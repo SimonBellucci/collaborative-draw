@@ -1,0 +1,12 @@
+$headerColor: #ff00ff;
+
+.header {
+    width: 100%;
+    background: blue;
+
+    .header-logo {
+        transition: all 0.2s ease;
+        max-height: 50px;
+        width: auto;
+    }
+}
