@@ -11,6 +11,8 @@
     <button type="button" name="button" id="createCircle" class="shape">Cercle</button>
     <input type="color" name="" value="" id="colorPicker">
 
+    <input type="text" name="" value="" id="radiusValue">
+
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
     <script src="/js/fabric.min.js" charset="utf-8"></script>
     <script type="text/javascript">
@@ -38,23 +40,12 @@
           return color = colored;
         }
 
-        // create a wrapper around native canvas element (with id="c")
+        //Création du Canvas
         const canvas = new fabric.Canvas('canvasTest', {
           isDrawingMode: false
         });
 
-        function objectAdded(){
-          socket.emit('newObject');
-        }
-
-        Array.from(shapeButton).forEach(function(element) {
-          element.addEventListener('click', objectAdded);
-        });
-
-
-        socket.on('getNewObject', data => {
-          console.log(data.id);
-        });
+      canvas.selection = false;
 
         //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
         const freeDraw = $('freeDraw');
@@ -68,14 +59,24 @@
           }
         });
 
-        canvas.on('path:created', () => {
-          console.log('path')
+        canvas.on('path:created', (opt) => {
+          opt.path.id = fabric.Object.__uid++
+          opt.path.lockMovementX = true;
+          opt.path.lockMovementY = true;
+          opt.path.lockScalingX = true;
+          opt.path.lockScalingY = true;
+          opt.path.lockRotation = true;
+          socket.emit('pathAdded')
+          let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+          socket.emit('connectionCanvas', serializedCanvas);
         });
 
         canvas.on('object:selected', onObjectSelected);
 
         function onObjectSelected(e){
         	let self = e.target;
+          let radius = $('radiusValue');
+          radius.setAttribute('value', self.radius);
           console.log(self);
         }
 
@@ -93,52 +94,57 @@
           socket.emit('newCoords', {top: self.top, left: self.left, id: self.id});
         }
 
-        canvas.on('object:added', objectAdded);
+        function drawObject(data){
+          if(data.type == 'circle'){
+
+            const circle = new fabric.Circle({
+              radius: 100,
+              fill: data.color,
+              left: canvas.width/2,
+              top: canvas.height/2,
+              selectable: true
+            });
+
+            circle.toObject = (function(toObject) {
+            return function() {
+              return fabric.util.object.extend(toObject.call(this), {
+                  id: this.id
+                });
+              };
+            })(circle.toObject);
+
+            circle.id = data.id;
+
+            canvas.add(circle);
+          }
+        }
+
+        document.addEventListener('keydown', e => {
+          if(e.keyCode == '8' || e.keyCode == '46'){
+            canvas.getActiveObject().visible = false;
+            let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+            socket.emit('connectionCanvas', serializedCanvas);
+          }
+        }, false);
+
+        socket.on('getNewObject', data => {
+          drawObject(data);
+        });
 
         circleButton.addEventListener('click', () => {
-
-          const circle = new fabric.Circle({
-            radius: 100,
-            fill: color,
-            left: canvas.width/2,
-            top: canvas.height/2,
-          });
-
-          circle.toObject = (function(toObject) {
-          return function() {
-            return fabric.util.object.extend(toObject.call(this), {
-                id: this.id
-              });
-            };
-          })(circle.toObject);
-
-          circle.id = 1;
-
-          // circle.id = count;
-
-          canvas.add(circle);
-          //count++ //LE COUNT DOIT SE FAIRE AU NIVEAU DU SERVEUR
-
-          //Serialization
-          let serializedCanvas = JSON.stringify(canvas);
-          socket.emit('connectionCanvas', serializedCanvas);
-
+          socket.emit('objectAdded', {type: 'circle', color: color});
         });
 
       socket.on('getNewCoords', data => {
         let allObjects = canvas.getObjects();
 
-        //console.log(allObjects[data.id]);
+        //console.log(allObjects);
         allObjects[data.id].top = data.top;
         allObjects[data.id].left = data.left;
 
         canvas.renderAll();
 
       });
-
-      // socket.on('getNewObject', data => {
-      //   let count = data.id;
-      // });
 
       socket.on('getNewScale', data => {
         let allObjects = canvas.getObjects();
@@ -149,8 +155,6 @@
         canvas.renderAll();
 
       });
-
-      // myCanvas.getObjects().indexOf(myObject)
 
         //On récupère le canvas à la ocnnection
         socket.on('getConnectionCanvas', data => {
