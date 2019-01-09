@@ -10,11 +10,11 @@ let idCount = 0;
 io.on('connection', (socket) => {
   console.log('Nouvelle connexion');
 
-  socket.emit('getConnectionCanvas', canvasData);
+  io.emit('getConnectionCanvas', canvasData);
 
   socket.on('connectionCanvas', data => {
     canvasData = data;
-    socket.broadcast.emit('getConnectionCanvas', data);
+    io.emit('getConnectionCanvas', data);
   });
 
   socket.on('newCoords', data => {
@@ -25,12 +25,14 @@ io.on('connection', (socket) => {
     io.emit('getNewScale', data);
   });
 
-  socket.on('newObject', data => {
+  socket.on('objectAdded', data => {
     idCount++
-    socket.emit('getNewObject', {id: idCount});
+    io.emit('getNewObject', {type: data.type, color: data.color, id: idCount-1});
   });
 
-  socket.emit('getNewObject', {id: idCount});
+  socket.on('pathAdded', () => {
+    idCount++
+  })
 
 });
 
