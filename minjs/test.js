@@ -1,1 +1,0 @@
-var demo=document.getElementById("demo"),btn=document.getElementById("dateBtn");btn.addEventListener("click",function(){demo.innerHTML=Date()});
