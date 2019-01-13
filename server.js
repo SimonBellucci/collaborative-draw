@@ -1,8 +1,55 @@
-const http = require('http');
-const server = http.createServer();
-const fs = require('fs');
+const express = require('express');
+const path = require('path');
+const app = express();
+const http = require('http').Server(app);
 
-const io = require('socket.io')(server);
+const io = require('socket.io')(http);
+
+app.use('/mincss', express.static(__dirname + '/mincss'))
+app.use('/js', express.static(__dirname + '/js'))
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+app.get('/canvas', function(req, res) {
+  res.sendFile(path.join(__dirname + '/canvas.html'));
+});
+
+// server.on('request', (request, response) => {
+//   let url = request.url;
+
+//   if(url == '/'){
+//     fs.readFile('canvas.html', (error, contents) => {
+//       if(error){
+//         response.writeHead(500);
+//         response.end()
+//         return;
+//       }
+//       else{
+//         response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+//         response.write(contents);
+//         response.end();
+//       }
+//     });
+//     return;
+//   }
+//   else if (url == '/js/fabric.min.js') {
+//     fs.readFile('./js/fabric.min.js', (error, contents) => {
+//       if(error){
+//         response.writeHead(500);
+//         response.end()
+//         return;
+//       }
+//       else{
+//         response.writeHead(200, {'Content-Type': 'application/javascript; charset=utf-8'});
+//         response.write(contents);
+//         response.end();
+//       }
+//     });
+//     return;
+//   }
+// });
 
 let canvasData = '';
 let idCount = 0;
@@ -36,39 +83,4 @@ io.on('connection', (socket) => {
 
 });
 
-server.on('request', (request, response) => {
-  let url = request.url;
-
-  if(url == '/'){
-    fs.readFile('canvas.html', (error, contents) => {
-      if(error){
-        response.writeHead(500);
-        response.end()
-        return;
-      }
-      else{
-        response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-        response.write(contents);
-        response.end();
-      }
-    });
-    return;
-  }
-  else if (url == '/js/fabric.min.js') {
-    fs.readFile('./js/fabric.min.js', (error, contents) => {
-      if(error){
-        response.writeHead(500);
-        response.end()
-        return;
-      }
-      else{
-        response.writeHead(200, {'Content-Type': 'application/javascript; charset=utf-8'});
-        response.write(contents);
-        response.end();
-      }
-    });
-    return;
-  }
-});
-
-server.listen(10001);
+http.listen(10001);
