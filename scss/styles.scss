@@ -1,2 +1,8 @@
+@import "components/variables";
+@import "components/fonts";
+@import "components/buttons";
+@import "components/global";
 @import "components/header";
 @import "components/footer";
+
+@import "vendors/bootstrap/grid";
