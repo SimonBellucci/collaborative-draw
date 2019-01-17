@@ -6,20 +6,17 @@
     border-radius:2px;
     color: $white;
     transition: all 0.3s ease;
-    &.blue {
+    &--blue {
         background: $blue
     }
-    &.purple {
+    &--purple {
         background: $purple;
     }
-    &.red {
+    &--red {
         background: $red;
     }
-    &.transparent {
+    &--transparent {
         color:$gray-2;
         border:1px solid $gray-2;
-    }
-    &:hover {
-        opacity:0.9;
     }
 }
