@@ -1,12 +1,21 @@
-$headerColor: #ff00ff;
 
-.header {
-    width: 100%;
-    background: blue;
-
-    .header-logo {
-        transition: all 0.2s ease;
-        max-height: 50px;
-        width: auto;
+header {
+    padding-top:10px;
+    .menu {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        float: right;
+        li {
+            display: inline-block;
+            .menu__link {
+                font-weight: 300;
+                display: inline-block;
+                margin-left: 38px;
+                &--strong {
+                    font-weight: bold;
+                }
+            }
+        }
     }
 }

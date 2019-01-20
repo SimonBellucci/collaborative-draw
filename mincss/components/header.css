@@ -1,1 +1,1 @@
-.header{width:100%;background:blue}.header .header-logo{-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;transition:all 0.2s ease;max-height:50px;width:auto}
+header{padding-top:10px}header .menu{display:inline-block;list-style:none;padding:0;float:right}header .menu li{display:inline-block}header .menu li .menu__link{font-weight:300;display:inline-block;margin-left:38px}header .menu li .menu__link--strong{font-weight:bold}

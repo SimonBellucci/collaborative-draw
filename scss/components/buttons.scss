@@ -1,0 +1,22 @@
+@import "variables";
+
+.button {
+    font-size: 16px;
+    padding:10px 18px;
+    border-radius:2px;
+    color: $white;
+    transition: all 0.3s ease;
+    &--blue {
+        background: $blue
+    }
+    &--purple {
+        background: $purple;
+    }
+    &--red {
+        background: $red;
+    }
+    &--transparent {
+        color:$gray-2;
+        border:1px solid $gray-2;
+    }
+}
