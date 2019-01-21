@@ -5,6 +5,10 @@ const http = require('http').Server(app);
 
 const io = require('socket.io')(http);
 
+// créé le chemin vers les images
+app.use(express.static('public'));
+
+
 app.use('/mincss', express.static(__dirname + '/mincss'))
 app.use('/js', express.static(__dirname + '/js'))
 
@@ -12,9 +16,18 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get('/app', function(req, res) {
+  res.sendFile(path.join(__dirname + '/app.html'));
+});
+
 app.get('/canvas', function(req, res) {
   res.sendFile(path.join(__dirname + '/canvas.html'));
 });
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
+
 
 // server.on('request', (request, response) => {
 //   let url = request.url;
