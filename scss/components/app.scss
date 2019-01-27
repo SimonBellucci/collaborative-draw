@@ -20,6 +20,7 @@
             padding: 15px 20px;
             box-sizing: content-box;
             position: relative;
+            transition: all 0.2s ease;
             &__sub {
                 list-style: none;
                 position: absolute;
@@ -37,6 +38,7 @@
                     font-weight: 100;
                     width: 100%;
                     box-sizing: border-box;
+                    transition: all 0.2s ease;
                     &:hover {
                         background: rgba(255 , 255 , 255 , 0.02);
                     }
@@ -52,6 +54,7 @@
                 background: #2e3741;
                 .tools__item__sub {
                 display: inline-block;
+                }
             }
             &:last-child {
                 margin-bottom:0px;
