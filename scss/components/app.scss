@@ -1,0 +1,64 @@
+@import "variables";
+
+.app {
+    background: $gray-1;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    .tools {
+        background: $gray-3;
+        display: inline-block;
+        padding:30px 0px;
+        position: absolute;
+        left: 0;
+        top:50% ;
+        transform:translateY(50%);
+        &__item {
+            width:22px;
+            height:22px;
+            cursor: pointer;
+            padding: 15px 20px;
+            box-sizing: content-box;
+            position: relative;
+            transition: all 0.2s ease;
+            &__sub {
+                list-style: none;
+                position: absolute;
+                left:62px;
+                background: #2e3741;
+                display:none;
+                padding:0px;
+                top:0;
+                margin: 0;
+                &__item {
+                    color:$white;
+                    display: inline-block;
+                    white-space: nowrap;
+                    padding:15.5px 20px;
+                    font-weight: 100;
+                    width: 100%;
+                    box-sizing: border-box;
+                    transition: all 0.2s ease;
+                    &:hover {
+                        background: rgba(255 , 255 , 255 , 0.02);
+                    }
+                }
+            }
+            &__sub-img {
+                width:5px;
+                height:5px;
+                position: absolute;
+                right: 10px;
+            }
+            &:hover  {
+                background: #2e3741;
+                .tools__item__sub {
+                display: inline-block;
+                }
+            }
+            &:last-child {
+                margin-bottom:0px;
+            }
+        }
+    }
+}

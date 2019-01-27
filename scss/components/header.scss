@@ -1,5 +1,8 @@
+@import 'variables';
 
-header {
+
+/* Home header */
+.global-header {
     padding-top:10px;
     .menu {
         display: inline-block;
@@ -17,5 +20,75 @@ header {
                 }
             }
         }
+    }
+}
+
+/* App header */
+.app-header {
+    background: $gray-3;
+    padding:15px 20px!important;
+    position: relative;
+    .menu {
+        position: relative;
+        &__icon {
+            display: inline-block;
+            height:25px;
+            img {
+                height:25px;
+                width: 50px;
+                display: inline-block;
+            }
+        }
+        &__sub {
+            list-style:none;
+            padding: 0;
+            display: none;
+            position: absolute;
+            z-index: 10;
+            left:5px;
+            top:33.5px;
+            background: #2e3741;
+            &__link {
+                color:$white;
+                padding: 17px 30px;
+                transition: all 0.2s ease;
+                a {
+                    font-weight: 400;
+                }
+                &:hover {
+                    background: rgba(255 , 255 , 255 , 0.02);
+                }
+            }
+        }
+    }
+    .project-name {
+        color:$white;
+        font-size: 18px;
+        position: absolute;
+        margin: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .people {
+        background: #2f3943;
+        padding:0 10px;
+        margin-right: 20px;
+        &__icon {
+            height:20px;
+        }
+        &__number {
+            color:$white;
+            margin-left:3px;
+        }
+        &__add {
+            display: inline-flex;
+            margin-left:15px;
+            img {
+                height:20px;
+            }
+        }
+    }
+    .export {
+
     }
 }
