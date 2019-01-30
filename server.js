@@ -24,8 +24,8 @@ app.get('/canvas', function(req, res) {
   res.sendFile(path.join(__dirname + '/canvas.html'));
 });
 
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/index.html'));
+app.get('/mes-projets', function(req, res) {
+  res.sendFile(path.join(__dirname + '/my-projects.html'));
 });
 
 
