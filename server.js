@@ -28,6 +28,13 @@ app.get('/mes-projets', function(req, res) {
   res.sendFile(path.join(__dirname + '/my-projects.html'));
 });
 
+app.get('/connexion', function(req, res) {
+  res.sendFile(path.join(__dirname + '/connexion.html'));
+});
+
+app.get('/inscription', function(req, res) {
+  res.sendFile(path.join(__dirname + '/register.html'));
+});
 
 // server.on('request', (request, response) => {
 //   let url = request.url;
