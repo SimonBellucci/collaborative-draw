@@ -10,7 +10,7 @@ app.use(express.static('public'));
 
 
 app.use('/mincss', express.static(__dirname + '/mincss'))
-app.use('/js', express.static(__dirname + '/js'))
+app.use('/minjs', express.static(__dirname + '/minjs'))
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));

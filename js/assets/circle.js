@@ -1,7 +1,7 @@
-circleButton.addEventListener('click', () => {
+circleButton.addEventListener('click', function() {
 
 
-  const circle = new fabric.Circle({
+  var circle = new fabric.Circle({
     radius: 100,
     fill: color,
     left: canvas.width/2,
@@ -19,7 +19,7 @@ circleButton.addEventListener('click', () => {
   });
 
   //Serialization
-  let serializedCanvas = JSON.stringify(canvas);
+  var serializedCanvas = JSON.stringify(canvas);
   socket.emit('connectionCanvas', serializedCanvas);
 
 });
