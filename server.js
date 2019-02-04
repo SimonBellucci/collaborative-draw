@@ -8,7 +8,7 @@ const io = require('socket.io')(http);
 var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'https://db.iha.unistra.fr',
+    host : 'base.iha.unistra.fr',
     user : 'prjapp2',
     password : 'YPQ7ygSJQ0zZeLV9',
     database : 'prjapp2'
@@ -28,9 +28,15 @@ app.set('view engine', 'ejs');
 // // about page
 // app.get('/about', function(req, res) {
 //   res.render('pages/about',
-        {
-          name: ''
-        });
+// });
+
+//Requests
+//Récupérer le title d'un projet
+let title = ""
+
+// knex('projects').where({id: 1}).select('title').then((response)=>{
+//   console.log(response);
+//   title = response[0].title
 // });
 
 // créé le chemin vers les images
@@ -48,7 +54,12 @@ app.get('/app', function(req, res) {
 });
 
 app.get('/mes-projets', function(req, res) {
-  res.render('pages/my-projects');
+  let userId = 2;
+  knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
+    res.render('pages/my-projects', {
+      infos: response
+    });
+  });
 });
 
 app.get('/connexion', function(req, res) {

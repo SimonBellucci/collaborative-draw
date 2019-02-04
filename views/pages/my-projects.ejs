@@ -28,46 +28,28 @@
         <main>
             <section class="all-projects container">
                 <h1>Mes projets</h1>
-                <article class="project row">
-                    <div class="project__preview col-lg-4">
-                        <div class="project__preview__status">
-                            <img src="./images/cadena.svg" alt="">
-                        </div>
-                        <img class="project__preview__image" src="./images/demo.png" alt="">
-                    </div>
-                    <div class="project__informations col-lg-6">
-                        <h2 class="project__informations__title">
-                            Titre du projet
-                        </h2>
-                        <span class="project__informations__author"><strong>Auteur :</strong> JeromeCrea</span><br>
-                        <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> Simon57, Thomas</span><br>
-                        <span class="project__informations__date">Créé le 10.12.2018</span>
-                    </div>
-                    <div class="project__cta col-lg-2">
-                        <a href="" class="button button--transparent" title="Modifier">Modifier</a>
-                        <a href="" class="button button--red" title="Supprimer">Supprimer</a>
-                    </div>
-                </article>
-                <article class="project row">
-                    <div class="project__preview col-lg-4">
-                        <div class="project__preview__status">
-                            <img src="./images/public-white.svg" alt="">
-                        </div>
-                        <img class="project__preview__image" src="./images/landscape.jpg" alt="">
-                    </div>
-                    <div class="project__informations col-lg-6">
-                        <h2 class="project__informations__title">
-                            Titre du projet
-                        </h2>
-                        <span class="project__informations__author"><strong>Auteur :</strong> JeromeCrea</span><br>
-                        <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> Simon57, Thomas</span><br>
-                        <span class="project__informations__date">Créé le 10.12.2018</span>
-                    </div>
-                    <div class="project__cta col-lg-2">
-                        <a href="" class="button button--transparent" title="Modifier">Modifier</a>
-                        <a href="" class="button button--red" title="Supprimer">Supprimer</a>
-                    </div>
-                </article>
+                <% infos.forEach(function(info) { %>
+                  <article class="project row">
+                      <div class="project__preview col-lg-4">
+                          <div class="project__preview__status">
+                              <img src="./images/cadena.svg" alt="">
+                          </div>
+                          <img class="project__preview__image" src="./images/demo.png" alt="">
+                      </div>
+                      <div class="project__informations col-lg-6">
+                          <h2 class="project__informations__title">
+                              <%= info.title %>
+                          </h2>
+                          <span class="project__informations__author"><strong>Auteur :</strong> <%= info.nickname %></span><br>
+                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> Simon57, Thomas</span><br>
+                          <span class="project__informations__date">Créé le <%= info.creation_date %></span>
+                      </div>
+                      <div class="project__cta col-lg-2">
+                          <a href="" class="button button--transparent" title="Modifier">Modifier</a>
+                          <a href="" class="button button--red" title="Supprimer">Supprimer</a>
+                      </div>
+                  </article>
+                <% }); %>
             </section>
         </main>
     </body>
