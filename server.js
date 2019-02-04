@@ -10,12 +10,12 @@ app.set('view engine', 'ejs');
 
 // use res.render to load up an ejs view file
 
-// // index page 
+// // index page
 // app.get('/', function(req, res) {
 //   res.render('pages/index');
 // });
 
-// // about page 
+// // about page
 // app.get('/about', function(req, res) {
 //   res.render('pages/about');
 // });
@@ -23,32 +23,31 @@ app.set('view engine', 'ejs');
 // créé le chemin vers les images
 app.use(express.static('public'));
 
-
 app.use('/mincss', express.static(__dirname + '/mincss'))
 app.use('/minjs', express.static(__dirname + '/minjs'))
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/index.html'));
+  res.render('pages/index');
 });
 
 app.get('/app', function(req, res) {
-  res.sendFile(path.join(__dirname + '/app.html'));
-});
-
-app.get('/canvas', function(req, res) {
-  res.sendFile(path.join(__dirname + '/canvas.html'));
+  res.render('pages/app');
 });
 
 app.get('/mes-projets', function(req, res) {
-  res.sendFile(path.join(__dirname + '/my-projects.html'));
+  res.render('pages/my-projects');
 });
 
 app.get('/connexion', function(req, res) {
-  res.sendFile(path.join(__dirname + '/connexion.html'));
+  res.render('pages/connexion');
 });
 
 app.get('/inscription', function(req, res) {
-  res.sendFile(path.join(__dirname + '/register.html'));
+  res.render('pages/register');
+});
+
+app.get('/canvas', function(req, res) {
+  res.render('pages/canvas');
 });
 
 // server.on('request', (request, response) => {
