@@ -11,7 +11,7 @@ var knex = require('knex')({
     host : 'https://db.iha.unistra.fr',
     user : 'prjapp2',
     password : 'YPQ7ygSJQ0zZeLV9',
-    database : 'wemake_db'
+    database : 'prjapp2'
   }
 });
 
