@@ -5,6 +5,21 @@ const http = require('http').Server(app);
 
 const io = require('socket.io')(http);
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// use res.render to load up an ejs view file
+
+// // index page 
+// app.get('/', function(req, res) {
+//   res.render('pages/index');
+// });
+
+// // about page 
+// app.get('/about', function(req, res) {
+//   res.render('pages/about');
+// });
+
 // créé le chemin vers les images
 app.use(express.static('public'));
 
