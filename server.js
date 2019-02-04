@@ -5,6 +5,16 @@ const http = require('http').Server(app);
 
 const io = require('socket.io')(http);
 
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host : 'https://db.iha.unistra.fr',
+    user : 'prjapp2',
+    password : 'YPQ7ygSJQ0zZeLV9',
+    database : 'wemake_db'
+  }
+});
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
@@ -17,7 +27,10 @@ app.set('view engine', 'ejs');
 
 // // about page 
 // app.get('/about', function(req, res) {
-//   res.render('pages/about');
+//   res.render('pages/about',
+        {
+          name: ''
+        });
 // });
 
 // créé le chemin vers les images
