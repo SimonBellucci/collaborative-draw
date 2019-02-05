@@ -205,6 +205,35 @@ io.on('connection', (socket) => {
     });
   });
 
+  //Connexion
+  socket.on('connectionUser', data => {
+
+    //Hashage MDP
+    shasum.update(data.password);
+
+    //Vérification email
+    knex('users').where({ email: data.email }).then( response => {
+      if(response.length == 0){
+        console.log('Email inconnu');
+        socket.emit('emailUnknown');
+      }
+      else{
+        console.log('Email connu');
+        //Vérification correspondance user / password
+        knex('users').where({ email: data.email, password: shasum.digest('hex') }).then( response => {
+          if(response.length == 0){
+            console.log('Mauvais MDP');
+            socket.emit('wrongPassword');
+          }
+          else{
+            console.log('Bon MDP');
+          }
+        });
+      }
+    });
+
+  });
+
 });
 
 http.listen(10001);

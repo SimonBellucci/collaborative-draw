@@ -17,15 +17,15 @@
                     <a href="" class="bloc-form__previous">&#8249;	Retour à l'accueil</a>
                     <h1 class="bloc-form__title"> WEMAKE</h1>
                     <form action="" class="bloc-form__form">
-                        <input class="bloc-form__form__input" type="mail form__mail" placeholder="Votre adresse email"><br>
-                        <input class="bloc-form__form__input" type="password" placeholder="Votre mot de passe">
+                        <input id="formMail" class="bloc-form__form__input" type="mail form__mail" placeholder="Votre adresse email"><br>
+                        <input id="formPassword" class="bloc-form__form__input" type="password" placeholder="Votre mot de passe">
                     </form>
                     <div class="row">
                         <div class="col-lg-6">
                             <a href="#" class="bloc-form__forgot">Mot de passe oublié ?</a>
                         </div>
                         <div class="col-lg-6">
-                            <a href="" class="bloc-form__connexion button button--blue" title="Se connecter">Se connecter</a>
+                            <a href="" id="connectionButton" class="bloc-form__connexion button button--blue" title="Se connecter">Se connecter</a>
                         </div>
                     </div>
                     <hr>
@@ -49,5 +49,34 @@
                 </div>
             </div>
         </section>
+
+        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+        <script type="text/javascript">
+
+          let $ = function(id){return document.getElementById(id)};
+
+          //Initialisation de socket.io
+          const socket = io('/');
+
+          function connection(){
+
+            const userInfo = {
+              email: $('formMail').value,
+              password: $('formPassword').value
+            };
+
+            socket.emit('connectionUser', userInfo);
+          }
+
+          $('connectionButton').addEventListener('click', () => {
+            connection();
+          });
+
+          socket.on('emailAlreadyExists', () => {
+            console.log('emailAlreadyExists')
+          });
+
+        </script>
+
     </body>
 </html>
