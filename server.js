@@ -12,11 +12,12 @@ var knex = require('knex')({
     user : 'prjapp2',
     password : 'YPQ7ygSJQ0zZeLV9',
     database : 'prjapp2'
-  }
+  },
+  pool: { min: 0, max: 10 }
 });
 
-let crypto = require('crypto')
-  , shasum = crypto.createHash('sha1');
+let crypto = require('crypto'),
+    shasum = crypto.createHash('sha1');
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
