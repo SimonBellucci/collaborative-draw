@@ -15,6 +15,9 @@ var knex = require('knex')({
   }
 });
 
+let crypto = require('crypto')
+  , shasum = crypto.createHash('sha1');
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
@@ -54,12 +57,34 @@ app.get('/app', function(req, res) {
 });
 
 app.get('/mes-projets', function(req, res) {
-  let userId = 2;
-  knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-    res.render('pages/my-projects', {
-      infos: response
+  let userId = 1;
+  let projects = [];
+  // knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
+  //
+  // });
+  knex.table('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').where("projects_users.user_id", userId).then((response) => {
+    response.forEach(project => {
+      projects.push(project);
+    })
+    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
+      response.forEach(project => {
+        // knex.table('users').innerJoin('projects_users', 'users.id', '=', 'projects_users.user_id').where("projects_users.project_id", project.id).then((response) => {
+        //   project.users = response
+        // })
+        projects.push(project);
+      })
+      console.log(projects);
+      res.render('pages/my-projects', {
+        infos: projects
+      });
     });
+
+
   });
+
+
+
+
 });
 
 app.get('/connexion', function(req, res) {
@@ -138,6 +163,46 @@ io.on('connection', (socket) => {
   socket.on('pathAdded', () => {
     idCount++
   })
+
+  //Inscription
+  socket.on('registerUser', data => {
+
+    //Hashage MDP
+    shasum.update(data.password);
+
+    //Vérification si l'utilisateur existe déjà : email + pseudo
+    knex('users').where({ email: data.email }).then( response => {
+      if(response.length == 0){
+          console.log('Pas de mail correspondant')
+
+          knex('users').where({ nickname: data.nickname }).then( response => {
+            console.log(response);
+            if(response.length == 0){
+              console.log('Surnom non existant');
+
+              //Insertion dans la base
+              knex('users').insert({
+                lastname: data.lastname,
+                firstname: data.firstname,
+                nickname: data.nickname,
+                email: data.email,
+                password: shasum.digest('hex')
+              }).then(response => {
+                console.log(response);
+              });
+            }
+            else{
+              console.log('Surnom existant');
+              socket.emit('nickNameAlreadyExists');
+            }
+          });
+      }
+      else{
+        console.log('Un mail correspondant')
+        socket.emit('emailAlreadyExists');
+      }
+    });
+  });
 
 });
 
