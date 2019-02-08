@@ -5,10 +5,11 @@ var subMenu = document.querySelector(".menu__sub");
 
 window.addEventListener("load" , function() {
 
-    subMenu.style.height = "0px";
-    subMenu.style.visibility = "hidden";
-
     if (subMenu) {
+
+        subMenu.style.height = "0px";
+        subMenu.style.visibility = "hidden";
+
         menuButton.addEventListener('click' , function(e) {
             e.preventDefault();
             if (subMenu.style.height  === "0px") {
@@ -26,10 +27,12 @@ window.addEventListener("load" , function() {
     var addButton = document.querySelector(".people__add");
     var subAdd = document.querySelector(".people__sub");
 
-    subAdd.style.top = "-50px";
 
 
     if (subAdd) {
+
+        subAdd.style.top = "-50px";
+
         addButton.addEventListener('click' , function(e) {
             e.preventDefault();
             if (subAdd.style.top  === "-50px") {
@@ -40,4 +43,28 @@ window.addEventListener("load" , function() {
             }
         });
     }
+
+
+
+    //ouverture modal créer un projets
+    var modal = document.querySelector('.modal');
+    var btnCreate = document.getElementsByClassName('create-project');
+    var closeModal = document.querySelector('.modal__content__close');
+
+
+    modal.style.opacity = "0";
+    modal.style.visibility = "hidden";
+
+    for (var i = 0 ; i < btnCreate.length ; i++) {
+        btnCreate[i].addEventListener('click' , function(e) {
+            e.preventDefault();
+
+            modal.style.opacity = "1";
+            modal.style.visibility = "visible";
+        });
+    }
+    closeModal.addEventListener('click' , function() {
+        modal.style.opacity = "0";
+        modal.style.visibility = "hidden";
+    });
 });
