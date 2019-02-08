@@ -47,6 +47,10 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
+app.get('/galerie', function(req, res) {
+  res.render('pages/gallery');
+});
+
 const useSession = app.use(session({
   key: 'user_id',
   secret: 'keyboard cat',

@@ -28,6 +28,7 @@
         <main>
             <section class="all-projects container">
                 <h1>Mes projets</h1>
+                <% if(infos.length > 0){ %>
                 <% infos.forEach(function(info) { %>
                   <article class="project row">
                       <div class="project__preview col-lg-4">
@@ -54,6 +55,14 @@
                       </div>
                   </article>
                 <% }); %>
+                <% }else{ %>
+                    <div class="row">
+                        <div>
+                            <p>Vous n'avez pas de projets</p>
+                            <a href="#" class="create-project button button--blue" title="Créer un projet">Créer un projet</a>
+                        </div>
+                    </div>
+                <% } %>
             </section>
         </main>
         <script src="./minjs/script.js"></script>

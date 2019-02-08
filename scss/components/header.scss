@@ -15,8 +15,19 @@
                 font-weight: 300;
                 display: inline-block;
                 margin-left: 38px;
+                position: relative;
                 &--strong {
                     font-weight: bold;
+                }
+                &--active:after {
+                    content: "";
+                    height: 1px;
+                    background: #1f252d;
+                    position: absolute;
+                    width: 100%;
+                    bottom: -7px;
+                    left: 0;
+                    right: 0;
                 }
             }
         }
