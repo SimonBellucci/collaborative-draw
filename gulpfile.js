@@ -33,10 +33,10 @@ gulp.task('styles', function() {
 gulp.task('watch', function() {
     var server = livereload();
 
-    // gulp.watch('js/**/*.js', ['scripts']);
+    gulp.watch('js/**/*.js', ['scripts']);
     gulp.watch('scss/**/*.scss', ['styles']);
 });
 
-/* Typing only " gulp " will run scripts, styles and 
+/* Typing only " gulp " will run scripts, styles and
 then watch tasks */
 gulp.task('default', ['styles', 'scripts', 'watch']);

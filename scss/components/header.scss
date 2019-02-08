@@ -27,6 +27,7 @@
 .app-header {
     background: $gray-3;
     padding:15px 20px!important;
+    top: 0;
     position: relative;
     .menu {
         position: relative;
@@ -42,12 +43,14 @@
         &__sub {
             list-style:none;
             padding: 0;
-            display: none;
             position: absolute;
-            z-index: 10;
             left:5px;
-            top:33.5px;
             background: #2e3741;
+            transition: all 0.3s ease;
+            top:33px;
+            overflow: hidden;
+            visibility: hidden;
+            z-index: 2;
             &__link {
                 color:$white;
                 padding: 17px 30px;
