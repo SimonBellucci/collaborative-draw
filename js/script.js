@@ -21,4 +21,23 @@ window.addEventListener("load" , function() {
             }
         });
     }
+
+    // ouverture des utilisateurs à ajouter
+    var addButton = document.querySelector(".people__add");
+    var subAdd = document.querySelector(".people__sub");
+
+    subAdd.style.top = "-50px";
+
+
+    if (subAdd) {
+        addButton.addEventListener('click' , function(e) {
+            e.preventDefault();
+            if (subAdd.style.top  === "-50px") {
+                subAdd.style.top = "33px";
+            }
+            else {
+                subAdd.style.top = "-50px";
+            }
+        });
+    }
 });

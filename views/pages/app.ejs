@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="fr" dir="ltr" class="app">
     <head>
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
 	    <link rel="stylesheet" href="./mincss/styles.css">
 	    <title>WeMake - App</title>
     </head>
-    <body class="app">
+    <body>
         <header class="container-fluid app-header">
             <div class="row align-center">
                 <div class="col-lg-6">
@@ -16,7 +16,7 @@
                         <ul class="menu__sub">
                             <li class="menu__sub__link"><a href="" title="Mes projets">Mes projets</a></li>
                             <li class="menu__sub__link"><a href="" title="Galerie publique">Galerie publique</a></li>
-                            <li class="menu__sub__link"><a href="" title="Déconnexion">Déconnexion</a></li>
+                            <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -28,6 +28,10 @@
                         <a href="#" class="people__add">
                             <img src="./images/add.svg" alt="Add people" title="Add">
                         </a>
+                        <ul class="people__sub">
+                            <input class="people__sub__input" type="email" placeholder="Saisissez l'email du collaborateur">
+                            <button class="people__sub__validate button button--blue" type="submit">Inviter</button>
+                        </ul>
                     </div>
                     <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
@@ -57,8 +61,8 @@
                 <img src="./images/shapes.svg" alt="Shapes">
                 <img src="./images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
-                    <li class="tools__item__sub__item">Dessin</li>
-                    <li class="tools__item__sub__item">Cercle</li>
+                    <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button>
+                    <button class="tools__item__sub__item shape" type="button" name="button" id="createCircle">Cercle</button>
                     <li class="tools__item__sub__item">Rectangle</li>
                     <li class="tools__item__sub__item">Triangle</li>
                 </ul>
@@ -69,7 +73,166 @@
             <div class="tools__item">
                 <img src="./images/crop.svg" alt="Crop">
             </div>
-        </section>
+            <div class="tools__item">
+                <input type="color" name="" value="#278bff" id="colorPicker">
+            </div>
+
+
+        </section><canvas id="canvasTest" width="700" height="500"></canvas>
+
+        <!-- <input type="text" name="" value="" id="radiusValue"> -->
+
+        <script src="./socket.io/socket.io.js" charset="utf-8"></script>
+        <script src="./minjs/fabric.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+          window.onload = () => {
+
+            var $ = function(id){return document.getElementById(id)};
+
+            //Initialisation de socket.io
+            const socket = io('/');
+
+            //Récupération des boutons de création de formes
+            const shapeButton = document.getElementsByClassName('shape');
+            const circleButton = $('createCircle');
+
+            //Récupération des boutons de changements de couleur
+            const colorPicker = $('colorPicker');
+
+            colorPicker.addEventListener('change', (e) => {
+              changeColor(e.target.value);
+            });
+
+            let color = 'black';
+
+            function changeColor(colored){
+              return color = colored;
+            }
+
+            //Création du Canvas
+            const canvas = new fabric.Canvas('canvasTest', {
+              isDrawingMode: false
+            });
+
+          canvas.selection = false;
+
+            //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
+            const freeDraw = $('freeDraw');
+
+            freeDraw.addEventListener('click', (e) => {
+              if(canvas.isDrawingMode == false){
+                canvas.isDrawingMode = true;
+              }
+              else{
+                canvas.isDrawingMode = false;
+              }
+            });
+
+            canvas.on('path:created', (opt) => {
+              opt.path.id = fabric.Object.__uid++
+              opt.path.lockMovementX = true;
+              opt.path.lockMovementY = true;
+              opt.path.lockScalingX = true;
+              opt.path.lockScalingY = true;
+              opt.path.lockRotation = true;
+              socket.emit('pathAdded')
+              let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+              socket.emit('connectionCanvas', serializedCanvas);
+            });
+
+            canvas.on('object:selected', onObjectSelected);
+
+            function onObjectSelected(e){
+            	let self = e.target;
+              let radius = $('radiusValue');
+              radius.setAttribute('value', self.radius);
+              console.log(self);
+            }
+
+            canvas.on('object:scaling', onObjectScaled);
+
+            function onObjectScaled(e){
+            	let self = e.target;
+              socket.emit('newScale', {scaleX: self.get('scaleX'), scaleY: self.get('scaleY'), id: self.id})
+            }
+
+            canvas.on('object:moving', objectMoving);
+
+            function objectMoving(e){
+              let self = e.target;
+              socket.emit('newCoords', {top: self.top, left: self.left, id: self.id});
+            }
+
+            function drawObject(data){
+              if(data.type == 'circle'){
+
+                const circle = new fabric.Circle({
+                  radius: 100,
+                  fill: data.color,
+                  left: canvas.width/2,
+                  top: canvas.height/2,
+                  selectable: true
+                });
+
+                circle.toObject = (function(toObject) {
+                return function() {
+                  return fabric.util.object.extend(toObject.call(this), {
+                      id: this.id
+                    });
+                  };
+                })(circle.toObject);
+
+                circle.id = data.id;
+
+                canvas.add(circle);
+              }
+            }
+
+            document.addEventListener('keydown', e => {
+              if(e.keyCode == '8' || e.keyCode == '46'){
+                canvas.getActiveObject().visible = false;
+                let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+                socket.emit('connectionCanvas', serializedCanvas);
+              }
+            }, false);
+
+            socket.on('getNewObject', data => {
+              drawObject(data);
+            });
+
+            circleButton.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'circle', color: color});
+            });
+
+          socket.on('getNewCoords', data => {
+            let allObjects = canvas.getObjects();
+
+            //console.log(allObjects);
+            allObjects[data.id].top = data.top;
+            allObjects[data.id].left = data.left;
+
+            canvas.renderAll();
+
+          });
+
+          socket.on('getNewScale', data => {
+            let allObjects = canvas.getObjects();
+
+            allObjects[data.id].scaleX = data.scaleX;
+            allObjects[data.id].scaleY = data.scaleY;
+
+            canvas.renderAll();
+
+          });
+
+            //On récupère le canvas à la ocnnection
+            socket.on('getConnectionCanvas', data => {
+              console.log('New Data = '+data)
+              canvas.loadFromJSON(data);
+            })
+
+          }
+        </script>
         <script src="./minjs/script.js"></script>
     </body>
 </html>

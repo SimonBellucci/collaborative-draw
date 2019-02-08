@@ -76,6 +76,7 @@
         background: #2f3943;
         padding:0 10px;
         margin-right: 20px;
+        position: relative;
         &__icon {
             height:20px;
         }
@@ -88,6 +89,26 @@
             margin-left:15px;
             img {
                 height:20px;
+            }
+        }
+        &__sub {
+            position: absolute;
+            background: #2e3741;
+            transition: all 0.3s ease;
+            top: 37px;
+            z-index: -1;
+            right: 0;
+            padding: 20px;
+            display: flex;
+            overflow: hidden;
+            &__input {
+                height: 40px;
+                width:222px;
+                padding-left: 10px;
+                outline: none;
+            }
+            &__validate {
+                margin-left:10px;
             }
         }
     }

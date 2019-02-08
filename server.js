@@ -7,16 +7,16 @@ const io = require('socket.io')(http);
 
 const session = require('express-session');
 
-const knex = require('knex')({
+var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'base.iha.unistra.fr',
-    user : 'prjapp2',
-    password : 'YPQ7ygSJQ0zZeLV9',
+    host : 'localhost',
+    user : 'root',
+    password : '',
     database : 'prjapp2'
   },
   pool: { min: 0, max: 10 }
-});
+})
 
 const crypto = require('crypto')
 
