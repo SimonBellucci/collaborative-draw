@@ -7,16 +7,16 @@ const io = require('socket.io')(http);
 
 const session = require('express-session');
 
-var knex = require('knex')({
+const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'localhost',
-    user : 'root',
-    password : '',
+    host : 'base.iha.unistra.fr',
+    user : 'prjapp2',
+    password : 'YPQ7ygSJQ0zZeLV9',
     database : 'prjapp2'
   },
   pool: { min: 0, max: 10 }
-})
+});
 
 const crypto = require('crypto')
 
@@ -48,7 +48,12 @@ app.get('/', function(req, res) {
 });
 
 app.get('/galerie', function(req, res) {
-  res.render('pages/gallery');
+  //JOINTURE A VOIR AVEC ISSLER POUR author_id = user_id
+  knex('projects').where({ visibility: 1 }).then((response) => {
+    res.render('pages/gallery', {
+      infos: response
+    });
+  });
 });
 
 const useSession = app.use(session({

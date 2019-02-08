@@ -40,51 +40,17 @@
                     </div>
                 </div>
                 <div class="row">
+                  <% infos.forEach(function(info) { %>
                     <div class="col-lg-3 popular-projects__three">
                         <div>
                             <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
                             <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
-                                <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
+                                <h4 class="popular-projects__three__box-infos__title"><a href="#"><%= info.title %></a></h4>
+                                <span class="popular-projects__three__box-infos__author"><%= info.author_id %></span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 popular-projects__three">
-                        <div>
-                            <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
-                            <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
-                                <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 popular-projects__three">
-                        <div>
-                            <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
-                            <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
-                                <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 popular-projects__three">
-                        <div>
-                            <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
-                            <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
-                                <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 popular-projects__three">
-                        <div>
-                            <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
-                            <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
-                                <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
-                            </div>
-                        </div>
-                    </div>
+                  <% }); %>
                 </div>
             </section>
         </main>
