@@ -16,7 +16,7 @@
                         <ul class="menu__sub">
                             <li class="menu__sub__link"><a href="" title="Accueil">Home</a></li>
                             <li class="menu__sub__link"><a href="" title="Galerie publique">Galerie publique</a></li>
-                            <li class="menu__sub__link"><a href="" title="Déconnexion">Déconnexion</a></li>
+                            <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -32,7 +32,11 @@
                   <article class="project row">
                       <div class="project__preview col-lg-4">
                           <div class="project__preview__status">
+                            <% if(info.visibility){ %>
+                              <img src="./images/public-white.svg" alt="">
+                            <% } else{ %>
                               <img src="./images/cadena.svg" alt="">
+                            <% } %>
                           </div>
                           <img class="project__preview__image" src="./images/demo.png" alt="">
                       </div>
@@ -41,7 +45,7 @@
                               <%= info.title %>
                           </h2>
                           <span class="project__informations__author"><strong>Auteur :</strong> <%= info.nickname %></span><br>
-                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> Simon57, Thomas</span><br>
+                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <%= info.nickname %></span><br>
                           <span class="project__informations__date">Créé le <%= info.creation_date %></span>
                       </div>
                       <div class="project__cta col-lg-2">

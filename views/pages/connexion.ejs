@@ -16,18 +16,18 @@
                 <div class="col-lg-6 text-center bloc-form">
                     <a href="" class="bloc-form__previous">&#8249;	Retour à l'accueil</a>
                     <h1 class="bloc-form__title"> WEMAKE</h1>
-                    <form action="" class="bloc-form__form">
-                        <input id="formMail" class="bloc-form__form__input" type="mail form__mail" placeholder="Votre adresse email"><br>
-                        <input id="formPassword" class="bloc-form__form__input" type="password" placeholder="Votre mot de passe">
+                    <form action="/connexion" method="POST" class="bloc-form__form">
+                        <input id="formMail" class="bloc-form__form__input" type="mail form__mail" name="email" placeholder="Votre adresse email"><br>
+                        <input id="formPassword" class="bloc-form__form__input" type="password" name="password" placeholder="Votre mot de passe">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <a href="#" class="bloc-form__forgot">Mot de passe oublié ?</a>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="submit" id="connectionButton" class="bloc-form__connexion button button--blue" title="Se connecter">Se connecter</button>
+                            </div>
+                        </div>
                     </form>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <a href="#" class="bloc-form__forgot">Mot de passe oublié ?</a>
-                        </div>
-                        <div class="col-lg-6">
-                            <a href="" id="connectionButton" class="bloc-form__connexion button button--blue" title="Se connecter">Se connecter</a>
-                        </div>
-                    </div>
                     <hr>
                     <div class="row">
                         <div class="col-lg-6">
@@ -40,7 +40,7 @@
                     <hr>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="#" class="bloc-form__subscribe">Vous n'êtes pas encore inscrit ? Inscrivez-vous</a>
+                            <a href="/inscription" class="bloc-form__subscribe">Vous n'êtes pas encore inscrit ? Inscrivez-vous</a>
                         </div>
                     </div>
                 </div>
@@ -68,13 +68,17 @@
             socket.emit('connectionUser', userInfo);
           }
 
-          $('connectionButton').addEventListener('click', () => {
-            connection();
-          });
+          // $('connectionButton').addEventListener('click', () => {
+          //   connection();
+          // });
 
           socket.on('emailAlreadyExists', () => {
             console.log('emailAlreadyExists')
           });
+
+		  socket.on('connectionRedirect', () => {
+			socket.emit('connected')
+		  });
 
         </script>
 
