@@ -90,6 +90,22 @@ app.get('/app', function(req, res) {
   }
 });
 
+app.get('/app/:id', function(req, res) {
+  let projectId = req.params.id;
+
+  knex('projects').where({ id: projectId }).then((response) => {
+    if(req.session.user){
+      res.render('pages/app', {
+        infos: response
+      });
+    }
+  	else{
+      res.redirect('/connexion');
+    }
+  });
+
+});
+
 app.get('/deconnexion', function(req, res){
   req.session.user = null;
   res.redirect('/connexion');
@@ -128,6 +144,18 @@ app.get('/mes-projets', function(req, res) {
     res.redirect('/connexion');
   }
 });
+
+app.post('/mes-projets', function(req, res) {
+  knex('projects').insert({
+    author_id: req.session.user[0].id,
+    title: req.body.name,
+    width: req.body.width,
+    height: req.body.height,
+  }).then(response => {
+    console.log(response);
+    res.redirect('/app/'+response);
+  });
+})
 
 app.get('/connexion', sessionChecker, function(req, res) {
   res.render('pages/connexion');

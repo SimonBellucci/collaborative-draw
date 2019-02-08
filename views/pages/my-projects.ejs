@@ -8,22 +8,22 @@
 	    <title>WeMake - Mes projets</title>
     </head>
     <body>
-        <div class="modal">
+        <form action="/mes-projets" method="POST" class="modal">
             <div class="modal__content">
                 <div class="modal__content__close">&#215;</div>
                 <span class="modal__content__title">Créer un projet</span>
                 <div class="modal__content__name">
                     <label for="name">Nom du projet</label><br />
-                    <input id="name-project" class="modal__content__name__input" type="text" placeholder="Projet n°1">
+                    <input id="name-project" class="modal__content__name__input" type="text" name="name" placeholder="Projet n°1">
                 </div>
                 <div class="modal__content__size">
                     <label for="size-project">Taille du projet (en px)</label><br />
-                    <input id="size-project" type="number" class="modal__content__size__1" placeholder="800"> x
-                    <input type="number" class="modal__content__size__2" placeholder="600">
+                    <input id="size-project" type="number" class="modal__content__size__1" name="width" placeholder="800"> x
+                    <input type="number" class="modal__content__size__2" name="height" placeholder="600">
                 </div>
-                <button class="button button--blue">Créer le projet</button>
+                <button class="button button--blue" type="submit">Créer le projet</button>
             </div>
-        </div>
+        </form>
 
         <header class="container-fluid app-header">
             <div class="row align-center">
