@@ -1,7 +1,7 @@
 const config = {
-  host: 'base.iha.unistra.fr',
-  user : 'prjapp2',
-  password : 'YPQ7ygSJQ0zZeLV9',
+  host: 'localhost',
+  user : 'root',
+  password : '',
   database : 'prjapp2'
 }
 
