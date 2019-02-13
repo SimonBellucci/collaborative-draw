@@ -39,8 +39,8 @@
         </header>
         <section class="tools">
             <div class="tools__item">
-                <label for="file"><img src="../images/import.svg" alt="Settings"></label>
-              <input type="file" class="tools__item__files" id="file" name="" value="" style="background:url('../images/import.svg')">
+              <input type="file" id="file" name="" value="">
+                <img src="../images/import.svg" alt="Import">
             </div>
             <div class="tools__item">
                 <img src="../images/settings.svg" alt="Settings">
@@ -205,6 +205,9 @@
                      canvas.add(svg);
                   });
                }
+
+               sendData();
+
             }
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/

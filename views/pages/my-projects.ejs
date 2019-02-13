@@ -63,7 +63,7 @@
                               <%= own.title %>
                           </h2>
                          <!--  <span class="project__informations__author"><strong>Auteur :</strong> <%= own.nickname %></span><br> -->
-                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <% if(own.collabs.length > 0){ %>
+                          <span class="project__informations__colaborators"><strong><% if(own.collabs.length > 1){ %>Collaborateurs :<% }else{ %> Collaborateur : <%}%></strong> <% if(own.collabs.length > 0){ %>
                             <%= own.collabs.join(', ') %>
                           <% }else{ %>
                             Il n'y a aucun collaborateur
