@@ -22,6 +22,17 @@
             box-sizing: content-box;
             position: relative;
             transition: all 0.2s ease;
+            label {
+                cursor: pointer;
+            }
+            &__files {
+                width: 0.1px;
+            	height: 0.1px;
+            	opacity: 0;
+            	overflow: hidden;
+            	position: absolute;
+            	z-index: -1;
+            }
             &__sub {
                 list-style: none;
                 position: absolute;
