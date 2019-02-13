@@ -24,14 +24,14 @@
                 <div class="col-lg-6 d-flex justify-end">
                     <div class="people d-flex align-center">
                         <img class="people__icon" src="../images/add-people.svg" alt="">
-                        <span class="people__number">3</span>
+                        <span class="people__number"><%= count %></span>
                         <a href="#" class="people__add">
                             <img src="../images/add.svg" alt="Add people" title="Add">
                         </a>
-                        <ul class="people__sub">
-                            <input class="people__sub__input" type="email" placeholder="Saisissez l'email du collaborateur">
-                            <button class="people__sub__validate button button--blue" type="submit">Inviter</button>
-                        </ul>
+                        <form action="/add-user/<%= infos[0].id %>" method="POST" class="people__sub">
+                            <input class="people__sub__input" type="email" name="email" placeholder="Saisissez l'email du collaborateur">
+                            <button type="submit" class="people__sub__validate button button--blue" type="submit">Inviter</button>
+                        </form>
                     </div>
                     <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
@@ -114,7 +114,21 @@
               isDrawingMode: false
             });
 
-          canvas.selection = false;
+            let jsonDb = "<%= infos[0].render %>";
+            let json = jsonDb.replace(/&#34;/g, '"');
+
+            console.log(json);
+            canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
+
+            canvas.selection = false;
+
+            //Envoi du JSON vers Server
+            function sendData(){
+              let id = "<%= infos[0].id %>";
+              let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+              let image = canvas.toDataURL('jpeg');
+              socket.emit('connectionCanvas', {canvas: serializedCanvas, id: id, image: image});
+            }
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
@@ -136,9 +150,10 @@
               opt.path.lockScalingY = true;
               opt.path.lockRotation = true;
               socket.emit('pathAdded')
-              let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
-              socket.emit('connectionCanvas', serializedCanvas);
+              sendData();
             });
+
+            canvas.on('object:added', sendData);
 
             canvas.on('object:selected', onObjectSelected);
 
@@ -191,8 +206,7 @@
             document.addEventListener('keydown', e => {
               if(e.keyCode == '8' || e.keyCode == '46'){
                 canvas.getActiveObject().visible = false;
-                let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
-                socket.emit('connectionCanvas', serializedCanvas);
+                sendData();
               }
             }, false);
 
@@ -226,10 +240,10 @@
           });
 
             //On récupère le canvas à la ocnnection
-            socket.on('getConnectionCanvas', data => {
-              console.log('New Data = '+data)
-              canvas.loadFromJSON(data);
-            })
+            // socket.on('getConnectionCanvas', data => {
+            //   console.log('New Data = '+data)
+            //   canvas.loadFromJSON(data);
+            // })
 
           }
         </script>

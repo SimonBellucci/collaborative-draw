@@ -15,7 +15,8 @@ const knex = require('knex')({
     password : 'YPQ7ygSJQ0zZeLV9',
     database : 'prjapp2'
   },
-  pool: { min: 0, max: 10 }
+  pool: { min: 0, max: 10 },
+  charset   : 'UTF8_GENERAL_CI'
 });
 
 const crypto = require('crypto')
@@ -23,15 +24,6 @@ const crypto = require('crypto')
 function sha1(data){
   return crypto.createHash("sha1").update(data).digest("hex");
 }
-
-//Bloquer l'acces au pages si pas de session
-// app.use(function(req, res, next) {
-//     if(!req.session) {
-//         res.redirect('/connexion');
-//     } else {
-//         next();
-//     }
-// });
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -72,15 +64,6 @@ const sessionChecker = (req, res, next) => {
     }
 };
 
-// app.use(function(req, res, next) {
-//     console.log(req.session.authenticated)
-//     if(!req.session) {
-//         res.redirect('/connexion');
-//     } else {
-//         next();
-//     }
-// });
-
 app.get('/app', function(req, res) {
   if(req.session.user){
     res.render('pages/app');
@@ -92,17 +75,27 @@ app.get('/app', function(req, res) {
 
 app.get('/app/:id', function(req, res) {
   let projectId = req.params.id;
+  let countUsers = 0;
 
-  knex('projects').where({ id: projectId }).then((response) => {
-    if(req.session.user){
-      res.render('pages/app', {
-        infos: response
-      });
-    }
-  	else{
-      res.redirect('/connexion');
-    }
-  });
+  knex('projects_users').where({ project_id: projectId }).then(all => {
+
+    all.forEach(one => {
+      countUsers++
+    })
+
+    knex('projects').where({ id: projectId }).then((response) => {
+      if(req.session.user){
+        res.render('pages/app', {
+          infos: response,
+          count: countUsers
+        });
+      }
+    	else{
+        res.redirect('/connexion');
+      }
+    });
+  })
+
 
 });
 
@@ -113,33 +106,107 @@ app.get('/deconnexion', function(req, res){
 
 app.get('/mes-projets', function(req, res) {
 
-  let projects = [];
-  // knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-  //
-  // });
+  let ownProjects = {};
 
   if(req.session.user){
     let userId = req.session.user[0].id;
-
-    knex.table('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').where("projects_users.user_id", userId).then((response) => {
-      response.forEach(project => {
-        projects.push(project);
-      })
-      knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-        response.forEach(project => {
-          projects.push(project);
-        });
-        // knex.table('users').innerJoin('projects_users', 'users.id', '=', 'projects_users.user_id').where("projects_users.project_id", 2).then((response) => {
-        //   response.forEach(project => {
-        //     projects.push(project);
-        //   });
-        // });
-        console.log(projects);
-        res.render('pages/my-projects', {
-          infos: projects
-        });
+    knex.from('projects').select('id', 'title', 'creation_date', 'visibility', 'thumbnail').where('author_id', userId).then(rows => {
+      let projects_ids = [];
+      rows.forEach( row => {
+        ownProjects['project'+row.id] = row;
+        row.collabs = [];
+        projects_ids.push(row.id);
       });
+      return projects_ids;
+    }).then(ids => {
+      return knex.table('projects_users').innerJoin('users', 'users.id', '=', 'projects_users.user_id').select('project_id','nickname').where('project_id', 'in', ids);
+    }).then(collabs => {
+        collabs.forEach(collab => {
+          ownProjects['project'+collab.project_id].collabs.push(collab.nickname);
+        });
+        console.log(Object.values(ownProjects));
+        res.render('pages/my-projects', {
+          ownProjects: Object.values(ownProjects)
+        });
+    });
+
+
+    /*
+  	knex.from('projects').select('id', 'title', 'creation_date', 'visibility').where('author_id', userId).then(response => {
+  		response.forEach(own => {
+  			ownProjects.push(own);
+        own.collabs = [];
+  			knex.from('projects_users').select('user_id').where('project_id', own.id).then(response => {
+  				response.forEach(collabId => {
+  					knex.from('users').select('nickname').where('id', collabId.user_id).then(response => {
+  						own.collabs.push(response)
+
+  					});
+  				});
+  			});
+  		});
+      console.log(ownProjects)
+  		res.render('pages/my-projects', {
+  			ownProjects: ownProjects
+  		});
   	});
+    */
+
+    /* knex.from('projects').select('id', 'title', 'creation_date', 'visibility').where('author_id', userId).then(response => {
+		response.forEach(own => {
+			ownProjects.push(own);
+			knex.from('users').select('nickname').where('id', userId).then(response => {
+				ownProjects.push(response);
+				res.render('pages/my-projects', {
+					ownProjects: ownProjects
+				});
+			});
+
+		});
+		knex.from('projects_users').select('project_id').where('user_id', userId).then(response => {
+		response.forEach(project => {
+			knex.from('projects').select('id', 'author_id', 'title', 'creation_date', 'visibility').where('id', project.project_id).then(responses => {
+				responses.forEach(response => {
+					othersProjects.push(response);
+					knex.from('users').select('nickname').where('id', response.id).then(names => {
+							names.forEach(name => {
+								othersProjects.push(names);
+							});
+							console.log(othersProjects);
+
+						});
+					});
+				});
+			});
+		});
+    }) */
+
+
+	/* knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
+        response.forEach(project => {
+			ownProjects.push(project);
+			console.log(project)
+        });
+		res.render('pages/my-projects', {
+			ownProjects: ownProjects
+		});
+    }); */
+
+	/* knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
+        response.forEach(project => {
+			ownProjects.push(project);
+        });
+		res.render('pages/my-projects', {
+			ownProjects: ownProjects
+		});
+    }); */
+
+    /* knex.table('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').where("projects_users.user_id", userId).then((response) => {
+      response.forEach(project => {
+        othersProjects.push(project);
+      })
+
+  	}); */
   }else{
     res.redirect('/connexion');
   }
@@ -155,6 +222,13 @@ app.post('/mes-projets', function(req, res) {
     console.log(response);
     res.redirect('/app/'+response);
   });
+})
+
+app.post('/delete/:id', function(req, res) {
+  console.log('delete '+req.params.id)
+  knex('projects').where({ id: req.params.id }).del().then(response => {
+    res.redirect('/mes-projets')
+  })
 })
 
 app.get('/connexion', sessionChecker, function(req, res) {
@@ -223,6 +297,26 @@ app.post('/inscription', function(req, res){
   });
 });
 
+app.post('/add-user/:id', function(req, res) {
+  let mail = req.body.email;
+  let project = req.params.id;
+
+  knex('users').where({ email: mail }).then( response => {
+    if(response.length == 0){
+        console.log('Pas de mail correspondant')
+    }
+    else{
+      knex('projects_users').insert({
+        user_id: response[0].id,
+        project_id: project,
+      }).then(response => {
+        res.redirect('/app/'+project)
+      });
+    }
+  });
+
+});
+
 app.get('/canvas', function(req, res) {
   res.render('pages/canvas');
 });
@@ -236,8 +330,15 @@ io.on('connection', (socket) => {
   io.emit('getConnectionCanvas', canvasData);
 
   socket.on('connectionCanvas', data => {
-    canvasData = data;
-    io.emit('getConnectionCanvas', data);
+    canvasData = data.canvas;
+    let project_id = data.id;
+    let image = data.image;
+
+    knex('projects').where({ id: project_id }).update({ render: canvasData, thumbnail: image }).then(response => {
+      console.log(response);
+    })
+
+    io.emit('getConnectionCanvas', data.canvas);
   });
 
   socket.on('newCoords', data => {
