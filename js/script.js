@@ -28,15 +28,13 @@ window.addEventListener("load" , function() {
     var subAdd = document.querySelector(".people__sub");
 
     if (subAdd) {
-
         subAdd.style.top = "-50px";
-
         addButton.addEventListener('click' , function(e) {
 
             e.preventDefault();
             if (subAdd.style.top  === "-50px") {
                 document.querySelector('.people__sub__input').focus()
-                subAdd.style.top = "33px";
+                subAdd.style.top = "53px";
             }
             else {
                 subAdd.style.top = "-50px";

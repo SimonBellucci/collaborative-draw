@@ -69,6 +69,7 @@
         top:50%;
         transform: translate(-50%, calc(-50% + 35px));
         background: white;
+        z-index: -2;
     }
     input#colorPicker {
         border: 0;

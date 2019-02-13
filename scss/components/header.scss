@@ -130,7 +130,7 @@
             position: absolute;
             background: #2e3741;
             transition: all 0.3s ease;
-            top: 37px;
+            top: 53px;
             z-index: -1;
             right: 0;
             padding: 20px;
@@ -142,6 +142,7 @@
                 width:222px;
                 padding-left: 10px;
                 outline: none;
+                border:0;
             }
             &__validate {
                 margin-left:10px;
