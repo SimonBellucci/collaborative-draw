@@ -5,6 +5,11 @@
     &__title {
         font-size:40px;
     }
+    &__previous {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
     &__form {
         text-align: left;
         &__input {
@@ -38,6 +43,14 @@
     &__forgot {
         float: left;
         margin-top:20px;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    &__subscribe {
+        &:hover {
+            text-decoration: underline;
+        }
     }
     &__connexion {
         float: right;

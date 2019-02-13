@@ -16,6 +16,23 @@
                 display: inline-block;
                 margin-left: 38px;
                 position: relative;
+                &:after {
+                    content: "";
+                    height: 1px;
+                    background: #1f252d;
+                    position: absolute;
+                    width: 0%;
+                    bottom: -7px;
+                    transition: all 0.3s ease;
+                    margin: auto;
+                    left: 0;
+                    right: 0;
+                }
+                &:hover:after {
+                    width:100%;
+                    right: 0;
+                    left: 0;
+                }
                 &--strong {
                     font-weight: bold;
                 }
@@ -88,6 +105,8 @@
         padding:0 10px;
         margin-right: 20px;
         position: relative;
+        height: 39px;
+        width: 87px;
         &__icon {
             height:20px;
         }
@@ -100,6 +119,11 @@
             margin-left:15px;
             img {
                 height:20px;
+                transition: all 0.2s ease;
+                &:hover {
+                    height: 22px;
+                    margin-left:-2px;
+                }
             }
         }
         &__sub {
@@ -112,6 +136,7 @@
             padding: 20px;
             display: flex;
             overflow: hidden;
+            top:-50px;
             &__input {
                 height: 40px;
                 width:222px;

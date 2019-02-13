@@ -1,5 +1,11 @@
 @import 'variables';
 
+@keyframes heart-burst {
+ from {background-position:left;}
+ to { background-position:right;}
+}
+
+
 .introduction {
     padding:100px 0;
     &__title, &__text {
@@ -28,8 +34,9 @@
     text-align: center;
     background-image: url('../images/landscape.jpg');
     background-size: cover;
+    background-attachment: fixed;
     background-repeat: no-repeat;
-    background-position: center -270px;
+    background-position: center;
     padding:90px 0;
     position: relative;
     height: 315px;
@@ -79,12 +86,52 @@
         &__box-infos {
             border:1px solid #ddd;
             padding:20px;
-            margin-top:-5px;
+            margin-top:-4px;
+            position: relative;
+
             h4 {
                 margin:0 0 5px 0;
+                a {
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
             }
             &__author {
                 color:$gray-2;
+            }
+            &__like {
+                position: absolute;
+                top:10px;
+                right:10px;
+                display: flex;
+                &__counter {
+                    height: 50px;
+                    display:inline-block;
+                    margin: 15px -11px 0 0;
+                    color:$gray-2;
+                }
+                &__icon {
+                    cursor: pointer;
+                     height: 50px;
+                     width: 50px;
+                     background: none;
+                     border:none;
+                     background-image:url("../images/like.png");
+                     background-position: left;
+                     background-repeat:no-repeat;
+                     background-size:2900%;
+                     animation: heart-burst 1s infinity;
+                     outline: none;
+                     &--is-animate {
+                         animation: heart-burst .8s steps(28) 1;
+                         background-position: right;
+
+                     }
+                     &:hover {
+                         background-position:right;
+                     }
+                }
             }
         }
     }

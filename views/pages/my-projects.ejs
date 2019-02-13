@@ -29,10 +29,10 @@
             <div class="row align-center">
                 <div class="col-lg-6">
                     <nav class="menu">
-                        <a href="#" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
+                        <a href="/" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="" title="Accueil">Home</a></li>
-                            <li class="menu__sub__link"><a href="" title="Galerie publique">Galerie publique</a></li>
+                            <li class="menu__sub__link"><a href="/" title="Accueil">Home</a></li>
+                            <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
                             <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
                     </nav>
@@ -44,7 +44,7 @@
         </header>
         <main>
             <section class="all-projects container">
-                <h1>Mes projets</h1>
+                <h1>.: Mes projets</h1>
                 <% if(infos.length > 0){ %>
                 <% infos.forEach(function(info) { %>
                   <article class="project row">
@@ -74,9 +74,10 @@
                 <% }); %>
                 <% }else{ %>
                     <div class="row">
-                        <div>
-                            <p>Vous n'avez pas de projets</p>
-                            <a href="#" class="create-project button button--blue" title="Créer un projet">Créer un projet</a>
+                        <div class="no-projects">
+                            <img src="./images/picture.svg" alt="Commencer un projet" class="no-projects__picture">
+                            <p class="no-projects__title">Vous n'avez pas de projets</p>
+                            <a href="#" class="create-project button button--blue" title="Créer un projet">Commencer un projet</a>
                         </div>
                     </div>
                 <% } %>

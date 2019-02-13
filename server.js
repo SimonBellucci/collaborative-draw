@@ -10,9 +10,9 @@ const session = require('express-session');
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'base.iha.unistra.fr',
-    user : 'prjapp2',
-    password : 'YPQ7ygSJQ0zZeLV9',
+    host : 'localhost',
+    user : 'root',
+    password : '',
     database : 'prjapp2'
   },
   pool: { min: 0, max: 10 }
