@@ -1,0 +1,139 @@
+@import "variables";
+
+.all-projects {
+    margin-top: 80px;
+    h1 {
+        margin: 0 -12px 30px -12px;
+    }
+    .project {
+        background: $gray-light;
+        height: 185px;
+        margin-bottom: 20px;
+        &__preview {
+            position: relative;
+            padding: 0 30px 0 0!important;
+            &__status {
+                height: 30px;
+                width: 30px;
+                background: $gray-1;
+                position: absolute;
+                top:0;
+                right: 30px;
+                cursor:pointer;
+                img {
+                    height:30px;
+                    width:30px;
+                    padding: 4px;
+                }
+            }
+            &__image {
+                max-width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                width: 100%;
+            }
+        }
+        &__informations {
+            color: $gray-2;
+            padding:20px;
+            &__title {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            &__author, &__colaborators  {
+                display: inline-block;
+                margin-bottom:5px;
+            }
+            &__colaborators {
+                padding-bottom: 10px;
+            }
+            &__date {
+                border-top: 1px solid #ddd;
+                padding-top:15px;
+                display: inline-block;
+            }
+        }
+        &__cta {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 25px;
+            .button {
+                width:122px;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+.modal {
+    position: absolute;
+    background: rgba(0 , 0 , 0 , 0.6);
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    transition: all 0.5s ease;
+    visibility: hidden;
+    opacity: 0;
+    &__content {
+        &__close {
+            position: absolute;
+            top:15px;
+            right:20px;
+            font-size: 24px;
+            color:$gray-2;
+            cursor: pointer;
+        }
+        position: absolute;
+        left: 50%;
+        top:50%;
+        transform: translate(-50% , -50%);
+        background: $white;
+        padding: 50px 85px;
+        display: inline-block;
+        &__title {
+            font-size:26px;
+            font-weight: bold;
+        }
+        &__name {
+            color:$gray-2;
+            margin-top: 30px;
+            &__input {
+                height:40px;
+                margin-top:7px;
+                padding-left: 10px;
+                outline: none;
+                width: 200px;
+                &:focus {
+                    border: 1px solid $blue;
+                }
+            }
+        }
+        &__size {
+            color:$gray-2;
+            margin-top:25px;
+            &__1 {
+                height:40px;
+                margin-top:7px;
+                width:60px;
+                padding-left: 10px;
+                outline: none;
+                &:focus {
+                    border: 1px solid $blue;
+                }
+            }
+            &__2 {
+                height: 40px;
+                width:60px;
+                margin-bottom: 30px;
+                padding-left: 10px;
+                outline: none;
+                &:focus {
+                    border: 1px solid $blue;
+                }
+            }
+        }
+    }
+}

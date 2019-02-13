@@ -1,0 +1,12 @@
+@import 'variables';
+
+.footer {
+    background: $gray-1;
+    text-align: center;
+    padding:20px 0;
+    &__link {
+        padding:0 10px;
+        color: $white;
+        font-size: 14px;
+    }
+}

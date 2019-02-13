@@ -1,0 +1,60 @@
+@import "variables";
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('Montserrat-Bold.otf') format('otf');
+    font-weight: bold;
+ }
+
+ @font-face {
+    font-family: 'Montserrat';
+    src: url('Montserrat-Regular.otf') format('otf');
+    font-weight: 400;
+}
+
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('Montserrat-Light.otf') format('otf');
+    font-weight: 300;
+}
+
+body {
+    font-family: 'Montserrat' , sans-serif;
+    color: $gray-1;
+}
+
+h1 {
+    font-size: 28px;
+    line-height: 41px;
+}
+
+h2 {
+    font-size:26px;
+    line-height: 38px;
+    margin-top:0;
+}
+
+h3 {
+    font-size:20px;
+    line-height: 28px;
+}
+
+h1, h2, h3 {
+    color: $gray-1;
+    font-weight: bold;
+}
+
+p {
+    font-size:16px;
+    line-height:30px;
+    color:$gray-2;
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color:inherit;
+    display: inline-block;
+}

@@ -1,0 +1,91 @@
+@import 'variables';
+
+.introduction {
+    padding:100px 0;
+    &__title, &__text {
+        padding-right:10px;
+    }
+    .button {
+        margin:10px 10px 0;
+    }
+    &__image {
+        padding-left:10px;
+    }
+}
+
+.features {
+    background: $gray-light;
+    padding:55px 0;
+    &__one, &__two, &__three{
+        text-align: center;
+        &__image {
+            height:60px;
+        }
+    }
+}
+
+.registration {
+    text-align: center;
+    background-image: url('../images/landscape.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center -270px;
+    padding:90px 0;
+    position: relative;
+    height: 315px;
+    &__text , .button {
+        transform: translateX(-50%);
+        position: absolute;
+        z-index: 1;
+        left: 50%;
+    }
+    &__text {
+        color:$white;
+        font-size: 24px;
+        line-height: 40px;
+        top:50px;
+    }
+    .button {
+        bottom:90px;
+    }
+    &__overlay {
+        &:before {
+            content: "";
+            background: black;
+            display: block;
+            height:100%;
+            width: 100%;
+            opacity: 0.6;
+            top:0;
+            bottom: 0;
+            right: 0;
+            left:0;
+            z-index: 0;
+            position: absolute;
+        }
+    }
+}
+
+.popular-projects {
+    padding:110px 0;
+    &__title {
+        margin-bottom:45px;
+    }
+    &__one, &__two, &__three {
+        margin-bottom: 40px;
+        &__image {
+            max-width: 100%;
+        }
+        &__box-infos {
+            border:1px solid #ddd;
+            padding:20px;
+            margin-top:-5px;
+            h4 {
+                margin:0 0 5px 0;
+            }
+            &__author {
+                color:$gray-2;
+            }
+        }
+    }
+}

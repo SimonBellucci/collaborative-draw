@@ -1,0 +1,129 @@
+@import 'variables';
+
+
+/* Home header */
+.global-header {
+    padding-top:10px;
+    .menu {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        float: right;
+        li {
+            display: inline-block;
+            .menu__link {
+                font-weight: 300;
+                display: inline-block;
+                margin-left: 38px;
+                position: relative;
+                &--strong {
+                    font-weight: bold;
+                }
+                &--active:after {
+                    content: "";
+                    height: 1px;
+                    background: #1f252d;
+                    position: absolute;
+                    width: 100%;
+                    bottom: -7px;
+                    left: 0;
+                    right: 0;
+                }
+            }
+        }
+    }
+}
+
+/* App header */
+.app-header {
+    background: $gray-3;
+    padding:15px 20px!important;
+    top: 0;
+    position: relative;
+    .menu {
+        position: relative;
+        &__icon {
+            display: inline-block;
+            height:25px;
+            img {
+                height:25px;
+                width: 50px;
+                display: inline-block;
+            }
+        }
+        &__sub {
+            list-style:none;
+            padding: 0;
+            position: absolute;
+            left:5px;
+            background: #2e3741;
+            transition: all 0.3s ease;
+            top:33px;
+            overflow: hidden;
+            visibility: hidden;
+            z-index: 2;
+            &__link {
+                color:$white;
+                padding: 17px 30px;
+                transition: all 0.2s ease;
+                a {
+                    font-weight: 400;
+                }
+                &:hover {
+                    background: rgba(255 , 255 , 255 , 0.02);
+                }
+            }
+        }
+    }
+    .project-name {
+        color:$white;
+        font-size: 18px;
+        position: absolute;
+        margin: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .people {
+        background: #2f3943;
+        padding:0 10px;
+        margin-right: 20px;
+        position: relative;
+        &__icon {
+            height:20px;
+        }
+        &__number {
+            color:$white;
+            margin-left:3px;
+        }
+        &__add {
+            display: inline-flex;
+            margin-left:15px;
+            img {
+                height:20px;
+            }
+        }
+        &__sub {
+            position: absolute;
+            background: #2e3741;
+            transition: all 0.3s ease;
+            top: 37px;
+            z-index: -1;
+            right: 0;
+            padding: 20px;
+            display: flex;
+            overflow: hidden;
+            &__input {
+                height: 40px;
+                width:222px;
+                padding-left: 10px;
+                outline: none;
+            }
+            &__validate {
+                margin-left:10px;
+            }
+        }
+    }
+    .export {
+
+    }
+}

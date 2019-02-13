@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+    <head>
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	    <link rel="stylesheet" href="./mincss/styles.css">
+	    <title>WeMake - Inscription</title>
+    </head>
+    <body>
+        <section class="container ">
+            <div class="row">
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-6 text-center bloc-form">
+                    <a href="" class="bloc-form__previous">&#8249;	Retour à l'accueil</a>
+                    <h1 class="bloc-form__title"> WEMAKE</h1>
+                    <form action="/inscription" method="POST" class="bloc-form__form">
+                        <input id="formLastName" class="bloc-form__form__input demi" type="text" name="lastname" placeholder="Nom">
+                        <input id="formSurName" class="bloc-form__form__input demi" type="text" name="firstname" placeholder="Prénom"><br>
+                        <input id="formNickName" class="bloc-form__form__input" type="text" name="nickname" placeholder="Votre pseudo"><br>
+                        <input id="formMail" class="bloc-form__form__input" type="mail" name="email" placeholder="Adresse email"><br>
+                        <input id="formPassword" class="bloc-form__form__input" type="password" name="password" placeholder="Votre mot de passe"><br>
+                        <input id="formPasswordVerify" class="bloc-form__form__input" type="password" placeholder="Confirmez le mot de passe"><br>
+                        <div class="row">
+                            <div class="col-lg-6 bloc-form__condition">
+                                En cliquant sur "S'inscrire" vous acceptez les Conditions générales d'utilisation de WEMAKE.
+                            </div>
+                            <div class="col-lg-6">
+                                <button href="" id="registerButton" class="bloc-form__connexion button button--blue" title="S'inscrire">S'inscrire</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/connexion" class="bloc-form__subscribe">Vous avez un compte ? Connectez-vous</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+            </div>
+        </section>
+
+        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+        <script type="text/javascript">
+
+          let $ = function(id){return document.getElementById(id)};
+
+          //Initialisation de socket.io
+          const socket = io('/');
+
+          function register(){
+
+            const userInfo = {
+              firstname: $('formSurName').value,
+              lastname: $('formLastName').value,
+              nickname: $('formNickName').value,
+              email: $('formMail').value,
+              password: $('formPassword').value
+            };
+
+            socket.emit('registerUser', userInfo);
+          }
+
+          $('registerButton').addEventListener('click', () => {
+            register();
+          });
+
+          socket.on('emailAlreadyExists', () => {
+            console.log('emailAlreadyExists')
+          });
+
+        </script>
+
+    </body>
+</html>
