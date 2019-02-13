@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	    <link rel="stylesheet" href="./mincss/styles.css">
+	    <link rel="stylesheet" href="../mincss/styles.css">
 	    <title>WeMake - App</title>
     </head>
     <body>
@@ -12,7 +12,7 @@
             <div class="row align-center">
                 <div class="col-lg-6">
                     <nav class="menu">
-                        <a href="#" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
+                        <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
                             <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
                             <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
@@ -63,8 +63,8 @@
                 <ul class="tools__item__sub">
                     <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createCircle">Cercle</button>
-                    <li class="tools__item__sub__item">Rectangle</li>
-                    <li class="tools__item__sub__item">Triangle</li>
+                    <button class="tools__item__sub__item shape" type="button" name="button" id="createRect">Rectangle</button>
+                    <button class="tools__item__sub__item shape" type="button" name="button" id="createTriangle">Triangle</button>
                 </ul>
             </div>
             <div class="tools__item">
@@ -95,6 +95,8 @@
             //Récupération des boutons de création de formes
             const shapeButton = document.getElementsByClassName('shape');
             const circleButton = $('createCircle');
+            const createRect = $('createRect');
+            const createTriangle = $('createTriangle');
 
             //Récupération des boutons de changements de couleur
             const colorPicker = $('colorPicker');
@@ -197,10 +199,64 @@
                   };
                 })(circle.toObject);
 
+
+                const rect = new fabric.Rect({
+                    width: 10,
+                    height: 20,
+                    fill: data.color,
+                    opacity: 0.7,
+                    top: canvas.height/2,
+                    left: canvas.width/2,
+                 });
+
+
+
                 circle.id = data.id;
 
                 canvas.add(circle);
-              }
+            } else if(data.type == 'rect'){
+
+                const rect = new fabric.Rect({
+                    width: 100,
+                    height: 200,
+                    fill: data.color,
+                    top: canvas.height/2,
+                    left: canvas.width/2,
+                 });
+
+                rect.toObject = (function(toObject) {
+                return function() {
+                  return fabric.util.object.extend(toObject.call(this), {
+                      id: this.id
+                    });
+                  };
+                })(rect.toObject);
+
+                rect.id = data.id;
+
+                canvas.add(rect);
+              } else if(data.type == 'triangle'){
+
+                  const triangle = new fabric.Triangle({
+                      width: 100,
+                      height: 200,
+                      fill: data.color,
+                      top: canvas.height/2,
+                      left: canvas.width/2,
+                   });
+
+                  triangle.toObject = (function(toObject) {
+                  return function() {
+                    return fabric.util.object.extend(toObject.call(this), {
+                        id: this.id
+                      });
+                    };
+                  })(triangle.toObject);
+
+                  triangle.id = data.id;
+
+                  canvas.add(triangle);
+                }
             }
 
             document.addEventListener('keydown', e => {
@@ -216,6 +272,14 @@
 
             circleButton.addEventListener('click', () => {
               socket.emit('objectAdded', {type: 'circle', color: color});
+            });
+
+            createRect.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'rect', color: color});
+            });
+
+            createTriangle.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'triangle', color: color});
             });
 
           socket.on('getNewCoords', data => {

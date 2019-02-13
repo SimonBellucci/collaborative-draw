@@ -15,7 +15,8 @@ const knex = require('knex')({
     password : '',
     database : 'prjapp2'
   },
-  pool: { min: 0, max: 10 }
+  pool: { min: 0, max: 10 },
+  charset   : 'UTF8_GENERAL_CI'
 });
 
 const crypto = require('crypto')
@@ -217,6 +218,7 @@ app.post('/mes-projets', function(req, res) {
     title: req.body.name,
     width: req.body.width,
     height: req.body.height,
+    creation_date: new Date().toISOString().slice(0, 19).replace('T', ' ')
   }).then(response => {
     console.log(response);
     res.redirect('/app/'+response);
