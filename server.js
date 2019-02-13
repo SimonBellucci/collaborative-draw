@@ -7,13 +7,15 @@ const io = require('socket.io')(http);
 
 const session = require('express-session');
 
+const config = require('./config/config.js');
+
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'localhost',
-    user : 'root',
-    password : '',
-    database : 'prjapp2'
+    host : config.host,
+    user : config.user,
+    password : config.password,
+    database : config.database
   },
   pool: { min: 0, max: 10 },
   charset   : 'UTF8_GENERAL_CI'
@@ -126,7 +128,7 @@ app.get('/mes-projets', function(req, res) {
         });
         console.log(Object.values(ownProjects));
         res.render('pages/my-projects', {
-          ownProjects: Object.values(ownProjects)
+          ownProjects: (Object.values(ownProjects)).reverse()
         });
     });
 
