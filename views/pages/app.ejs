@@ -39,6 +39,7 @@
         </header>
         <section class="tools">
             <div class="tools__item">
+              <input type="file" id="file" name="" value="">
                 <img src="../images/import.svg" alt="Import">
             </div>
             <div class="tools__item">
@@ -101,6 +102,13 @@
             //Récupération des boutons de changements de couleur
             const colorPicker = $('colorPicker');
 
+            //Récupération import d'image
+            const importButton = $('file');
+
+            importButton.addEventListener('change', (e) => {
+              upload(e);
+            })
+
             colorPicker.addEventListener('change', (e) => {
               changeColor(e.target.value);
             });
@@ -130,6 +138,73 @@
               let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
               let image = canvas.toDataURL('jpeg');
               socket.emit('connectionCanvas', {canvas: serializedCanvas, id: id, image: image});
+            }
+
+            //Ratio image
+            function sizeCalc(imgWidth, imgHeight) {
+              let width_ratio = canvas.width / 2 / imgWidth;
+              let height_ratio = canvas.height / 2 / imgHeight;
+
+              let ratio = null;
+
+              // if (width_ratio > height_ratio)
+              if (imgWidth >= imgHeight)
+                ratio = width_ratio;
+              else
+                ratio = height_ratio;
+
+              let height = canvas.height / 2 / ratio;
+              let width = (canvas.width / 2) / ratio;
+
+              let cH = canvas.height / 2;
+              let nH = imgHeight * ratio;
+              let cropY = (nH - cH) / ratio / 2;
+
+              let cW = canvas.width / 2;
+              let nW = imgWidth * ratio;
+              let cropX = (nW - cW) / ratio / 2;
+
+              let returnObj = {
+                width_ratio: ratio,
+                height_ratio: ratio,
+                width: width,
+                height: height
+              };
+
+              if (width_ratio > height_ratio) returnObj.cropY = cropY;
+              else returnObj.cropX = cropX;
+
+              return returnObj;
+            }
+
+            //Import d'image
+            function upload(e) {
+               let fileType = e.target.files[0].type;
+               let url = URL.createObjectURL(e.target.files[0]);
+
+               if (fileType === 'image/jpeg') { //check if png
+                  fabric.Image.fromURL(url, function(img) {
+                    let size = sizeCalc(img.width, img.height);
+                     img.set({
+                       left:20,
+                       top: 20,
+                       height: size.height,
+                       width: size.width,
+                       scaleY: size.height_ratio,
+                       scaleX: size.width_ratio,
+                       cropY: size.cropY ? size.cropY : false,
+                       cropX: size.cropX ? size.cropX : false
+                     });
+                     canvas.add(img);
+                  });
+               } else if (fileType === 'image/svg+xml') { //check if svg
+                  fabric.loadSVGFromURL(url, function(objects, options) {
+                     var svg = fabric.util.groupSVGElements(objects, options);
+                     svg.scaleToWidth(180);
+                     svg.scaleToHeight(180);
+                     canvas.add(svg);
+                  });
+               }
             }
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
