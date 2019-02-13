@@ -73,17 +73,18 @@ window.addEventListener("load" , function() {
 
 
     // animation like
-    var like = document.querySelector('.popular-projects__three__box-infos__like__icon');
+    var like = document.getElementsByClassName('popular-projects__three__box-infos__like__icon');
 
+    for (var i = 0 ; i < like.length ; i++) {
 
+        like[i].addEventListener('click' , function() {
+            this.classList.toggle("popular-projects__three__box-infos__like__icon--is-animate")
+        })
 
-    like.addEventListener('click' , function() {
-        like.classList.toggle("popular-projects__three__box-infos__like__icon--is-animate")
-    })
+        like[i].addEventListener('webkitAnimationEnd' , function() {
+            this.classList.add("popular-projects__three__box-infos__like__icon--is-animate")
+        })
+    }
 
-    like.addEventListener('webkitAnimationEnd' , function() {
-        console.log('OKKKKK')
-        like.classList.add("popular-projects__three__box-infos__like__icon--is-animate")
-    })
 
 });
