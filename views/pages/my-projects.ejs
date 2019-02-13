@@ -48,7 +48,7 @@
 				<h1>Mes projets</h1>
                 <% ownProjects.forEach(function(own) { %>
                   <article class="project row">
-                      <div class="project__preview col-lg-4" id="preview" style="background:url('<%= own.thumbnail %>')">
+                      <div class="project__preview col-lg-4">
                           <div class="project__preview__status">
                             <% if(own.visibility){ %>
                               <img src="./images/public-white.svg" alt="">
@@ -56,13 +56,18 @@
                               <img src="./images/cadena.svg" alt="">
                             <% } %>
                           </div>
+                          <img class="project__preview__image" id="preview" src="<%= own.thumbnail %>" alt="">
                       </div>
                       <div class="project__informations col-lg-6">
                           <h2 class="project__informations__title">
                               <%= own.title %>
                           </h2>
                          <!--  <span class="project__informations__author"><strong>Auteur :</strong> <%= own.nickname %></span><br> -->
-                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <%= own.collabs.join(', ') %></span><br>
+                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <% if(own.collabs.length > 0){ %>
+                            <%= own.collabs.join(', ') %>
+                          <% }else{ %>
+                            Il n'y a aucun collaborateur
+                          <%}%></span><br>
                           <span class="project__informations__date">Créé le <%= own.creation_date %></span>
                       </div>
                       <div class="project__cta col-lg-2">
