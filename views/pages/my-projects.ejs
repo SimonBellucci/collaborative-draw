@@ -8,22 +8,22 @@
 	    <title>WeMake - Mes projets</title>
     </head>
     <body>
-        <div class="modal">
+        <form action="/mes-projets" method="POST" class="modal">
             <div class="modal__content">
                 <div class="modal__content__close">&#215;</div>
                 <span class="modal__content__title">Créer un projet</span>
                 <div class="modal__content__name">
                     <label for="name">Nom du projet</label><br />
-                    <input id="name-project" class="modal__content__name__input" type="text" placeholder="Projet n°1">
+                    <input id="name-project" class="modal__content__name__input" type="text" name="name" placeholder="Projet n°1">
                 </div>
                 <div class="modal__content__size">
                     <label for="size-project">Taille du projet (en px)</label><br />
-                    <input id="size-project" type="number" class="modal__content__size__1" placeholder="800"> x
-                    <input type="number" class="modal__content__size__2" placeholder="600">
+                    <input id="size-project" type="number" class="modal__content__size__1" name="width" placeholder="800"> x
+                    <input type="number" class="modal__content__size__2" name="height" placeholder="600">
                 </div>
-                <button class="button button--blue">Créer le projet</button>
+                <button class="button button--blue" type="submit">Créer le projet</button>
             </div>
-        </div>
+        </form>
 
         <header class="container-fluid app-header">
             <div class="row align-center">
@@ -44,31 +44,39 @@
         </header>
         <main>
             <section class="all-projects container">
+<<<<<<< HEAD
                 <h1>.: Mes projets</h1>
                 <% if(infos.length > 0){ %>
                 <% infos.forEach(function(info) { %>
+=======
+                <% if(ownProjects.length > 0){ %>
+				<h1>Mes projets</h1>
+                <% ownProjects.forEach(function(own) { %>
+>>>>>>> 1c5f5868324efacaa1ac682adee2468e69af0042
                   <article class="project row">
                       <div class="project__preview col-lg-4">
                           <div class="project__preview__status">
-                            <% if(info.visibility){ %>
+                            <% if(own.visibility){ %>
                               <img src="./images/public-white.svg" alt="">
                             <% } else{ %>
                               <img src="./images/cadena.svg" alt="">
                             <% } %>
                           </div>
-                          <img class="project__preview__image" src="./images/demo.png" alt="">
+                          <img class="project__preview__image" id="preview" src="<%= own.thumbnail %>" alt="">
                       </div>
                       <div class="project__informations col-lg-6">
                           <h2 class="project__informations__title">
-                              <%= info.title %>
+                              <%= own.title %>
                           </h2>
-                          <span class="project__informations__author"><strong>Auteur :</strong> <%= info.nickname %></span><br>
-                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <%= info.nickname %></span><br>
-                          <span class="project__informations__date">Créé le <%= info.creation_date %></span>
+                         <!--  <span class="project__informations__author"><strong>Auteur :</strong> <%= own.nickname %></span><br> -->
+                          <span class="project__informations__colaborators"><strong>Collaborateurs :</strong> <%= own.collabs.join(', ') %></span><br>
+                          <span class="project__informations__date">Créé le <%= own.creation_date %></span>
                       </div>
                       <div class="project__cta col-lg-2">
-                          <a href="" class="button button--transparent" title="Modifier">Modifier</a>
-                          <a href="" class="button button--red" title="Supprimer">Supprimer</a>
+                          <a href=<%= "/app/"+own.id %> class="button button--transparent" title="Modifier">Modifier</a>
+                          <form class="" action="/delete/<%= own.id %>" method="POST">
+                            <button type="submit" class="button button--red" title="Supprimer">Supprimer</a>
+                          </form>
                       </div>
                   </article>
                 <% }); %>
@@ -84,5 +92,8 @@
             </section>
         </main>
         <script src="./minjs/script.js"></script>
+        <script type="text/javascript">
+          let image = document.getElementById('preview');
+        </script>
     </body>
 </html>
