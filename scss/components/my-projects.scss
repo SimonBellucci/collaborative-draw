@@ -12,6 +12,8 @@
         &__preview {
             position: relative;
             padding: 0 30px 0 0!important;
+            background-size: cover!important;
+            background-position: center!important;
             &__status {
                 height: 30px;
                 width: 30px;

@@ -48,7 +48,7 @@
 				<h1>Mes projets</h1>
                 <% ownProjects.forEach(function(own) { %>
                   <article class="project row">
-                      <div class="project__preview col-lg-4">
+                      <div class="project__preview col-lg-4" id="preview" style="background:url('<%= own.thumbnail %>')">
                           <div class="project__preview__status">
                             <% if(own.visibility){ %>
                               <img src="./images/public-white.svg" alt="">
@@ -56,7 +56,6 @@
                               <img src="./images/cadena.svg" alt="">
                             <% } %>
                           </div>
-                          <img class="project__preview__image" id="preview" src="<%= own.thumbnail %>" alt="">
                       </div>
                       <div class="project__informations col-lg-6">
                           <h2 class="project__informations__title">
