@@ -136,9 +136,15 @@
             function sendData(){
               let id = "<%= infos[0].id %>";
               let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+              console.log('Saved');
               let image = canvas.toDataURL('jpeg');
               socket.emit('connectionCanvas', {canvas: serializedCanvas, id: id, image: image});
             }
+
+            //Enregistrement toutes les 10 secs
+            setInterval(() => {
+              sendData();
+            },10000)
 
             //Ratio image
             function sizeCalc(imgWidth, imgHeight) {
