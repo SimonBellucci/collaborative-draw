@@ -13,7 +13,7 @@ window.addEventListener("load" , function() {
         menuButton.addEventListener('click' , function(e) {
             e.preventDefault();
             if (subMenu.style.height  === "0px") {
-                subMenu.style.height = "160px";
+                subMenu.style.height = "213px";
                 subMenu.style.visibility = "visible";
             }
             else {
@@ -22,6 +22,7 @@ window.addEventListener("load" , function() {
             }
         });
     }
+
 
     // ouverture des utilisateurs à ajouter
     var addButton = document.querySelector(".people__add");
@@ -60,7 +61,6 @@ window.addEventListener("load" , function() {
         for (var i = 0 ; i < btnCreate.length ; i++) {
             btnCreate[i].addEventListener('click' , function(e) {
                 e.preventDefault();
-
                 modal.style.opacity = "1";
                 modal.style.visibility = "visible";
             });
@@ -68,6 +68,12 @@ window.addEventListener("load" , function() {
         closeModal.addEventListener('click' , function() {
             modal.style.opacity = "0";
             modal.style.visibility = "hidden";
+        });
+        modal.addEventListener('click' , function(e) {
+            if(e.target ==  modal) {
+                modal.style.opacity = "0";
+                modal.style.visibility = "hidden";
+            }
         });
     }
 
