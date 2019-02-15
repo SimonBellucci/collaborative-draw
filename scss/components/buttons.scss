@@ -28,7 +28,8 @@
         color:$gray-2;
         border:1px solid $gray-2;
         &:hover {
-            border: 2px solid $gray-2;
+            background: $gray-2;
+            color:$white;
         }
     }
 }
