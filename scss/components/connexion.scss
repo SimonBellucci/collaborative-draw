@@ -1,7 +1,8 @@
 @import "variables";
 
 .bloc-form {
-    margin-top:100px;
+    margin: 100px auto 0;
+
     &__title {
         font-size:40px;
     }
@@ -34,6 +35,14 @@
         &__input.demi:first-child {
             margin-right: 6px;
         }
+
+        .form-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
     }
     &__condition {
         margin-top:20px;
@@ -52,14 +61,16 @@
             text-decoration: underline;
         }
     }
-    &__connexion {
-        float: right;
-        margin-top:20px;
-    }
-    &__facebook {
-        float:left;
-    }
-    &__google {
-        float:right;
+
+    @media only screen and (max-width: 22em) {
+        margin: 30px auto 0;
+
+        .form-flex {
+            justify-content: center;
+        }
+    
+        #connectionButton {
+            margin-top: 10px;
+        }
     }
 }
