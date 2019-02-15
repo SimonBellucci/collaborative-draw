@@ -265,7 +265,13 @@ let canvasData = '';
 let idCount = 0;
 
 io.on('connection', (socket) => {
-  console.log('Nouvelle connexion');
+
+  socket.on('room', function(room) {
+      socket.join(room);
+      io.sockets.in(room).emit('message', 'Room '+room);
+  });
+
+
 
   io.emit('getConnectionCanvas', canvasData);
 
@@ -273,6 +279,9 @@ io.on('connection', (socket) => {
     canvasData = data.canvas;
     let project_id = data.id;
     let image = data.image;
+
+    socket.project_id = project_id;
+    //io.sockets pour récupérer tous les sockets
 
     knex('projects').where({ id: project_id }).update({ render: canvasData, thumbnail: image }).then(response => {
       console.log(response);
@@ -282,7 +291,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newCoords', data => {
-    io.emit('getNewCoords', data);
+    io.sockets.in(data.room).emit('getNewCoords', data);
   });
 
   socket.on('newScale', data => {
