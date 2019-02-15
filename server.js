@@ -131,84 +131,6 @@ app.get('/mes-projets', function(req, res) {
           ownProjects: (Object.values(ownProjects)).reverse()
         });
     });
-
-
-    /*
-  	knex.from('projects').select('id', 'title', 'creation_date', 'visibility').where('author_id', userId).then(response => {
-  		response.forEach(own => {
-  			ownProjects.push(own);
-        own.collabs = [];
-  			knex.from('projects_users').select('user_id').where('project_id', own.id).then(response => {
-  				response.forEach(collabId => {
-  					knex.from('users').select('nickname').where('id', collabId.user_id).then(response => {
-  						own.collabs.push(response)
-
-  					});
-  				});
-  			});
-  		});
-      console.log(ownProjects)
-  		res.render('pages/my-projects', {
-  			ownProjects: ownProjects
-  		});
-  	});
-    */
-
-    /* knex.from('projects').select('id', 'title', 'creation_date', 'visibility').where('author_id', userId).then(response => {
-		response.forEach(own => {
-			ownProjects.push(own);
-			knex.from('users').select('nickname').where('id', userId).then(response => {
-				ownProjects.push(response);
-				res.render('pages/my-projects', {
-					ownProjects: ownProjects
-				});
-			});
-
-		});
-		knex.from('projects_users').select('project_id').where('user_id', userId).then(response => {
-		response.forEach(project => {
-			knex.from('projects').select('id', 'author_id', 'title', 'creation_date', 'visibility').where('id', project.project_id).then(responses => {
-				responses.forEach(response => {
-					othersProjects.push(response);
-					knex.from('users').select('nickname').where('id', response.id).then(names => {
-							names.forEach(name => {
-								othersProjects.push(names);
-							});
-							console.log(othersProjects);
-
-						});
-					});
-				});
-			});
-		});
-    }) */
-
-
-	/* knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-        response.forEach(project => {
-			ownProjects.push(project);
-			console.log(project)
-        });
-		res.render('pages/my-projects', {
-			ownProjects: ownProjects
-		});
-    }); */
-
-	/* knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-        response.forEach(project => {
-			ownProjects.push(project);
-        });
-		res.render('pages/my-projects', {
-			ownProjects: ownProjects
-		});
-    }); */
-
-    /* knex.table('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').where("projects_users.user_id", userId).then((response) => {
-      response.forEach(project => {
-        othersProjects.push(project);
-      })
-
-  	}); */
   }else{
     res.redirect('/connexion');
   }
@@ -233,6 +155,21 @@ app.post('/delete/:id', function(req, res) {
     res.redirect('/mes-projets')
   })
 })
+
+app.get('/mes-collaborations', function(req, res) {
+
+  if(req.session.user){
+    let userId = req.session.user[0].id;
+
+    knex.select('projects.*', 'users.nickname as author').from('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').innerJoin('users', 'projects.author_id', '=', 'users.id').where('projects_users.user_id', userId).then(rows => {
+      res.render('pages/my-collabs', {
+            othersProjects: rows.reverse()
+        });
+    });
+  }else{
+    res.redirect('/connexion');
+  }
+});
 
 app.get('/connexion', sessionChecker, function(req, res) {
   res.render('pages/connexion');

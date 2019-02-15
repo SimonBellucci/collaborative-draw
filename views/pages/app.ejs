@@ -183,6 +183,22 @@
               return returnObj;
             }
 
+            fabric.Image.prototype.toObject = (function(toObject) {
+              return function() {
+                return fabric.util.object.extend(toObject.call(this), {
+                  src: this.toDataURL(),
+                  height: this.height,
+                  width: this.width,
+                  matrixCache: this.matrixCache,
+                  ownMatrixCache: this.ownMatrixCache,
+                  scaleY: this.scaleY,
+                  scaleX: this.scaleX,
+                  cropX: this.cropX,
+                  cropY: this.cropY
+                });
+              };
+            })(fabric.Image.prototype.toObject);
+
             //Import d'image
             function upload(e) {
                let fileType = e.target.files[0].type;
@@ -245,8 +261,6 @@
 
             function onObjectSelected(e){
             	let self = e.target;
-              let radius = $('radiusValue');
-              radius.setAttribute('value', self.radius);
               console.log(self);
             }
 
