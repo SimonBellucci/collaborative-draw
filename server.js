@@ -85,16 +85,21 @@ app.get('/app/:id', function(req, res) {
       countUsers++
     })
 
-    knex('projects').where({ id: projectId }).then((response) => {
-      if(req.session.user){
-        res.render('pages/app', {
-          infos: response,
-          count: countUsers
-        });
-      }
-    	else{
-        res.redirect('/connexion');
-      }
+    knex('users').where({ id: req.session.user[0].id }).then(user => {
+
+      knex('projects').where({ id: projectId }).then((response) => {
+        if(req.session.user){
+          res.render('pages/app', {
+            infos: response,
+            count: countUsers,
+            username: user[0].nickname
+          });
+        }
+      	else{
+          res.redirect('/connexion');
+        }
+      });
+
     });
   })
 
@@ -267,11 +272,18 @@ let idCount = 0;
 io.on('connection', (socket) => {
 
   socket.on('room', function(room) {
+
       socket.join(room);
+
+      let connectedUsers = io.sockets.adapter.rooms[room].length;
+      console.log(connectedUsers);
       io.sockets.in(room).emit('message', 'Room '+room);
+      io.sockets.in(room).emit('numberConnected', connectedUsers);
   });
 
-
+  socket.on('chatMsg', data => {
+    io.sockets.in(data.room).emit('newChatMsg', {message: data.message, username: data.username});
+  })
 
   io.emit('getConnectionCanvas', canvasData);
 
@@ -284,7 +296,7 @@ io.on('connection', (socket) => {
     //io.sockets pour récupérer tous les sockets
 
     knex('projects').where({ id: project_id }).update({ render: canvasData, thumbnail: image }).then(response => {
-      console.log(response);
+      // console.log(response);
     })
 
     io.emit('getConnectionCanvas', data.canvas);

@@ -81,27 +81,12 @@
         </section>
 
         <section class="chat">
-            <div class="chat__header">
-                Connectés (<%= count %>)
-            </div>
-            <ul class="chat__messages">
-                <li class="chat__messages__li">
-                    <span class="chat__messages__li__author">
-                        Jérôme :
-                    </span>
-                    Message ancien
-                </li>
-                <li class="chat__messages__li">
-                    <span class="chat__messages__li__author">
-                        Simon :
-                    </span>
-                    Message récent
-                </li>
-            </ul>
+            <div class="chat__header" id="chat-count"></div>
+            <ul class="chat__messages" id="chat-container"></ul>
             <hr />
             <div class="chat__text">
-                <input class="chat__text__input" type="text" placeholder="Votre message...">
-                <button class="chat__text__submit" type="submit">Envoyer</button>
+                <input class="chat__text__input" id="chat-input" type="text" placeholder="Votre message...">
+                <button class="chat__text__submit" id="chat-send">Envoyer</button>
             </div>
         </section>
 
@@ -131,6 +116,36 @@
             socket.on('message', function(data) {
                console.log(data);
             });
+
+            //Chat
+            const chatContainer = $('chat-container');
+            const chatMsg = $('chat-input');
+            const chatSend = $('chat-send');
+            const chatCount = $('chat-count');
+
+            chatSend.addEventListener('click', () => {
+              console.log(chatMsg.value)
+              socket.emit('chatMsg', {room: room, username: "<%= username %>", message: chatMsg.value});
+            })
+
+            socket.on('newChatMsg', data => {
+              chatContainer.innerHTML +=
+              '<li class="chat__messages__li">'+
+                '<span class="chat__messages__li__author">'+data.username+' : '+'</span>'+data.message+
+              '</li>';
+
+            })
+
+            socket.on('numberConnected', data => {
+              console.log(data);
+              if(data === 1){
+                chatCount.innerHTML = 'Connecté ( '+data+' )';
+              }
+              else{
+                chatCount.innerHTML = 'Connectés ( '+data+' )';
+              }
+
+            })
 
             //Récupération des boutons de création de formes
             const shapeButton = document.getElementsByClassName('shape');
