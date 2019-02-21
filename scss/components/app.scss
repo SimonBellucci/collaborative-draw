@@ -93,4 +93,52 @@
         height: 100%;
     }
 
+    .chat {
+        position: absolute;
+        background: $white;
+        bottom:0;
+        right: 0;
+        min-width: 300px;
+        &__header {
+            background: $gray-3;
+            color:$white;
+            padding: 12px 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        &__messages {
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+            &__li {
+                padding:15px 20px;
+                &__author {
+                    font-weight: bold;
+                }
+            }
+            &__li:nth-child(odd) {
+                background: $gray-light;
+            }
+        }
+        hr {
+            margin-bottom: 20px;
+        }
+        &__text {
+            margin-bottom: 20px;
+            &__input {
+                line-height: 30px;
+                outline: none;
+                margin:0 5px 0 20px;
+                padding-left: 10px;
+            }
+            &__submit {
+                background: $gray-1;
+                margin-right: 20px;
+                &:hover {
+                    background: $gray-3;
+                }
+            }
+        }
+    }
+
 }

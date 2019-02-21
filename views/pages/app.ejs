@@ -78,9 +78,36 @@
             <div class="tools__item">
                 <input type="color" name="" value="#278bff" id="colorPicker">
             </div>
+        </section>
+
+        <section class="chat">
+            <div class="chat__header">
+                Connectés (<%= count %>)
+            </div>
+            <ul class="chat__messages">
+                <li class="chat__messages__li">
+                    <span class="chat__messages__li__author">
+                        Jérôme :
+                    </span>
+                    Message ancien
+                </li>
+                <li class="chat__messages__li">
+                    <span class="chat__messages__li__author">
+                        Simon :
+                    </span>
+                    Message récent
+                </li>
+            </ul>
+            <hr />
+            <div class="chat__text">
+                <input class="chat__text__input" type="text" placeholder="Votre message...">
+                <button class="chat__text__submit" type="submit">Envoyer</button>
+            </div>
+        </section>
 
 
-        </section><canvas id="canvasTest" width="<%= infos[0].width %>" height="<%= infos[0].height %>"></canvas>
+
+        <canvas id="canvasTest" width="<%= infos[0].width %>" height="<%= infos[0].height %>"></canvas>
 
         <!-- <input type="text" name="" value="" id="radiusValue"> -->
 
