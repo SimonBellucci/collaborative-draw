@@ -96,22 +96,27 @@
     .chat {
         position: absolute;
         background: $white;
-        bottom:0;
+        bottom:-303px;
         right: 0;
-        min-width: 300px;
+        width: 324px;
+        transition: all 0.3s ease;
         &__header {
             background: $gray-3;
             color:$white;
             padding: 12px 20px;
             font-weight: bold;
             text-align: center;
+            cursor: pointer;
         }
         &__messages {
             padding: 0;
             list-style: none;
             font-size: 14px;
+            height: 180px;
             &__li {
                 padding:15px 20px;
+                animation-duration: 0.3s;
+                animation-name: fadein;
                 &__author {
                     font-weight: bold;
                 }
@@ -139,6 +144,17 @@
                 }
             }
         }
+        &.open {
+            bottom:0;
+        }
     }
+}
 
+@keyframes fadein {
+    from {
+       opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

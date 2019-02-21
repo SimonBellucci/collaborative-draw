@@ -93,4 +93,13 @@ window.addEventListener("load" , function() {
     }
 
 
+    var headerChat = document.querySelector('.chat__header');
+    var chat = document.querySelector('.chat');
+
+    if (headerChat) {
+        headerChat.addEventListener('click' , function() {
+           chat.classList.toggle('open');
+        });
+    }
+
 });
