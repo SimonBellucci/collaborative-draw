@@ -281,8 +281,15 @@ io.on('connection', (socket) => {
       io.sockets.in(room).emit('numberConnected', connectedUsers);
   });
 
+  /*******
+  * Chat
+  *******/
   socket.on('chatMsg', data => {
     io.sockets.in(data.room).emit('newChatMsg', {message: data.message, username: data.username});
+  })
+
+  socket.on('chatTyping', data => {
+    io.sockets.in(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
   })
 
   io.emit('getConnectionCanvas', canvasData);

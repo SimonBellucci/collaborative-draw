@@ -108,6 +108,17 @@
             text-align: center;
             cursor: pointer;
         }
+        &__status {
+          background: #FFF !important;
+          position: relative;
+          &__img{
+            position: absolute;
+            top: -80px;
+            left: -44px;
+            transform: scale(0.15);
+
+          }
+        }
         &__messages {
             padding: 0;
             list-style: none;
