@@ -113,10 +113,14 @@
             list-style: none;
             font-size: 14px;
             height: 180px;
+            overflow-y: overlay;
+            margin-right: 10px;
+            padding: 0 10px 0 0;
             &__li {
                 padding:15px 20px;
                 animation-duration: 0.3s;
                 animation-name: fadein;
+                word-break: break-word;
                 &__author {
                     font-weight: bold;
                 }
@@ -134,19 +138,35 @@
                 line-height: 30px;
                 outline: none;
                 margin:0 5px 0 20px;
-                padding-left: 10px;
+                padding: 0px 40px 0 10px;
+                width: 290px;
             }
             &__submit {
-                background: $gray-1;
-                margin-right: 20px;
-                &:hover {
-                    background: $gray-3;
-                }
+                position: absolute;
+                bottom: 27px;
+                right: 7px;
+                background: url(../images/send.svg);
+                width: 20px;
+                height: 20px;
+                background-size: contain;
+                background-repeat: no-repeat;
             }
         }
         &.open {
             bottom:0;
         }
+    }
+    ::-webkit-scrollbar {
+        width: 5px;
+        margin-right: 20px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #eae9e9;
+        border-radius: 100px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: $gray-2;
+        border-radius: 100px;
     }
 }
 
