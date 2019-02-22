@@ -289,7 +289,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('chatTyping', data => {
-    io.sockets.in(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
+    socket.broadcast.to(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
   })
 
   io.emit('getConnectionCanvas', canvasData);

@@ -144,31 +144,9 @@
               '<li class="chat__messages__li">'+
                 '<span class="chat__messages__li__author">'+data.username+' : '+'</span>'+data.message+
               '</li>';
-
+              chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
             })
 
-            // let lastTypedTime = new Date(0);
-            // const typingDelay = 5000;
-            //
-            // function refreshTypingStatus() {
-            //     let isTyping = false;
-            //
-            //     if(chatMsg.value === '' || new Date().getTime() - lastTypedTime.getTime() > typingDelay) {
-            //         isTyping = false;
-            //         socket.emit('chatTyping', {room: room, username: "<%= username %>", isTyping: isTyping})
-            //     } else {
-            //         isTyping = true;
-            //         socket.emit('chatTyping', {room: room, username: "<%= username %>", isTyping: isTyping});
-            //     }
-            // }
-            //
-            // function updateLastTypedTime() {
-            //     lastTypedTime = new Date();
-            // }
-
-
-
-            // setInterval(refreshTypingStatus, 1000);
 
             chatMsg.addEventListener('keyup', () => {
                 let isTyping = false;
@@ -185,8 +163,6 @@
             });
             let flag = 0;
             function checkTyping(typing){
-
-
               if(typing && flag === 0){
                 socket.emit('chatTyping', {room: room, username: "<%= username %>", isTyping: true});
                 flag = 1;
