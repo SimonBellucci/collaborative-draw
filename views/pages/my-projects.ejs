@@ -90,8 +90,19 @@
                 <% } %>
             </section>
         </main>
+        <script src="../socket.io/socket.io.js" charset="utf-8"></script>
         <script src="./minjs/script.js"></script>
         <script type="text/javascript">
+
+          const socket = io.connect();
+
+          //Notification d'ajout dans un projet
+          socket.on('getCollabNotif', data => {
+              if(data.receiver == "<%= user %>"){
+                console.log(data.sender+' t\'as invité dans un nouveau projet')
+              }
+          });
+
           let image = document.getElementById('preview');
         </script>
     </body>

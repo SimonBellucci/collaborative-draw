@@ -92,7 +92,8 @@ app.get('/app/:id', function(req, res) {
           res.render('pages/app', {
             infos: response,
             count: countUsers,
-            username: user[0].nickname
+            username: user[0].nickname,
+            user: user[0].id
           });
         }
       	else{
@@ -133,7 +134,8 @@ app.get('/mes-projets', function(req, res) {
         });
         console.log(Object.values(ownProjects));
         res.render('pages/my-projects', {
-          ownProjects: (Object.values(ownProjects)).reverse()
+          ownProjects: (Object.values(ownProjects)).reverse(),
+          user: userId
         });
     });
   }else{
@@ -291,6 +293,15 @@ io.on('connection', (socket) => {
   socket.on('chatTyping', data => {
     socket.broadcast.to(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
   })
+
+  /*******
+  * Notification collabs
+  *******/
+  socket.on('newCollab', data => {
+    knex('users').where({ email: data.receiver }).then(response => {
+      io.emit('getCollabNotif', {sender: data.sender, receiver: response[0].id, project: data.project});
+    })
+  });
 
   io.emit('getConnectionCanvas', canvasData);
 

@@ -30,8 +30,8 @@
                             <img src="../images/add.svg" alt="Add people" title="Add">
                         </a>
                         <form action="/add-user/<%= infos[0].id %>" method="POST" class="people__sub">
-                            <input class="people__sub__input" type="email" name="email" placeholder="Saisissez l'email du collaborateur">
-                            <button type="submit" class="people__sub__validate button button--blue" type="submit">Inviter</button>
+                            <input class="people__sub__input" id="collabInput" type="email" name="email" placeholder="Saisissez l'email du collaborateur">
+                            <button type="submit" id="collabButton" class="people__sub__validate button button--blue" type="submit">Inviter</button>
                         </form>
                     </div>
                     <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
@@ -213,6 +213,21 @@
               }
 
             })
+
+            //Invitation collab
+            let collabButton = $('collabButton');
+            let collabInput = $('collabInput');
+
+            collabButton.addEventListener('click', () => {
+              socket.emit('newCollab', {sender: "<%= username %>", receiver: collabInput.value, project: "<%= infos[0].id %>"})
+            });
+
+            //Notification d'ajout dans un projet
+            socket.on('getCollabNotif', data => {
+                if(data.receiver == "<%= user %>"){
+                  console.log(data.sender+' t\'as invité dans le projet '+data.project)
+                }
+            });
 
             //Récupération des boutons de création de formes
             const shapeButton = document.getElementsByClassName('shape');
