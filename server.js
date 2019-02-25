@@ -42,12 +42,14 @@ app.get('/', function(req, res) {
 });
 
 app.get('/galerie', function(req, res) {
-  //JOINTURE A VOIR AVEC ISSLER POUR author_id = user_id
-  knex('projects').where({ visibility: 1 }).then((response) => {
-    res.render('pages/gallery', {
-      infos: response
+    let ownProjects = {};
+
+    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
+        res.render('pages/gallery', {
+            ownProjects: response.reverse()
+        });
     });
-  });
+
 });
 
 const useSession = app.use(session({
