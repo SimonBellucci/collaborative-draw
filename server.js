@@ -42,14 +42,12 @@ app.get('/', function(req, res) {
 });
 
 app.get('/galerie', function(req, res) {
-    let ownProjects = {};
-
-    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
-        res.render('pages/gallery', {
-            ownProjects: response.reverse()
-        });
+  //JOINTURE A VOIR AVEC ISSLER POUR author_id = user_id
+  knex('projects').where({ visibility: 1 }).then((response) => {
+    res.render('pages/gallery', {
+      infos: response
     });
-
+  });
 });
 
 const useSession = app.use(session({
@@ -80,6 +78,26 @@ app.get('/app', function(req, res) {
 app.get('/app/:id', function(req, res) {
   let projectId = req.params.id;
   let countUsers = 0;
+  let isInProject = false;
+
+  knex('projects_users').where({user_id: req.session.user[0].id, project_id: projectId}).then(collaboratorCheck => {
+    if(collaboratorCheck.length === 0){
+      knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
+        if(authorCheck.length === 0){
+          console.log('Pas collab ni aut')
+          return isInProject = false
+        }
+        else{
+          console.log('auteur')
+          return isInProject = true
+        }
+      })
+    }
+    else{
+      console.log('Collaborateur')
+      return isInProject = true
+    }
+  }).catch( error => {})
 
   knex('projects_users').where({ project_id: projectId }).then(all => {
 
@@ -90,7 +108,7 @@ app.get('/app/:id', function(req, res) {
     knex('users').where({ id: req.session.user[0].id }).then(user => {
 
       knex('projects').where({ id: projectId }).then((response) => {
-        if(req.session.user){
+        if(req.session.user && isInProject){
           res.render('pages/app', {
             infos: response,
             count: countUsers,
@@ -98,8 +116,11 @@ app.get('/app/:id', function(req, res) {
             user: user[0].id
           });
         }
-      	else{
+      	else if(!req.session.user){
           res.redirect('/connexion');
+        }
+        else if(!isInProject){
+          res.redirect('/mes-projets');
         }
       });
 
