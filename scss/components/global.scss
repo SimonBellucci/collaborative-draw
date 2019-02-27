@@ -27,3 +27,42 @@ hr {
     border-top:0;
     border-bottom: 1px solid #ccc ;
 }
+
+.popup {
+    background: $blue;
+    position: absolute;
+    display: inline-block;
+    top:90px;
+    padding:10px 40px 10px 10px;
+    max-width: 250px;
+    right: -250px;
+    transition: all 0.3s ease;
+    &.open {
+        right:20px;
+    }
+    &__close {
+        position: absolute;
+        top:6px;
+        right:20px;
+        font-size: 24px;
+        color:$white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+            color:$red;
+        }
+    }
+    &__text {
+        color:$white;
+        font-size: 14px;
+        font-weight: 100;
+    }
+    &__button {
+        margin-top:10px;
+        font-size: 14px;
+        border:1px solid $white;
+        &:hover {
+            border: 1px solid $white;
+        }
+    }
+}

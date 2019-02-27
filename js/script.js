@@ -102,4 +102,31 @@ window.addEventListener("load" , function() {
         });
     }
 
+
+    // notifications
+
+
+
+    var popup = document.getElementsByClassName('popup');
+    var popupClose = document.getElementsByClassName('popup__close');
+
+
+    if (popup) {
+        for (var i = 0 ; i < popup.length ; i++) {
+
+
+            function openNotif() {
+                popup[i].classList.add('open');
+            }
+
+            function closeNotif() {
+                popup[i].classList.remove('open');
+            }
+
+            popupClose[i].addEventListener('click' , function() {
+                closeNotif()
+            });
+        }
+    }
+
 });
