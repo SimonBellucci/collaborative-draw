@@ -101,12 +101,42 @@
         <script src="./minjs/script.js"></script>
         <script type="text/javascript">
 
+            const popup = document.getElementsByClassName('popup');
+            const popupClose = document.getElementsByClassName('popup__close');
+            const popupText = document.getElementsByClassName('popup__text');
+
+            if (popup) {
+                function openNotif() {
+                    for (let i = 0 ; i < popup.length ; i++) {
+                        popup[i].classList.add('open');
+                    }
+                }
+
+                function closeNotif() {
+                    for (let i = 0 ; i < popup.length ; i++) {
+                        popup[i].classList.remove('open');
+                    }
+                }
+
+
+            }
+
+            popupClose[0].addEventListener('click' , function() {
+                closeNotif()
+            });
+
           const socket = io.connect();
 
           //Notification d'ajout dans un projet
           socket.on('getCollabNotif', data => {
               if(data.receiver == "<%= user %>"){
-                console.log(data.sender+' t\'as invité dans un nouveau projet')
+                  openNotif();
+
+                  setTimeout(() => {
+                      closeNotif();
+                  },5000)
+
+                  popupText[0].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
               }
           });
 
