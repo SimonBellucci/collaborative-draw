@@ -49,7 +49,9 @@
             <div class="popup__text">
                 Lorem ipsum dola ersam Lorem ipsum dola ersam
             </div>
-            <button class="popup__button button button--white">Bouton</button>
+            <a id="popup-link" href="">
+                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+            </a>
         </div>
         <section class="tools">
             <div class="tools__item">
@@ -123,12 +125,53 @@
             const room = "<%= infos[0].id %>";
 
             socket.on('connect', function() {
-               socket.emit('room', room);
+               socket.emit('room', {room: room, user: "<%= username %>"});
             });
 
-            socket.on('message', function(data) {
-               console.log(data);
+            socket.on('newUser', function(data) {
+                openNotif(popup[0]);
+
+                setTimeout(() => {
+                    closeNotif(popup[0]);
+                },5000)
+
+                popupText[0].innerHTML = data;
             });
+
+            //Popup
+              const popup = document.getElementsByClassName('popup');
+              const popupClose = document.getElementsByClassName('popup__close');
+              const popupText = document.getElementsByClassName('popup__text');
+              const popupLink = document.getElementById('popup-link');
+
+              const openNotif = (element) => {
+                  element.classList.add('open');
+              }
+
+              const closeNotif = (element) => {
+                  element.classList.remove('open');
+              }
+
+              popupClose[0].addEventListener('click' , function() {
+                  closeNotif(popup[0])
+              });
+
+              popupClose[1].addEventListener('click' , function() {
+                  closeNotif(popup[1])
+              });
+
+              //Notification d'ajout dans un projet
+              socket.on('getCollabNotif', data => {
+                  if(data.receiver == "<%= user %>"){
+                      openNotif(popup[1]);
+                      setTimeout(() => {
+                          closeNotif(popup[1]);
+                      },5000)
+
+                      popupText[1].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
+                      popupLink.href = "/app/"+data.project;
+                  }
+              });
 
             //Chat
             const chatContainer = $('chat-container');

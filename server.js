@@ -303,12 +303,11 @@ io.on('connection', (socket) => {
 
   socket.on('room', function(room) {
 
-      socket.join(room);
+      socket.join(room.room);
 
-      let connectedUsers = io.sockets.adapter.rooms[room].length;
-      console.log(connectedUsers);
-      io.sockets.in(room).emit('message', 'Room '+room);
-      io.sockets.in(room).emit('numberConnected', connectedUsers);
+      let connectedUsers = io.sockets.adapter.rooms[room.room].length;
+      socket.broadcast.to(room.room).emit('newUser', room.user+' a rejoint la salle');
+      io.sockets.in(room.room).emit('numberConnected', connectedUsers);
   });
 
   /*******

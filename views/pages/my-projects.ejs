@@ -30,6 +30,9 @@
             <div class="popup__text">
                 Lorem ipsum dola ersam Lorem ipsum dola ersam
             </div>
+            <a id="popup-link" href="">
+                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+            </a>
         </div>
 
         <header class="container-fluid app-header">
@@ -104,25 +107,18 @@
             const popup = document.getElementsByClassName('popup');
             const popupClose = document.getElementsByClassName('popup__close');
             const popupText = document.getElementsByClassName('popup__text');
+            const popupLink = document.getElementById('popup-link');
 
-            if (popup) {
-                function openNotif() {
-                    for (let i = 0 ; i < popup.length ; i++) {
-                        popup[i].classList.add('open');
-                    }
-                }
+            const openNotif = (element) => {
+                element.classList.add('open');
+            }
 
-                function closeNotif() {
-                    for (let i = 0 ; i < popup.length ; i++) {
-                        popup[i].classList.remove('open');
-                    }
-                }
-
-
+            const closeNotif = (element) => {
+                element.classList.remove('open');
             }
 
             popupClose[0].addEventListener('click' , function() {
-                closeNotif()
+                closeNotif(popup[0])
             });
 
           const socket = io.connect();
@@ -130,13 +126,13 @@
           //Notification d'ajout dans un projet
           socket.on('getCollabNotif', data => {
               if(data.receiver == "<%= user %>"){
-                  openNotif();
-
+                  openNotif(popup[0]);
                   setTimeout(() => {
-                      closeNotif();
+                      closeNotif(popup[0]);
                   },5000)
 
                   popupText[0].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
+                  popupLink.href = "/app/"+data.project;
               }
           });
 
