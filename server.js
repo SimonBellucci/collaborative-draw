@@ -80,24 +80,29 @@ app.get('/app/:id', function(req, res) {
   let countUsers = 0;
   let isInProject = false;
 
-  knex('projects_users').where({user_id: req.session.user[0].id, project_id: projectId}).then(collaboratorCheck => {
-    if(collaboratorCheck.length === 0){
-      knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
-        if(authorCheck.length === 0){
-          console.log('Pas collab ni aut')
-          return isInProject = false
-        }
-        else{
-          console.log('auteur')
-          return isInProject = true
-        }
-      })
-    }
-    else{
-      console.log('Collaborateur')
-      return isInProject = true
-    }
-  }).catch( error => {})
+  if(req.session.user) {
+      knex('projects_users').where({user_id: req.session.user[0].id, project_id: projectId}).then(collaboratorCheck => {
+          if (collaboratorCheck.length === 0) {
+              knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
+                  if (authorCheck.length === 0) {
+                      console.log('Pas collab ni aut')
+                      return isInProject = false
+                  }
+                  else {
+                      console.log('auteur')
+                      return isInProject = true
+                  }
+              })
+          }
+          else {
+              console.log('Collaborateur')
+              return isInProject = true
+          }
+      }).catch(error => {
+      });
+  }else{
+      res.redirect('/connexion');
+  }
 
   knex('projects_users').where({ project_id: projectId }).then(all => {
 
