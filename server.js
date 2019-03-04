@@ -7,15 +7,18 @@ const io = require('socket.io')(http);
 
 const session = require('express-session');
 
+const config = require('./config/config.js');
+
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host : 'base.iha.unistra.fr',
-    user : 'prjapp2',
-    password : 'YPQ7ygSJQ0zZeLV9',
-    database : 'prjapp2'
+    host : config.host,
+    user : config.user,
+    password : config.password,
+    database : config.database
   },
-  pool: { min: 0, max: 10 }
+  pool: { min: 0, max: 10 },
+  charset   : 'UTF8_GENERAL_CI'
 });
 
 const crypto = require('crypto')
@@ -23,15 +26,6 @@ const crypto = require('crypto')
 function sha1(data){
   return crypto.createHash("sha1").update(data).digest("hex");
 }
-
-//Bloquer l'acces au pages si pas de session
-// app.use(function(req, res, next) {
-//     if(!req.session) {
-//         res.redirect('/connexion');
-//     } else {
-//         next();
-//     }
-// });
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -48,12 +42,12 @@ app.get('/', function(req, res) {
 });
 
 app.get('/galerie', function(req, res) {
-  //JOINTURE A VOIR AVEC ISSLER POUR author_id = user_id
-  knex('projects').where({ visibility: 1 }).then((response) => {
-    res.render('pages/gallery', {
-      infos: response
+    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
+        res.render('pages/gallery', {
+            ownProjects: response.reverse()
+        });
     });
-  });
+
 });
 
 const useSession = app.use(session({
@@ -72,15 +66,6 @@ const sessionChecker = (req, res, next) => {
     }
 };
 
-// app.use(function(req, res, next) {
-//     console.log(req.session.authenticated)
-//     if(!req.session) {
-//         res.redirect('/connexion');
-//     } else {
-//         next();
-//     }
-// });
-
 app.get('/app', function(req, res) {
   if(req.session.user){
     res.render('pages/app');
@@ -92,17 +77,61 @@ app.get('/app', function(req, res) {
 
 app.get('/app/:id', function(req, res) {
   let projectId = req.params.id;
+  let countUsers = 0;
+  let isInProject = false;
 
-  knex('projects').where({ id: projectId }).then((response) => {
-    if(req.session.user){
-      res.render('pages/app', {
-        infos: response
+  if(req.session.user) {
+      knex('projects_users').where({user_id: req.session.user[0].id, project_id: projectId}).then(collaboratorCheck => {
+          if (collaboratorCheck.length === 0) {
+              knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
+                  if (authorCheck.length === 0) {
+                      console.log('Pas collab ni aut')
+                      return isInProject = false
+                  }
+                  else {
+                      console.log('auteur')
+                      return isInProject = true
+                  }
+              })
+          }
+          else {
+              console.log('Collaborateur')
+              return isInProject = true
+          }
+      }).catch(error => {
       });
-    }
-  	else{
+  }else{
       res.redirect('/connexion');
-    }
-  });
+  }
+
+  knex('projects_users').where({ project_id: projectId }).then(all => {
+
+    all.forEach(one => {
+      countUsers++
+    })
+
+    knex('users').where({ id: req.session.user[0].id }).then(user => {
+
+      knex('projects').where({ id: projectId }).then((response) => {
+        if(req.session.user && isInProject){
+          res.render('pages/app', {
+            infos: response,
+            count: countUsers,
+            username: user[0].nickname,
+            user: user[0].id
+          });
+        }
+      	else if(!req.session.user){
+          res.redirect('/connexion');
+        }
+        else if(!isInProject){
+          res.redirect('/mes-projets');
+        }
+      });
+
+    });
+  })
+
 
 });
 
@@ -113,33 +142,30 @@ app.get('/deconnexion', function(req, res){
 
 app.get('/mes-projets', function(req, res) {
 
-  let projects = [];
-  // knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-  //
-  // });
+  let ownProjects = {};
 
   if(req.session.user){
     let userId = req.session.user[0].id;
-
-    knex.table('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').where("projects_users.user_id", userId).then((response) => {
-      response.forEach(project => {
-        projects.push(project);
-      })
-      knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').where("users.id", userId).then((response) => {
-        response.forEach(project => {
-          projects.push(project);
-        });
-        // knex.table('users').innerJoin('projects_users', 'users.id', '=', 'projects_users.user_id').where("projects_users.project_id", 2).then((response) => {
-        //   response.forEach(project => {
-        //     projects.push(project);
-        //   });
-        // });
-        console.log(projects);
-        res.render('pages/my-projects', {
-          infos: projects
-        });
+    knex.from('projects').select('id', 'title', 'creation_date', 'visibility', 'thumbnail').where('author_id', userId).then(rows => {
+      let projects_ids = [];
+      rows.forEach( row => {
+        ownProjects['project'+row.id] = row;
+        row.collabs = [];
+        projects_ids.push(row.id);
       });
-  	});
+      return projects_ids;
+    }).then(ids => {
+      return knex.table('projects_users').innerJoin('users', 'users.id', '=', 'projects_users.user_id').select('project_id','nickname').where('project_id', 'in', ids);
+    }).then(collabs => {
+        collabs.forEach(collab => {
+          ownProjects['project'+collab.project_id].collabs.push(collab.nickname);
+        });
+        console.log(Object.values(ownProjects));
+        res.render('pages/my-projects', {
+          ownProjects: (Object.values(ownProjects)).reverse(),
+          user: userId
+        });
+    });
   }else{
     res.redirect('/connexion');
   }
@@ -151,11 +177,34 @@ app.post('/mes-projets', function(req, res) {
     title: req.body.name,
     width: req.body.width,
     height: req.body.height,
+    creation_date: new Date().toISOString().slice(0, 19).replace('T', ' ')
   }).then(response => {
     console.log(response);
     res.redirect('/app/'+response);
   });
 })
+
+app.post('/delete/:id', function(req, res) {
+  console.log('delete '+req.params.id)
+  knex('projects').where({ id: req.params.id }).del().then(response => {
+    res.redirect('/mes-projets')
+  })
+})
+
+app.get('/mes-collaborations', function(req, res) {
+
+  if(req.session.user){
+    let userId = req.session.user[0].id;
+
+    knex.select('projects.*', 'users.nickname as author').from('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').innerJoin('users', 'projects.author_id', '=', 'users.id').where('projects_users.user_id', userId).then(rows => {
+      res.render('pages/my-collabs', {
+            othersProjects: rows.reverse()
+        });
+    });
+  }else{
+    res.redirect('/connexion');
+  }
+});
 
 app.get('/connexion', sessionChecker, function(req, res) {
   res.render('pages/connexion');
@@ -223,6 +272,26 @@ app.post('/inscription', function(req, res){
   });
 });
 
+app.post('/add-user/:id', function(req, res) {
+  let mail = req.body.email;
+  let project = req.params.id;
+
+  knex('users').where({ email: mail }).then( response => {
+    if(response.length == 0){
+        console.log('Pas de mail correspondant')
+    }
+    else{
+      knex('projects_users').insert({
+        user_id: response[0].id,
+        project_id: project,
+      }).then(response => {
+        res.redirect('/app/'+project)
+      });
+    }
+  });
+
+});
+
 app.get('/canvas', function(req, res) {
   res.render('pages/canvas');
 });
@@ -231,17 +300,55 @@ let canvasData = '';
 let idCount = 0;
 
 io.on('connection', (socket) => {
-  console.log('Nouvelle connexion');
+
+  socket.on('room', function(room) {
+
+      socket.join(room.room);
+
+      let connectedUsers = io.sockets.adapter.rooms[room.room].length;
+      socket.broadcast.to(room.room).emit('newUser', room.user+' a rejoint la salle');
+      io.sockets.in(room.room).emit('numberConnected', connectedUsers);
+  });
+
+  /*******
+  * Chat
+  *******/
+  socket.on('chatMsg', data => {
+    io.sockets.in(data.room).emit('newChatMsg', {message: data.message, username: data.username});
+  })
+
+  socket.on('chatTyping', data => {
+    socket.broadcast.to(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
+  })
+
+  /*******
+  * Notification collabs
+  *******/
+  socket.on('newCollab', data => {
+    knex('users').where({ email: data.receiver }).then(response => {
+      io.emit('getCollabNotif', {sender: data.sender, receiver: response[0].id, project: data.project});
+    })
+  });
 
   io.emit('getConnectionCanvas', canvasData);
 
   socket.on('connectionCanvas', data => {
-    canvasData = data;
-    io.emit('getConnectionCanvas', data);
+    canvasData = data.canvas;
+    let project_id = data.id;
+    let image = data.image;
+
+    socket.project_id = project_id;
+    //io.sockets pour récupérer tous les sockets
+
+    knex('projects').where({ id: project_id }).update({ render: canvasData, thumbnail: image }).then(response => {
+      // console.log(response);
+    })
+
+    io.emit('getConnectionCanvas', data.canvas);
   });
 
   socket.on('newCoords', data => {
-    io.emit('getNewCoords', data);
+    io.sockets.in(data.room).emit('getNewCoords', data);
   });
 
   socket.on('newScale', data => {

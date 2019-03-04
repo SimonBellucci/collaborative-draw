@@ -35,18 +35,22 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="gallery__title">
-                            Galerie publique
+                            .: Galerie publique
                         </h2>
                     </div>
                 </div>
                 <div class="row">
-                  <% infos.forEach(function(info) { %>
+                  <% ownProjects.forEach(function(own) { %>
                     <div class="col-lg-3 popular-projects__three">
                         <div>
-                            <img class="popular-projects__three__image" src="./images/road.jpg" alt="Road">
+                            <div class="popular-projects__three__image gallery-preview" style="background:url('<%= own.thumbnail %>')"></div>
                             <div class="popular-projects__three__box-infos">
-                                <h4 class="popular-projects__three__box-infos__title"><a href="#"><%= info.title %></a></h4>
-                                <span class="popular-projects__three__box-infos__author"><%= info.author_id %></span>
+                                <h4 class="popular-projects__three__box-infos__title"><a href="#"><%= own.title %></a></h4>
+                                <span class="popular-projects__three__box-infos__author"><%= own.nickname %></span>
+                                <div class="popular-projects__three__box-infos__like">
+                                    <span id="likeNumber" class="popular-projects__three__box-infos__like__counter">5</span>
+                                    <input type="submit" id="likeButton" class="popular-projects__three__box-infos__like__icon" value="">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -59,5 +63,19 @@
             <a href="#" title="Mentions légales" class="footer__link">Mentions légales</a>
             <a href="#" title="Nous contacter" class="footer__link">Nous contacter</a>
         </footer>
+        <script src="./minjs/script.js"></script>
+        <script type="application/javascript">
+            const likeButton = document.getElementById('likeButton');
+            const likeNumber = document.getElementsByClassName('popular-projects__three__box-infos__like__counter');
+
+            for(let i = 0; i < likeNumber.length; i++){
+                likeNumber[i].innerHTML = Math.floor(Math.random() * 1000) + 1;
+            }
+
+            likeButton.addEventListener('click', () => {
+                //Incrémentation du compteur à faire
+            })
+
+        </script>
     </body>
 </html>

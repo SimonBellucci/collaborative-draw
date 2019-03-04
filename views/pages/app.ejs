@@ -14,8 +14,9 @@
                     <nav class="menu">
                         <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="" title="Mes projets">Mes projets</a></li>
-                            <li class="menu__sub__link"><a href="" title="Galerie publique">Galerie publique</a></li>
+                            <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
+                            <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
+                            <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
                             <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
                     </nav>
@@ -24,22 +25,38 @@
                 <div class="col-lg-6 d-flex justify-end">
                     <div class="people d-flex align-center">
                         <img class="people__icon" src="../images/add-people.svg" alt="">
-                        <span class="people__number">3</span>
+                        <span class="people__number"><%= count %></span>
                         <a href="#" class="people__add">
                             <img src="../images/add.svg" alt="Add people" title="Add">
                         </a>
-                        <ul class="people__sub">
-                            <input class="people__sub__input" type="email" placeholder="Saisissez l'email du collaborateur">
-                            <button class="people__sub__validate button button--blue" type="submit">Inviter</button>
-                        </ul>
+                        <form action="/add-user/<%= infos[0].id %>" method="POST" class="people__sub">
+                            <input class="people__sub__input" id="collabInput" type="email" name="email" placeholder="Saisissez l'email du collaborateur">
+                            <button type="submit" id="collabButton" class="people__sub__validate button button--blue" type="submit">Inviter</button>
+                        </form>
                     </div>
                     <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
             </div>
         </header>
+        <div class="popup">
+            <div class="popup__close">&#215;</div>
+            <div class="popup__text">
+                Lorem ipsum dola ersam Lorem ipsum dola ersam
+            </div>
+        </div>
+        <div class="popup">
+            <div class="popup__close">&#215;</div>
+            <div class="popup__text">
+                Lorem ipsum dola ersam Lorem ipsum dola ersam
+            </div>
+            <a id="popup-link" href="">
+                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+            </a>
+        </div>
         <section class="tools">
             <div class="tools__item">
-                <img src="../images/import.svg" alt="Import">
+                <label for="file"><img src="../images/import.svg" alt="Settings"></label>
+                <input type="file" class="tools__item__files" id="file" name="" value="" style="background:url('../images/import.svg')">
             </div>
             <div class="tools__item">
                 <img src="../images/settings.svg" alt="Settings">
@@ -63,8 +80,8 @@
                 <ul class="tools__item__sub">
                     <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createCircle">Cercle</button>
-                    <li class="tools__item__sub__item">Rectangle</li>
-                    <li class="tools__item__sub__item">Triangle</li>
+                    <button class="tools__item__sub__item shape" type="button" name="button" id="createRect">Rectangle</button>
+                    <button class="tools__item__sub__item shape" type="button" name="button" id="createTriangle">Triangle</button>
                 </ul>
             </div>
             <div class="tools__item">
@@ -76,9 +93,21 @@
             <div class="tools__item">
                 <input type="color" name="" value="#278bff" id="colorPicker">
             </div>
+        </section>
+
+        <section class="chat">
+            <div class="chat__header" id="chat-count"></div>
+            <ul class="chat__messages" id="chat-container"></ul>
+            <hr />
+            <div class="chat__text">
+                <input class="chat__text__input" id="chat-input" type="text" placeholder="Votre message...">
+                <button class="chat__text__submit" id="chat-send"></button>
+            </div>
+        </section>
 
 
-        </section><canvas id="canvasTest" width="<%= infos[0].width %>" height="<%= infos[0].height %>"></canvas>
+
+        <canvas id="canvasTest" width="<%= infos[0].width %>" height="<%= infos[0].height %>"></canvas>
 
         <!-- <input type="text" name="" value="" id="radiusValue"> -->
 
@@ -90,14 +119,187 @@
             var $ = function(id){return document.getElementById(id)};
 
             //Initialisation de socket.io
-            const socket = io('/');
+            const socket = io.connect();
+
+            //Mise en place de la room avec l'ID du projet
+            const room = "<%= infos[0].id %>";
+
+            socket.on('connect', function() {
+               socket.emit('room', {room: room, user: "<%= username %>"});
+            });
+
+            socket.on('newUser', function(data) {
+                openNotif(popup[0]);
+
+                setTimeout(() => {
+                    closeNotif(popup[0]);
+                },5000)
+
+                popupText[0].innerHTML = data;
+            });
+
+            //Popup
+              const popup = document.getElementsByClassName('popup');
+              const popupClose = document.getElementsByClassName('popup__close');
+              const popupText = document.getElementsByClassName('popup__text');
+              const popupLink = document.getElementById('popup-link');
+
+              const openNotif = (element) => {
+                  element.classList.add('open');
+              }
+
+              const closeNotif = (element) => {
+                  element.classList.remove('open');
+              }
+
+              popupClose[0].addEventListener('click' , function() {
+                  closeNotif(popup[0])
+              });
+
+              popupClose[1].addEventListener('click' , function() {
+                  closeNotif(popup[1])
+              });
+
+              //Notification d'ajout dans un projet
+              socket.on('getCollabNotif', data => {
+                  if(data.receiver == "<%= user %>"){
+                      openNotif(popup[1]);
+                      setTimeout(() => {
+                          closeNotif(popup[1]);
+                      },5000)
+
+                      popupText[1].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
+                      popupLink.href = "/app/"+data.project;
+                  }
+              });
+
+            //Chat
+            const chatContainer = $('chat-container');
+            const chatMsg = $('chat-input');
+            const chatSend = $('chat-send');
+            const chatCount = $('chat-count');
+
+            chatSend.addEventListener('click', () => {
+              socket.emit('chatMsg', {room: room, username: "<%= username %>", message: chatMsg.value});
+              setTimeout(() => {
+                chatMsg.value = "";
+              }, 10);
+            });
+
+            chatMsg.addEventListener('keypress', (e) => {
+              if(e.keyCode === 13){
+                socket.emit('chatMsg', {room: room, username: "<%= username %>", message: chatMsg.value});
+                setTimeout(() => {
+                  chatMsg.value = "";
+                }, 10);
+              }
+            });
+
+            socket.on('newChatMsg', data => {
+              chatContainer.innerHTML +=
+              '<li class="chat__messages__li">'+
+                '<span class="chat__messages__li__author">'+data.username+' : '+'</span>'+data.message+
+              '</li>';
+              chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+            })
+
+
+            chatMsg.addEventListener('keyup', () => {
+                let isTyping = false;
+
+                if(chatMsg.value.length > 0){
+                  isTyping = true;
+                  checkTyping(isTyping);
+                }
+                else{
+                  isTyping = false;
+                  checkTyping(isTyping);
+                }
+
+            });
+            let flag = 0;
+            function checkTyping(typing){
+              if(typing && flag === 0){
+                socket.emit('chatTyping', {room: room, username: "<%= username %>", isTyping: true});
+                flag = 1;
+              }
+              else if(!typing){
+                socket.emit('chatTyping', {room: room, username: "<%= username %>", isTyping: false});
+                flag = 0;
+              }
+            }
+
+            socket.on('typingStatus', data => {
+
+              let statusDiv = document.createElement("li");
+              statusDiv.setAttribute('class', 'chat__messages__li chat__status');
+
+              let statusSpan = document.createElement("span");
+              statusSpan.setAttribute('class', 'chat__messages__li__author');
+
+              let spanContent = document.createTextNode(data.user+' : ');
+
+              let statusImg = document.createElement("img");
+              statusImg.setAttribute('class', 'chat__status__img');
+              statusImg.setAttribute('src', '../images/typing.gif');
+
+              statusDiv.appendChild(statusSpan);
+              statusSpan.appendChild(spanContent);
+              statusSpan.appendChild(statusImg);
+
+              if(data.status){
+                chatContainer.appendChild(statusDiv);
+                // '<li class="chat__messages__li" style="background: #FFF; position: relative">'+
+                //   '<span class="chat__messages__li__author">'+data.user+' : '+'</span>'+'<img src="../images/typing.gif" style="position: absolute;top: -80px; left: -44px;transform: scale(0.15);">'+
+                // '</li>';
+              }
+              else if(!data.status){
+                let div = document.getElementsByClassName('chat__status');
+                chatContainer.removeChild(div[0]);
+              }
+            })
+
+            socket.on('numberConnected', data => {
+              console.log(data);
+              if(data === 1){
+                chatCount.innerHTML = 'Connecté ( '+data+' )';
+              }
+              else{
+                chatCount.innerHTML = 'Connectés ( '+data+' )';
+              }
+
+            })
+
+            //Invitation collab
+            let collabButton = $('collabButton');
+            let collabInput = $('collabInput');
+
+            collabButton.addEventListener('click', () => {
+              socket.emit('newCollab', {sender: "<%= username %>", receiver: collabInput.value, project: "<%= infos[0].id %>"})
+            });
+
+            //Notification d'ajout dans un projet
+            socket.on('getCollabNotif', data => {
+                if(data.receiver == "<%= user %>"){
+                  console.log(data.sender+' t\'as invité dans le projet '+data.project)
+                }
+            });
 
             //Récupération des boutons de création de formes
             const shapeButton = document.getElementsByClassName('shape');
             const circleButton = $('createCircle');
+            const createRect = $('createRect');
+            const createTriangle = $('createTriangle');
 
             //Récupération des boutons de changements de couleur
             const colorPicker = $('colorPicker');
+
+            //Récupération import d'image
+            const importButton = $('file');
+
+            importButton.addEventListener('change', (e) => {
+              upload(e);
+            })
 
             colorPicker.addEventListener('change', (e) => {
               changeColor(e.target.value);
@@ -114,7 +316,113 @@
               isDrawingMode: false
             });
 
-          canvas.selection = false;
+            let jsonDb = "<%= infos[0].render %>";
+            let json = jsonDb.replace(/&#34;/g, '"');
+
+            console.log(json);
+            canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
+
+            canvas.selection = false;
+
+            //Envoi du JSON vers Server
+            function sendData(){
+              let id = "<%= infos[0].id %>";
+              let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
+              console.log('Saved');
+              let image = canvas.toDataURL('jpeg');
+              socket.emit('connectionCanvas', {canvas: serializedCanvas, id: id, image: image});
+            }
+
+            //Enregistrement toutes les 10 secs
+            setInterval(() => {
+              sendData();
+            },10000)
+
+            //Ratio image
+            function sizeCalc(imgWidth, imgHeight) {
+              let width_ratio = canvas.width / 2 / imgWidth;
+              let height_ratio = canvas.height / 2 / imgHeight;
+
+              let ratio = null;
+
+              // if (width_ratio > height_ratio)
+              if (imgWidth >= imgHeight)
+                ratio = width_ratio;
+              else
+                ratio = height_ratio;
+
+              let height = canvas.height / 2 / ratio;
+              let width = (canvas.width / 2) / ratio;
+
+              let cH = canvas.height / 2;
+              let nH = imgHeight * ratio;
+              let cropY = (nH - cH) / ratio / 2;
+
+              let cW = canvas.width / 2;
+              let nW = imgWidth * ratio;
+              let cropX = (nW - cW) / ratio / 2;
+
+              let returnObj = {
+                width_ratio: ratio,
+                height_ratio: ratio,
+                width: width,
+                height: height
+              };
+
+              if (width_ratio > height_ratio) returnObj.cropY = cropY;
+              else returnObj.cropX = cropX;
+
+              return returnObj;
+            }
+
+            fabric.Image.prototype.toObject = (function(toObject) {
+              return function() {
+                return fabric.util.object.extend(toObject.call(this), {
+                  src: this.toDataURL(),
+                  height: this.height,
+                  width: this.width,
+                  matrixCache: this.matrixCache,
+                  ownMatrixCache: this.ownMatrixCache,
+                  scaleY: this.scaleY,
+                  scaleX: this.scaleX,
+                  cropX: this.cropX,
+                  cropY: this.cropY
+                });
+              };
+            })(fabric.Image.prototype.toObject);
+
+            //Import d'image
+            function upload(e) {
+               let fileType = e.target.files[0].type;
+               let url = URL.createObjectURL(e.target.files[0]);
+
+               if (fileType === 'image/jpeg') { //check if png
+                  fabric.Image.fromURL(url, function(img) {
+                    let size = sizeCalc(img.width, img.height);
+                     img.set({
+                       left:20,
+                       top: 20,
+                       height: size.height,
+                       width: size.width,
+                       scaleY: size.height_ratio,
+                       scaleX: size.width_ratio,
+                       cropY: size.cropY ? size.cropY : false,
+                       cropX: size.cropX ? size.cropX : false
+                     });
+                     canvas.add(img);
+                  });
+               } else if (fileType === 'image/svg+xml') { //check if svg
+                  fabric.loadSVGFromURL(url, function(objects, options) {
+                     var svg = fabric.util.groupSVGElements(objects, options);
+                     svg.scaleToWidth(180);
+                     svg.scaleToHeight(180);
+                     canvas.add(svg);
+                  });
+               }
+
+               sendData();
+
+            }
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
@@ -136,16 +444,15 @@
               opt.path.lockScalingY = true;
               opt.path.lockRotation = true;
               socket.emit('pathAdded')
-              let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
-              socket.emit('connectionCanvas', serializedCanvas);
+              sendData();
             });
+
+            canvas.on('object:added', sendData);
 
             canvas.on('object:selected', onObjectSelected);
 
             function onObjectSelected(e){
             	let self = e.target;
-              let radius = $('radiusValue');
-              radius.setAttribute('value', self.radius);
               console.log(self);
             }
 
@@ -160,7 +467,7 @@
 
             function objectMoving(e){
               let self = e.target;
-              socket.emit('newCoords', {top: self.top, left: self.left, id: self.id});
+              socket.emit('newCoords', {room: room, top: self.top, left: self.left, id: self.id});
             }
 
             function drawObject(data){
@@ -182,17 +489,70 @@
                   };
                 })(circle.toObject);
 
+
+                const rect = new fabric.Rect({
+                    width: 10,
+                    height: 20,
+                    fill: data.color,
+                    opacity: 0.7,
+                    top: canvas.height/2,
+                    left: canvas.width/2,
+                 });
+
+
+
                 circle.id = data.id;
 
                 canvas.add(circle);
-              }
+            } else if(data.type == 'rect'){
+
+                const rect = new fabric.Rect({
+                    width: 100,
+                    height: 200,
+                    fill: data.color,
+                    top: canvas.height/2,
+                    left: canvas.width/2,
+                 });
+
+                rect.toObject = (function(toObject) {
+                return function() {
+                  return fabric.util.object.extend(toObject.call(this), {
+                      id: this.id
+                    });
+                  };
+                })(rect.toObject);
+
+                rect.id = data.id;
+
+                canvas.add(rect);
+              } else if(data.type == 'triangle'){
+
+                  const triangle = new fabric.Triangle({
+                      width: 100,
+                      height: 200,
+                      fill: data.color,
+                      top: canvas.height/2,
+                      left: canvas.width/2,
+                   });
+
+                  triangle.toObject = (function(toObject) {
+                  return function() {
+                    return fabric.util.object.extend(toObject.call(this), {
+                        id: this.id
+                      });
+                    };
+                  })(triangle.toObject);
+
+                  triangle.id = data.id;
+
+                  canvas.add(triangle);
+                }
             }
 
             document.addEventListener('keydown', e => {
               if(e.keyCode == '8' || e.keyCode == '46'){
                 canvas.getActiveObject().visible = false;
-                let serializedCanvas = JSON.stringify(canvas.toJSON(['id', 'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation']));
-                socket.emit('connectionCanvas', serializedCanvas);
+                sendData();
               }
             }, false);
 
@@ -202,6 +562,14 @@
 
             circleButton.addEventListener('click', () => {
               socket.emit('objectAdded', {type: 'circle', color: color});
+            });
+
+            createRect.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'rect', color: color});
+            });
+
+            createTriangle.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'triangle', color: color});
             });
 
           socket.on('getNewCoords', data => {
@@ -226,10 +594,10 @@
           });
 
             //On récupère le canvas à la ocnnection
-            socket.on('getConnectionCanvas', data => {
-              console.log('New Data = '+data)
-              canvas.loadFromJSON(data);
-            })
+            // socket.on('getConnectionCanvas', data => {
+            //   console.log('New Data = '+data)
+            //   canvas.loadFromJSON(data);
+            // })
 
           }
         </script>

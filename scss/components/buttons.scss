@@ -7,17 +7,30 @@
     color: $white;
     transition: all 0.3s ease;
     &--blue {
-        background: $blue
+        background: $blue;
+        &:hover {
+            background: #489cfd;
+        }
     }
     &--purple {
         background: $purple;
+        &:hover {
+            background: #7e8ae8;
+        }
     }
     &--red {
         background: $red;
+        &:hover {
+            background: #fd4f84;
+        }
     }
     &--transparent {
         color:$gray-2;
         border:1px solid $gray-2;
+        &:hover {
+            background: $gray-2;
+            color:$white;
+        }
     }
 }
 

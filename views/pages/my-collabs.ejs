@@ -25,16 +25,6 @@
             </div>
         </form>
 
-        <div class="popup">
-            <div class="popup__close">&#215;</div>
-            <div class="popup__text">
-                Lorem ipsum dola ersam Lorem ipsum dola ersam
-            </div>
-            <a id="popup-link" href="">
-                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
-            </a>
-        </div>
-
         <header class="container-fluid app-header">
             <div class="row align-center">
                 <div class="col-lg-6">
@@ -42,7 +32,7 @@
                         <a href="/" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
                             <li class="menu__sub__link"><a href="/" title="Accueil">Home</a></li>
-                            <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
+                            <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
                             <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
                             <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
@@ -55,13 +45,13 @@
         </header>
         <main>
             <section class="all-projects container">
-                <% if(ownProjects.length > 0){ %>
-				<h1>Mes projets</h1>
-                <% ownProjects.forEach(function(own) { %>
+                <% if(othersProjects.length > 0){ %>
+				              <h1>Mes collaborations</h1>
+                <% othersProjects.forEach(function(other) { %>
                   <article class="project row">
-                      <div class="project__preview col-lg-4" id="preview" style="background:url('<%= own.thumbnail %>')">
+                      <div class="project__preview col-lg-4" id="preview" style="background:url('<%= other.thumbnail %>')">
                           <div class="project__preview__status">
-                            <% if(own.visibility){ %>
+                            <% if(other.visibility){ %>
                               <img src="./images/public-white.svg" alt="">
                             <% } else{ %>
                               <img src="./images/cadena.svg" alt="">
@@ -70,72 +60,29 @@
                       </div>
                       <div class="project__informations col-lg-6">
                           <h2 class="project__informations__title">
-                              <%= own.title %>
+                              <%= other.title %>
                           </h2>
-                         <!--  <span class="project__informations__author"><strong>Auteur :</strong> <%= own.nickname %></span><br> -->
-                          <span class="project__informations__colaborators"><strong><% if(own.collabs.length > 1){ %>Collaborateurs :<% }else{ %> Collaborateur : <%}%></strong> <% if(own.collabs.length > 0){ %>
-                            <%= own.collabs.join(', ') %>
-                          <% }else{ %>
-                            Il n'y a aucun collaborateur
-                          <%}%></span><br>
-                          <span class="project__informations__date">Créé le <%= own.creation_date %></span>
+                         <span class="project__informations__author"><strong>Auteur :</strong> <%= other.author %></span><br>
+                          <span class="project__informations__date">Créé le <%= other.creation_date %></span>
                       </div>
                       <div class="project__cta col-lg-2">
-                          <a href=<%= "/app/"+own.id %> class="button button--transparent" title="Modifier">Modifier</a>
-                          <form class="" action="/delete/<%= own.id %>" method="POST">
-                            <button type="submit" class="button button--red" title="Supprimer">Supprimer</a>
-                          </form>
+                          <a href=<%= "/app/"+other.id %> class="button button--transparent" title="Modifier">Modifier</a>
                       </div>
                   </article>
                 <% }); %>
                 <% }else{ %>
-                  <h1>Mes projets</h1>
+                  <h1>Mes collaborations</h1>
                     <div class="row">
                         <div class="no-projects">
                             <img src="./images/picture.svg" alt="Commencer un projet" class="no-projects__picture">
-                            <p class="no-projects__title">Vous n'avez pas de projets</p>
-                            <a href="#" class="create-project button button--blue" title="Créer un projet">Commencer un projet</a>
+                            <p class="no-projects__title">Vous n'êtes en collaboration sur aucun projet</p>
                         </div>
                     </div>
                 <% } %>
             </section>
         </main>
-        <script src="../socket.io/socket.io.js" charset="utf-8"></script>
         <script src="./minjs/script.js"></script>
         <script type="text/javascript">
-
-            const popup = document.getElementsByClassName('popup');
-            const popupClose = document.getElementsByClassName('popup__close');
-            const popupText = document.getElementsByClassName('popup__text');
-            const popupLink = document.getElementById('popup-link');
-
-            const openNotif = (element) => {
-                element.classList.add('open');
-            }
-
-            const closeNotif = (element) => {
-                element.classList.remove('open');
-            }
-
-            popupClose[0].addEventListener('click' , function() {
-                closeNotif(popup[0])
-            });
-
-          const socket = io.connect();
-
-          //Notification d'ajout dans un projet
-          socket.on('getCollabNotif', data => {
-              if(data.receiver == "<%= user %>"){
-                  openNotif(popup[0]);
-                  setTimeout(() => {
-                      closeNotif(popup[0]);
-                  },5000)
-
-                  popupText[0].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
-                  popupLink.href = "/app/"+data.project;
-              }
-          });
-
           let image = document.getElementById('preview');
         </script>
     </body>

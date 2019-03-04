@@ -13,6 +13,7 @@
         left: 0;
         top: calc(50% + 70px);
         transform: translateY(calc(-50% - 35px));
+        z-index: 1;
         &__item {
             width:22px;
             height:22px;
@@ -21,6 +22,17 @@
             box-sizing: content-box;
             position: relative;
             transition: all 0.2s ease;
+            label {
+                cursor: pointer;
+            }
+            &__files {
+                width: 0.1px;
+            	height: 0.1px;
+            	opacity: 0;
+            	overflow: hidden;
+            	position: absolute;
+            	z-index: -1;
+            }
             &__sub {
                 list-style: none;
                 position: absolute;
@@ -39,6 +51,7 @@
                     width: 100%;
                     box-sizing: border-box;
                     transition: all 0.2s ease;
+                    font-size: 16px;
                     &:hover {
                         background: rgba(255 , 255 , 255 , 0.02);
                     }
@@ -67,6 +80,7 @@
         top:50%;
         transform: translate(-50%, calc(-50% + 35px));
         background: white;
+        z-index: -2;
     }
     input#colorPicker {
         border: 0;
@@ -79,4 +93,99 @@
         height: 100%;
     }
 
+    .chat {
+        position: absolute;
+        background: $white;
+        bottom:-303px;
+        right: 0;
+        width: 324px;
+        transition: all 0.3s ease;
+        &__header {
+            background: $gray-3;
+            color:$white;
+            padding: 12px 20px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+        &__status {
+          background: #FFF !important;
+          position: relative;
+          &__img{
+            position: absolute;
+            top: -80px;
+            left: -44px;
+            transform: scale(0.15);
+
+          }
+        }
+        &__messages {
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+            height: 180px;
+            overflow-y: overlay;
+            margin-right: 10px;
+            padding: 0 10px 0 0;
+            &__li {
+                padding:15px 20px;
+                animation-duration: 0.3s;
+                animation-name: fadein;
+                word-break: break-word;
+                &__author {
+                    font-weight: bold;
+                }
+            }
+            &__li:nth-child(odd) {
+                background: $gray-light;
+            }
+        }
+        hr {
+            margin-bottom: 20px;
+        }
+        &__text {
+            margin-bottom: 20px;
+            &__input {
+                line-height: 30px;
+                outline: none;
+                margin:0 5px 0 20px;
+                padding: 0px 40px 0 10px;
+                width: 290px;
+            }
+            &__submit {
+                position: absolute;
+                bottom: 27px;
+                right: 7px;
+                background: url(../images/send.svg);
+                width: 20px;
+                height: 20px;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+        }
+        &.open {
+            bottom:0;
+        }
+    }
+    ::-webkit-scrollbar {
+        width: 5px;
+        margin-right: 20px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #eae9e9;
+        border-radius: 100px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: $gray-2;
+        border-radius: 100px;
+    }
+}
+
+@keyframes fadein {
+    from {
+       opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

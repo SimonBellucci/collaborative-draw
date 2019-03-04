@@ -12,6 +12,8 @@
         &__preview {
             position: relative;
             padding: 0 30px 0 0!important;
+            background-size: cover!important;
+            background-position: center!important;
             &__status {
                 height: 30px;
                 width: 30px;
@@ -66,6 +68,21 @@
             }
         }
     }
+    .no-projects {
+        width: 100%;
+        text-align: center;
+        padding:10%;
+        background:$gray-light;
+        &__picture {
+            width:51px;
+        }
+        &__title {
+            margin-top:10px;
+            font-size: 26px;
+            color:#babbbc;
+            font-weight: 200;
+        }
+    }
 }
 
 .modal {
@@ -85,6 +102,10 @@
             font-size: 24px;
             color:$gray-2;
             cursor: pointer;
+            transition: all 0.3s ease;
+            &:hover {
+                color:$red;
+            }
         }
         position: absolute;
         left: 50%;
