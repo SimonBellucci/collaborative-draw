@@ -133,7 +133,7 @@ window.addEventListener("load" , function() {
 
     // visibilité du projets
 
-    var modalVisibility = document.getElementsByClassName('modal-visibility');
+    /* var modalVisibility = document.getElementsByClassName('modal-visibility');
     var btnVisibility = document.getElementsByClassName('project__preview__status');
     var closeModalVisibility = document.querySelectorAll('.modal-visibility__content__close');
     var btnValidationVisibility = document.querySelectorAll('.modal-visibility__content__validate')
@@ -169,7 +169,7 @@ window.addEventListener("load" , function() {
                                 }
                             });
         }
-    }
+    } */
 
     // if (modalVisibility) {
     //     for (var i = 0 ; i < modalVisibility.length ; i++ ) {
