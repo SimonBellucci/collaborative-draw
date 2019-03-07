@@ -25,22 +25,6 @@
             </div>
         </form>
 
-        <form action="" method="POST" class="modal-visibility">
-            <div class="modal-visibility__content">
-                <div class="modal-visibility__content__close">&#215;</div>
-                <span class="modal-visibility__content__title">Vous voulez rendre ce projet :</span><br />
-                <div class="modal-visibility__content__input">
-                    <input type="radio" name="visibility" id="private" value="private" checked>
-                    <label for="private">Privé</label>
-                </div>
-                <div class="modal-visibility__content__input">
-                    <input type="radio" name="visibility" id="public" value="public">
-                    <label for="public">Public</label>
-                </div>
-                <button class="modal-visibility__content__validate button button--blue" type="submit">Valider</button>
-            </div>
-        </form>
-
         <div class="popup">
             <div class="popup__close">&#215;</div>
             <div class="popup__text">
@@ -74,9 +58,28 @@
                 <% if(ownProjects.length > 0){ %>
 				<h1>Mes projets</h1>
                 <% ownProjects.forEach(function(own) { %>
+
+                    <form action="/visible/<%= own.id %>" id="<%= own.id %>" method="POST" class="modal-visibility">
+                        <div class="modal-visibility__content">
+                            <div class="modal-visibility__content__close">&#215;</div>
+                            <span class="modal-visibility__content__title">Vous voulez rendre ce projet :</span><br />
+                            <div class="modal-visibility__content__input">
+                                <input type="radio" name="visibility" id="private" value="private" checked>
+                                <label for="private">Privé</label>
+                            </div>
+                            <div class="modal-visibility__content__input">
+                                <input type="radio" name="visibility" id="public" value="public">
+                                <label for="public">Public</label>
+                            </div>
+                            <button class="modal-visibility__content__validate button button--blue btn-<%= own.id %>" type="submit">Valider</button>
+                        </div>
+                    </form>
+
+
+
                   <article class="project row">
                       <div class="project__preview col-lg-4" id="preview" style="background:url('<%= own.thumbnail %>')">
-                          <div class="project__preview__status">
+                          <div class="project__preview__status preview-<%= own.id %>">
                             <% if(own.visibility){ %>
                               <img src="./images/public-white.svg" alt="">
                             <% } else{ %>

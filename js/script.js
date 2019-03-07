@@ -133,31 +133,73 @@ window.addEventListener("load" , function() {
 
     // visibilité du projets
 
-    var modalVisibility = document.querySelector('.modal-visibility');
-    var btnVisibility = document.querySelector('.project__preview__status');
-    var closeModalVisibility = document.querySelector('.modal-visibility__content__close');
-    var btnValidationVisibility = document.querySelector('.modal-visibility__content__validate')
+    var modalVisibility = document.getElementsByClassName('modal-visibility');
+    var btnVisibility = document.getElementsByClassName('project__preview__status');
+    var closeModalVisibility = document.querySelectorAll('.modal-visibility__content__close');
+    var btnValidationVisibility = document.querySelectorAll('.modal-visibility__content__validate')
 
-    if (modalVisibility) {
-        hiddenModal(modalVisibility)
+    if(modalVisibility){
+        for(var i = 0; i < modalVisibility.length; i++){
 
-        btnVisibility.addEventListener('click' , function(e) {
-            e.preventDefault();
-            modalVisibility.style.opacity = "1";
-            modalVisibility.style.visibility = "visible";
-        });
+            var id = modalVisibility[i].getAttribute('id');
 
-        closeModalVisibility.addEventListener('click' , function() {
-            hiddenModal(modalVisibility)
-        });
-        btnValidationVisibility.addEventListener('click' , function() {
-            hiddenModal(modalVisibility)
-        });
-        modalVisibility.addEventListener('click' , function(e) {
-            if(e.target ==  modalVisibility) {
-                hiddenModal(modalVisibility)
-            }
-        });
+            document.getElementById(id).style.opacity = "0";
+            document.getElementById(id).style.visiility = "hidden";
+
+            btnVisibility[i].addEventListener('click' , function(e) {
+                        e.preventDefault();
+                        document.getElementById(id).style.opacity = "1";
+                        document.getElementById(id).style.visibility = "visible";
+            });
+
+            closeModalVisibility[i].addEventListener('click' , function() {
+                        document.getElementById(id).style.opacity = "0";
+                        document.getElementById(id).style.visibility = "hidden";
+                    });
+
+                    btnValidationVisibility[i].addEventListener('click' , function() {
+                                document.getElementById(id).style.opacity = "0";
+                                document.getElementById(id).style.visibility = "hidden";
+                            });
+
+                            document.getElementById(id).addEventListener('click' , function(e) {
+                                if(e.target ==  modalVisibility[i]) {
+                                    document.getElementById(id).style.opacity = "0";
+                                    document.getElementById(id).style.visibility = "hidden";
+                                }
+                            });
+        }
     }
+
+    // if (modalVisibility) {
+    //     for (var i = 0 ; i < modalVisibility.length ; i++ ) {
+    //
+    //     modalVisibility[i].style.opacity = "0";
+    //     modalVisibility[i].style.visibility = "hidden";
+    //
+    //         console.log(btnVisibility[i])
+    //         console.log(btnValidationVisibility[i])
+    //         btnVisibility[i].addEventListener('click' , function(e) {
+    //             e.preventDefault();
+    //             modalVisibility[i].style.opacity = "1";
+    //             modalVisibility[i].style.visibility = "visible";
+    //         });
+    //
+    //         closeModalVisibility[i].addEventListener('click' , function() {
+    //             modalVisibility[i].style.opacity = "0";
+    //             modalVisibility[i].style.visibility = "hidden";
+    //         });
+    //         btnValidationVisibility[i].addEventListener('click' , function() {
+    //             modalVisibility[i].style.opacity = "0";
+    //             modalVisibility[i].style.visibility = "hidden";
+    //         });
+    //         modalVisibility[i].addEventListener('click' , function(e) {
+    //             if(e.target ==  modalVisibility[i]) {
+    //                 modalVisibility[i].style.opacity = "0";
+    //                 modalVisibility[i].style.visibility = "hidden";
+    //             }
+    //         });
+    //     }
+    // }
 
 });

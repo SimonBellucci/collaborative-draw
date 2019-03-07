@@ -169,6 +169,8 @@
     transition: all 0.5s ease;
     visibility: hidden;
     opacity: 0;
+    top: 0;
+    right: 0;
     &__content {
         position: absolute;
         left: 50%;
