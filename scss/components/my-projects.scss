@@ -20,7 +20,7 @@
                 background: $gray-1;
                 position: absolute;
                 top:0;
-                right: 30px;
+                right: 0px;
                 cursor:pointer;
                 img {
                     height:30px;
@@ -155,6 +155,53 @@
                     border: 1px solid $blue;
                 }
             }
+        }
+    }
+}
+
+
+.modal-visibility {
+    position: absolute;
+    background: rgba(0 , 0 , 0 , 0.6);
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    transition: all 0.5s ease;
+    visibility: hidden;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    &__content {
+        position: absolute;
+        left: 50%;
+        top:50%;
+        transform: translate(-50% , -50%);
+        background: $white;
+        padding: 50px 85px;
+        display: inline-block;
+        &__close {
+            position: absolute;
+            top:15px;
+            right:20px;
+            font-size: 24px;
+            color:$gray-2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            &:hover {
+                color:$red;
+            }
+        }
+        &__title {
+            font-size:26px;
+            font-weight: bold;
+            margin-bottom:20px;
+            display: inline-block;
+        }
+        &__input {
+            margin-bottom:10px;
+        }
+        .button {
+            margin-top: 15px;
         }
     }
 }

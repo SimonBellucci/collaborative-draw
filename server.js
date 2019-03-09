@@ -292,6 +292,21 @@ app.post('/add-user/:id', function(req, res) {
 
 });
 
+app.post('/visible/:id', (req, res) => {
+    let project = req.params.id;
+    let visibility = req.body.visibility;
+    if(visibility == 'private'){
+        knex('projects').where('id', project).update('visibility', 0).then(response => {
+            res.redirect('/mes-projets');
+        });
+    }
+    else if(visibility == 'public'){
+        knex('projects').where('id', project).update('visibility', 1).then(response => {
+            res.redirect('/mes-projets');
+        });
+    }
+})
+
 app.get('/canvas', function(req, res) {
   res.render('pages/canvas');
 });
