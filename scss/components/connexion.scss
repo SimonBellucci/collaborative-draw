@@ -1,10 +1,14 @@
 @import "variables";
 
 .bloc-form {
-    margin: 100px auto 0;
+    margin: 30px auto;
+    
+    @media only screen and (min-width: 30em) {
+        margin: 100px auto 50px;
+    }
 
     &__title {
-        font-size:40px;
+        font-size: 40px;
     }
     &__previous {
         &:hover {
@@ -16,14 +20,16 @@
         &__input {
             width: 100%;
             height: 40px;
-            margin:5px 0;
-            padding:0px 0 0 15px;
+            margin: 5px 0;
+            padding: 0px 0 0 15px;
             outline: none;
-            border:1px solid #ccc;
+            border: 1px solid #ccc;
             color: $gray-2;
+
             &:focus {
                 border: 1px solid $blue;
             }
+
             &::placeholder {
                 color:#ccc;
             }
@@ -33,7 +39,15 @@
             display: inline-block;
         }
         &__input.demi:first-child {
-            margin-right: 6px;
+            margin-right: 1px;
+
+            @media only screen and (min-width: 30em) {
+                margin-right: 4px;
+            }
+
+            @media only screen and (min-width: 60em) {
+                margin-right: 5px;
+            }
         }
 
         .form-flex {
@@ -45,10 +59,19 @@
         }
     }
     &__condition {
-        margin-top:20px;
+        margin-top: 20px;
         font-size: 12px;
-        text-align: left;
+        text-align: center;
+
+        @media only screen and (min-width: 30em) {
+            text-align: left;
+        }
     }
+
+    &__register {
+        margin-top: 15px;
+    }
+    
     &__forgot {
         float: left;
         margin-top:20px;
@@ -63,8 +86,6 @@
     }
 
     @media only screen and (max-width: 22em) {
-        margin: 30px auto 0;
-
         .form-flex {
             justify-content: center;
         }
