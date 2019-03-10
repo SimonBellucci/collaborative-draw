@@ -7,25 +7,95 @@
 
 
 .introduction {
-    padding:100px 0;
+    padding: 25px 0;
+    text-align: left;
+
+    @media only screen and (min-width: 30em) {
+        padding: 100px 0;
+        text-align: right;
+    }
+   
     &__title, &__text {
-        padding-right:10px;
+        padding-right: 0;
+
+        @media only screen and (min-width: 30em) {
+            padding-right:10px;
+        }
     }
+
+    &__text {
+        font-size: 14px;
+        line-height: unset;
+
+        @media only screen and (min-width: 30em) {
+            font-size: inherit;
+            line-height: 30px;
+        }
+    }
+
+    &__btn {
+        text-align: center;
+
+        @media only screen and (min-width: 30em) {
+            text-align: unset;
+        }
+    }
+    
     .button {
-        margin:10px 10px 0;
+        margin: 10px 10px 20px;
     }
+
     &__image {
-        padding-left:10px;
+        padding-left: 0;
+
+        @media only screen and (min-width: 30em) {
+            padding-left: 10px;
+        }
+
+        img {
+            width: 100%;
+        }
     }
 }
 
 .features {
     background: $gray-light;
-    padding:55px 0;
-    &__one, &__two, &__three{
+    padding: 30px 0;
+
+    @media only screen and (min-width: 30em) {
+        padding: 55px 0;
+    }
+
+    &__title {
         text-align: center;
-        &__image {
-            height:60px;
+        margin-top: 0;
+        font-size: 18px;
+
+        @media only screen and (min-width: 30em) {
+            font-size: 26px;
+        }
+    }
+
+    .feature {
+        text-align: center;
+
+        &__text {
+            font-size: 14px;
+            line-height: 1;
+
+            @media only screen and (min-width: 30em) {
+                font-size: 16px;
+            }
+        }
+
+        &__img {
+            height: 50px;
+            width: 50px;
+
+            @media only screen and (min-width: 30em) {
+                height: 60px;
+                width: 60px;
+            }
         }
     }
 }
@@ -37,25 +107,48 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center;
-    padding:90px 0;
+    padding: 30px 0;
     position: relative;
-    height: 315px;
+    height: 195px;
+
+    @media only screen and (min-width: 30em) {
+        padding: 90px 0;
+        height: 315px;
+    }
+
     &__text , .button {
         transform: translateX(-50%);
         position: absolute;
         z-index: 1;
         left: 50%;
     }
+
     &__text {
-        color:$white;
-        font-size: 24px;
-        line-height: 40px;
-        top:50px;
+        width: 100%;
+        color: $white;
+        font-size: 16px;
+        line-height: 24px;
+        margin-top: 0;
+        
+        @media only screen and (min-width: 30em) {
+            font-size: 24px;
+            line-height: 40px;
+            margin-top: 1em;
+            top: 50px;
+        }
     }
+
     .button {
-        bottom:90px;
+        top: 110px;
+
+        @media only screen and (min-width: 30em) {
+            top: unset;
+            bottom: 90px;
+        }
     }
+
     &__overlay {
+
         &:before {
             content: "";
             background: black;
@@ -63,10 +156,10 @@
             height:100%;
             width: 100%;
             opacity: 0.6;
-            top:0;
+            top: 0;
             bottom: 0;
             right: 0;
-            left:0;
+            left: 0;
             z-index: 0;
             position: absolute;
         }
@@ -74,17 +167,30 @@
 }
 
 .popular-projects {
-    padding:110px 0;
-    &__title {
-        margin-bottom:45px;
+    padding: 30px 0;
+
+    @media only screen and (min-width: 30em) {
+        padding: 55px 0;
     }
+
+    &__title {
+        margin-top: 0;
+        margin-bottom: 30px;
+
+        @media only screen and (min-width: 30em) {
+            margin-bottom: 45px;
+        }
+    }
+
     &__one, &__two, &__three {
         margin-bottom: 40px;
+
         &__image {
             background-position: center!important;
             background-size: cover!important;
             min-height: 200px;
         }
+
         &__box-infos {
             border:1px solid #ddd;
             padding:20px;
@@ -99,20 +205,24 @@
                     }
                 }
             }
+
             &__author {
                 color:$gray-2;
             }
+
             &__like {
                 position: absolute;
                 top:5px;
                 right:5px;
                 display: flex;
+
                 &__counter {
                     height: 50px;
                     display:inline-block;
                     margin: 15px -11px 0 0;
                     color:$gray-2;
                 }
+
                 &__icon {
                     cursor: pointer;
                      height: 50px;
@@ -130,6 +240,7 @@
                          background-position: right;
 
                      }
+
                      &:hover {
                          background-position:right;
                      }

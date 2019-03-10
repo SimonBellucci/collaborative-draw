@@ -30,14 +30,24 @@ h1 {
 }
 
 h2 {
-    font-size:26px;
-    line-height: 38px;
-    margin-top:0;
+    font-size: 18px;
+    line-height: 24px;
+
+    @media only screen and (min-width: 30em) {
+        font-size: 26px;
+        line-height: 38px;
+        margin-top: 0;
+    }
 }
 
 h3 {
-    font-size:20px;
-    line-height: 28px;
+    font-size: 16px;
+    line-height: 1;
+
+    @media only screen and (min-width: 30em) {
+        font-size: 20px;
+        line-height: 28px;
+    }
 }
 
 h1, h2, h3 {
@@ -46,9 +56,9 @@ h1, h2, h3 {
 }
 
 p {
-    font-size:16px;
-    line-height:30px;
-    color:$gray-2;
+    font-size: 16px;
+    line-height: 30px;
+    color: $gray-2;
     font-weight: 400;
 }
 
