@@ -312,7 +312,6 @@ app.get('/canvas', function(req, res) {
 });
 
 let canvasData = '';
-let idCount = 0;
 
 io.on('connection', (socket) => {
 
@@ -371,12 +370,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('objectAdded', data => {
-    idCount++
-    io.emit('getNewObject', {type: data.type, color: data.color, id: idCount-1});
+    let room = data.room;
+
+    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {
+      knex('projects').select('items').where({ id: room }).then(response => {
+        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url});
+      });
+    });
+
   });
 
   socket.on('pathAdded', () => {
-    idCount++
+    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {});
   })
 
 });
