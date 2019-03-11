@@ -366,8 +366,16 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newScale', data => {
-    io.emit('getNewScale', data);
+    io.sockets.in(data.room).emit('getNewScale', data);
   });
+
+  socket.on('newColor', data => {
+    io.sockets.in(data.room).emit('getNewColor', data);
+  })
+
+  socket.on('layer', data => {
+    io.sockets.in(data.room).emit('getLayer', {type: data.type, object: data.object});
+  })
 
   socket.on('objectAdded', data => {
     let room = data.room;

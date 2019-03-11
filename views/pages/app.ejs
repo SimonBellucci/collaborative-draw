@@ -77,7 +77,7 @@
                 <span class="characteristics__option__title">Couleur</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
-                        <input type="color" name="" value="#278bff" id="colorPicker">
+                        <input type="color" name="" value="#278bff" id="colorPickerSingle">
                     </li>
                 </ul>
             </div>
@@ -319,6 +319,7 @@
 
             //Récupération des boutons de changements de couleur
             const colorPicker = $('colorPicker');
+            const colorPickerSingle = $('colorPickerSingle');
 
             //Récupération import d'image
             const importButton = $('file');
@@ -340,6 +341,22 @@
               changeColor(e.target.value);
             });
 
+            colorPickerSingle.addEventListener('change', (e) => {
+              console.log('couleurChange');
+              socket.emit('newColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
+            })
+
+            socket.on('getNewColor', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.set('fill', data.color)
+
+              canvas.renderAll();
+              sendData();
+            })
+
             let color = 'black';
 
             function changeColor(colored){
@@ -354,7 +371,6 @@
             let jsonDb = "<%= infos[0].render %>";
             let json = jsonDb.replace(/&#34;/g, '"');
 
-            console.log(json);
             canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
 
             canvas.selection = false;
@@ -372,6 +388,60 @@
             setInterval(() => {
               sendData();
             },10000)
+
+            //Changement de positions (arrière-plan, premier-plan, ect...)
+            const buttonToBack = $('posAp');
+            const buttonBackward = $('posAr');
+            const buttonToFront = $('posPp');
+            const buttonFront = $('posAv');
+
+            buttonToBack.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'toBack'})
+            });
+
+            buttonBackward.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'back'})
+            });
+
+            buttonToFront.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'toFront'})
+            });
+
+            buttonFront.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'front'})
+            });
+
+            socket.on('getLayer', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.object
+              })
+
+              if(data.type == 'toBack'){
+                canvas.sendToBack(result);
+              }
+              else if(data.type == 'toFront'){
+                canvas.bringToFront(result);
+              }
+              else if(data.type == 'back'){
+                canvas.sendBackwards(result);
+              }
+              else if(data.type == 'front'){
+                canvas.bringForward(result);
+              }
+            })
+
+            window.addEventListener('click', function(e){
+              if($('canvasTest').contains(e.target)){
+                return;
+              }
+              else if (document.getElementsByClassName('upper-canvas')[0].contains(e.target)){
+                return;
+              }
+              else{
+                canvas.discardActiveObject();
+                console.log("x");
+              }
+            });
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
@@ -400,9 +470,12 @@
 
             canvas.on('object:selected', onObjectSelected);
 
+            let lastObjectSelected = 0;
+
             function onObjectSelected(e){
             	let self = e.target;
-              colorPicker.value = self.fill
+              colorPickerSingle.value = self.fill
+              lastObjectSelected = self;
               console.log(self);
               console.log(self.fill);
             }
@@ -411,7 +484,7 @@
 
             function onObjectScaled(e){
             	let self = e.target;
-              socket.emit('newScale', {scaleX: self.get('scaleX'), scaleY: self.get('scaleY'), id: self.id})
+              socket.emit('newScale', {room: room, scaleX: self.get('scaleX'), scaleY: self.get('scaleY'), id: self.id})
             }
 
             canvas.on('object:moving', objectMoving);
@@ -568,21 +641,25 @@
             })
 
           socket.on('getNewCoords', data => {
-            let allObjects = canvas.getObjects();
+            let result = canvas.getObjects().find(obj => {
+              return obj.id === data.id
+            })
 
             //console.log(allObjects);
-            allObjects[data.id].top = data.top;
-            allObjects[data.id].left = data.left;
+            result.top = data.top;
+            result.left = data.left;
 
             canvas.renderAll();
 
           });
 
           socket.on('getNewScale', data => {
-            let allObjects = canvas.getObjects();
+            let result = canvas.getObjects().find(obj => {
+              return obj.id === data.id
+            })
 
-            allObjects[data.id].scaleX = data.scaleX;
-            allObjects[data.id].scaleY = data.scaleY;
+            result.scaleX = data.scaleX;
+            result.scaleY = data.scaleY;
 
             canvas.renderAll();
 
