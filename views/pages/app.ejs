@@ -34,7 +34,7 @@
                             <button type="submit" id="collabButton" class="people__sub__validate button button--blue" type="submit">Inviter</button>
                         </form>
                     </div>
-                    <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
+                    <a href="#" id="export" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
             </div>
         </header>
@@ -293,6 +293,19 @@
 
             //Récupération import d'image
             const importButton = $('file');
+
+            //Export du canvas en png
+            const exportButton = $('export');
+
+            exportButton.addEventListener('click', saveImage)
+
+            function saveImage(e) {
+                this.href = canvas.toDataURL({
+                    format: 'png',
+                    quality: 0.8
+                });
+                this.download = 'canvas.png'
+            }
 
             colorPicker.addEventListener('change', (e) => {
               changeColor(e.target.value);
