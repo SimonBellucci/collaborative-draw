@@ -344,15 +344,6 @@
               sendData();
             },10000)
 
-            //Import d'image
-            function upload(e) {
-              //  let fileType = e.target.files[0].type;
-              //  let url = URL.createObjectURL(e.target.files[0]);
-
-
-
-            }
-
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
 
@@ -382,7 +373,9 @@
 
             function onObjectSelected(e){
             	let self = e.target;
+              colorPicker.value = self.fill
               console.log(self);
+              console.log(self.fill);
             }
 
             canvas.on('object:scaling', onObjectScaled);
