@@ -99,8 +99,14 @@
                 <img src="../images/filters.svg" alt="Filters">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
-                    <li class="tools__item__sub__item">Noir et blanc</li>
-                    <li class="tools__item__sub__item">Sépia</li>
+                    <li class="tools__item__sub__item filter" data-filter="grayscale">Noir et blanc</li>
+                    <li class="tools__item__sub__item filter" data-filter="sepia">Sépia</li>
+                    <li class="tools__item__sub__item filter" data-filter="polaroid">Polaroïd</li>
+                    <li class="tools__item__sub__item filter" data-filter="vintage">Vintage</li>
+                    <li class="tools__item__sub__item filter" data-filter="technicolor">Technicolor</li>
+                    <li class="tools__item__sub__item filter" data-filter="brownie">Brownie</li>
+                    <li class="tools__item__sub__item filter" data-filter="kodachrome">Kodachrome</li>
+                    <li class="tools__item__sub__item filter" data-filter="reset">Réinitialiser</li>
                 </ul>
             </div>
             <div class="tools__item">
@@ -388,6 +394,52 @@
             setInterval(() => {
               sendData();
             },10000)
+
+            //Filtres images
+            const allFilters = document.getElementsByClassName('filter');
+            for(let i = 0; i < allFilters.length; i++){
+              allFilters[i].addEventListener('click', (e) => {
+                socket.emit('newFilter', {room: room, id: lastObjectSelected.id, filter: e.target.getAttribute('data-filter')})
+              })
+            }
+
+            const filtersObject = {
+              'grayscale': new fabric.Image.filters.Grayscale(),
+              'sepia': new fabric.Image.filters.Sepia(),
+              'polaroid': new fabric.Image.filters.Polaroid(),
+              'vintage': new fabric.Image.filters.Vintage(),
+              'technicolor': new fabric.Image.filters.Technicolor(),
+              'brownie': new fabric.Image.filters.Brownie(),
+              'kodachrome': new fabric.Image.filters.Kodachrome()
+            }
+
+            socket.on('getNewFilter', data => {
+
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              });
+
+              if(data.filter == 'reset'){
+                result.filters = [];
+                result.applyFilters();
+                canvas.renderAll();
+                sendData();
+              }
+              else{
+                let fil = filtersObject[data.filter];
+                if(result.filters.length > 0 ){
+                  result.filters = []
+                }
+
+                result.filters.push(fil);
+                result.applyFilters();
+                canvas.renderAll();
+                sendData();
+              }
+
+
+
+            })
 
             //Changement de positions (arrière-plan, premier-plan, ect...)
             const buttonToBack = $('posAp');

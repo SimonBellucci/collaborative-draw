@@ -373,6 +373,10 @@ io.on('connection', (socket) => {
     io.sockets.in(data.room).emit('getNewColor', data);
   });
 
+  socket.on('newFilter', data => {
+    io.sockets.in(data.room).emit('getNewFilter', {id: data.id, filter: data.filter});
+  })
+
   socket.on('deleted', data => {
     io.sockets.in(data.room).emit('getDeleted', {id: data.id});
   })
