@@ -369,13 +369,33 @@ io.on('connection', (socket) => {
     io.sockets.in(data.room).emit('getNewScale', data);
   });
 
+  socket.on('newRotation', data => {
+    io.sockets.in(data.room).emit('getNewRotation', data);
+  });
+
   socket.on('newColor', data => {
     io.sockets.in(data.room).emit('getNewColor', data);
   });
 
+  socket.on('newBorderColor', data => {
+    io.sockets.in(data.room).emit('getNewBorderColor', data);
+  });
+
+  socket.on('newBorderWidth', data => {
+    io.sockets.in(data.room).emit('getNewBorderWidth', data);
+  });
+
+  socket.on('newFont', data => {
+    io.sockets.in(data.room).emit('getNewFont', data);
+  })
+
   socket.on('newFilter', data => {
     io.sockets.in(data.room).emit('getNewFilter', {id: data.id, filter: data.filter});
-  })
+  });
+
+  socket.on('newText', data => {
+    io.sockets.in(data.room).emit('getNewText', {text: data.text, id: data.id});
+  });
 
   socket.on('deleted', data => {
     io.sockets.in(data.room).emit('getDeleted', {id: data.id});
