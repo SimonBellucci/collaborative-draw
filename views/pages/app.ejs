@@ -439,7 +439,6 @@
               }
               else{
                 canvas.discardActiveObject();
-                console.log("x");
               }
             });
 
@@ -612,10 +611,17 @@
 
             document.addEventListener('keydown', e => {
               if(e.keyCode == '8' || e.keyCode == '46'){
-                canvas.getActiveObject().visible = false;
-                sendData();
+                socket.emit('deleted', {room: room, id: lastObjectSelected.id});
               }
             }, false);
+
+            socket.on('getDeleted', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+              canvas.remove(result);
+              sendData();
+            })
 
             socket.on('getNewObject', data => {
               drawObject(data);
