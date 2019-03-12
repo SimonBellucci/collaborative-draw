@@ -53,8 +53,8 @@
                 <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
             </a>
         </div>
-        <section class="characteristics">
-            <div class="characteristics__close">&#8249;</div>
+        <section class="characteristics" id="caract">
+            <div class="characteristics__close" id="caract-close">&#8249;</div>
             <h3 class="characteristics__title">Caractéristiques</h3>
             <div class="characteristics__option">
                 <span class="characteristics__option__title">Position</span>
@@ -477,7 +477,16 @@
               lastObjectSelected = self;
               console.log(self);
               console.log(self.fill);
+              $('caract').classList.add('active')
+              $('caract-close').classList.add('active')
             }
+
+            canvas.on('mouse:down', (e) => {
+              if(e.target == null){
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+              }
+            })
 
             canvas.on('object:scaling', onObjectScaled);
 
