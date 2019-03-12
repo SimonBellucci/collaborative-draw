@@ -635,9 +635,12 @@
 
             importButton.addEventListener('change', (e) => {
               let fileType = e.target.files[0].type;
-              let url = URL.createObjectURL(e.target.files[0]);
-              socket.emit('objectAdded', {type: 'image', file: fileType, url: url, room: room})
-              // upload(e);
+              var reader = new FileReader();
+              reader.readAsDataURL(e.target.files[0]);
+              reader.onloadend = function() {
+                  base64data = reader.result;
+                  socket.emit('objectAdded', {type: 'image', file: fileType, url: base64data, room: room})
+              }
             })
 
           socket.on('getNewCoords', data => {
