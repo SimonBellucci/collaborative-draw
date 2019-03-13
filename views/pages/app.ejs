@@ -73,15 +73,18 @@
                     </li>
                 </ul>
             </div>
-            <div class="characteristics__option">
+            <div class="characteristics__option" id="backgroundOptions">
                 <span class="characteristics__option__title">Couleur fond</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
                         <input type="color" name="" value="#278bff" id="colorPickerSingle">
                     </li>
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <img src="../images/transparent.svg" alt="Transparent" id="colorPickerNone">
+                    </li>
                 </ul>
             </div>
-            <div class="characteristics__option">
+            <div class="characteristics__option" id="borderOptions">
                 <span class="characteristics__option__title">Couleur bordure</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
@@ -89,7 +92,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="characteristics__option">
+            <div class="characteristics__option" id="widthOptions">
                 <span class="characteristics__option__title">Épaisseur bordure</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
@@ -114,17 +117,20 @@
         </section>
         <section class="tools">
             <div class="tools__item">
+                <img src="../images/arrow-deselect.svg" id="deselect" alt="Désélectionner">
+            </div>
+            <div class="tools__item">
                 <label for="file"><img src="../images/import.svg" alt="Settings"></label>
                 <input type="file" class="tools__item__files" id="file" name="" value="" style="background:url('../images/import.svg')">
             </div>
-            <div class="tools__item">
+            <!-- <div class="tools__item">
                 <img src="../images/settings.svg" alt="Settings">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
                     <li class="tools__item__sub__item">Contraste</li>
                     <li class="tools__item__sub__item">Luminosité</li>
                 </ul>
-            </div>
+            </div> -->
             <div class="tools__item">
                 <img src="../images/filters.svg" alt="Filters">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
@@ -152,9 +158,9 @@
             <div class="tools__item">
                 <img src="../images/text.svg" id="text" alt="Text">
             </div>
-            <div class="tools__item">
+            <!-- <div class="tools__item">
                 <img src="../images/crop.svg" alt="Crop">
-            </div>
+            </div> -->
             <div class="tools__item">
                 <input type="color" name="" value="#278bff" id="colorPicker">
             </div>
@@ -357,12 +363,24 @@
             const colorPicker = $('colorPicker');
             const colorPickerSingle = $('colorPickerSingle');
             const colorPickerBorder = $('colorPickerBorder');
+            const colorPickerNone = $('colorPickerNone');
 
             //Input épaisseur
             const borderWidth = $('borderWidth');
 
+            //Options
+            const backgroundOptions = $('backgroundOptions');
+            const borderOptions = $('borderOptions');
+            const widthOptions = $('widthOptions');
+
             //Récupération import d'image
             const importButton = $('file');
+
+            //Deselection
+            $('deselect').addEventListener('click', () => {
+                canvas.discardActiveObject();
+                canvas.renderAll();
+            })
 
             //Export du canvas en png
             const exportButton = $('export');
@@ -385,6 +403,10 @@
               socket.emit('newColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
             })
 
+            colorPickerNone.addEventListener('click', (e) => {
+              socket.emit('newNoneColor', {room: room, id: lastObjectSelected.id, color: 'rgba(0,0,0,0)'});
+            })
+
             colorPickerBorder.addEventListener('change', (e) => {
               socket.emit('newBorderColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
             })
@@ -394,6 +416,17 @@
             })
 
             socket.on('getNewColor', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.set('fill', data.color)
+
+              canvas.renderAll();
+              sendData();
+            })
+
+            socket.on('getNewNoneColor', data => {
               let result = canvas.getObjects().find(obj => {
                 return obj.id === data.id
               })
@@ -536,29 +569,29 @@
 
               if(data.type == 'toBack'){
                 canvas.sendToBack(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
               }
               else if(data.type == 'toFront'){
                 canvas.bringToFront(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
               }
               else if(data.type == 'back'){
                 canvas.sendBackwards(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
               }
               else if(data.type == 'front'){
                 canvas.bringForward(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
               }
             })
-
-            window.addEventListener('click', function(e){
-              if($('canvasTest').contains(e.target)){
-                return;
-              }
-              else if (document.getElementsByClassName('upper-canvas')[0].contains(e.target)){
-                return;
-              }
-              else{
-                canvas.discardActiveObject();
-              }
-            });
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
@@ -592,6 +625,17 @@
             function onObjectSelected(e){
             	let self = e.target;
               let fontOptions = $('fontOptions');
+
+            if(self.type != 'image'){
+                backgroundOptions.style.display = 'block';
+                borderOptions.style.display = 'block';
+                widthOptions.style.display = 'block';
+            }
+            else{
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+            }
 
               if(self.text != null){
                 fontOptions.style.display = 'block';

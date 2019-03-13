@@ -377,6 +377,10 @@ io.on('connection', (socket) => {
     io.sockets.in(data.room).emit('getNewColor', data);
   });
 
+  socket.on('newNoneColor', data => {
+    io.sockets.in(data.room).emit('getNewNoneColor', data);
+  });
+
   socket.on('newBorderColor', data => {
     io.sockets.in(data.room).emit('getNewBorderColor', data);
   });
