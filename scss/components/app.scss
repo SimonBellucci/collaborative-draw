@@ -235,10 +235,31 @@
         &__title {
             font-size: 14px;
         }
+        #fonts {
+            margin: 5px 0 10px 0;
+        }
         ul {
             list-style: none;
             padding: 0;
             margin:10px 0 0 0;
+        }
+        .background-color {
+            display: flex;
+            #colorPickerNone {
+                height: 24px;
+                margin-left: 5px;
+            }
+            #colorPickerSingle {
+                border: 0;
+                padding: 0;
+                background: none;
+                outline: none;
+                -webkit-appearance: none;
+                cursor:pointer;
+                height: 31px;
+                width: 46px;
+                margin-top: -4px;
+            }
         }
         &__action {
             font-size: 12px;
@@ -262,6 +283,20 @@
                 &:hover:before{
                     content:none;
                 }
+            }
+            #colorPickerBorder {
+                border: 0;
+                padding: 0;
+                background: none;
+                outline: none;
+                -webkit-appearance: none;
+                cursor:pointer;
+                height: 31px;
+                width: 46px;
+                margin-top: -4px;
+            }
+            #borderWidth {
+                width: 43px;
             }
         }
 
