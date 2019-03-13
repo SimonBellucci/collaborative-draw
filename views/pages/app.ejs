@@ -114,6 +114,22 @@
                     <option class="characteristics__option__action characteristics__option__action--color" value="RobotoSlab">RobotoSlab</option>
                 </select>
             </div>
+            <div class="characteristics__option" id="backgroundFreeOptions" style="display: none">
+                <span class="characteristics__option__title">Couleur du trait</span>
+                <ul class="background-color">
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <input type="color" name="" value="#278bff" id="colorPickerFree">
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="widthFreeOptions" style="display: none">
+                <span class="characteristics__option__title">Épaisseur du trait</span>
+                <ul class="background-color">
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                      <input type="range" id="freeWidth" name="epaisseur" min="0" max="100">
+                    </li>
+                </ul>
+            </div>
         </section>
         <section class="grid-canvas">
             <input type="checkbox" class="grid-canvas__input" id="grid-canvas">
@@ -332,7 +348,6 @@
             })
 
             socket.on('numberConnected', data => {
-              console.log(data);
               if(data === 1){
                 chatCount.innerHTML = 'Connecté ( '+data+' )';
               }
@@ -382,6 +397,38 @@
 
             //Deselection
             $('deselect').addEventListener('click', () => {
+
+              if(canvas.isDrawingMode == false){
+                canvas.isDrawingMode = true;
+
+                $('caract').classList.add('active')
+                $('caract-close').classList.add('active')
+
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+                fontOptions.style.display = 'none';
+
+                bgFree.style.display = 'block';
+                widthFree.style.display = 'block';
+              }
+              else{
+                canvas.isDrawingMode = false;
+
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
+                setTimeout(() => {
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+                  fontOptions.style.display = 'block';
+
+                  bgFree.style.display = 'none';
+                  widthFree.style.display = 'none';
+                },500)
+              }
+
                 canvas.discardActiveObject();
                 canvas.renderAll();
             })
@@ -599,24 +646,57 @@
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
+            const freeColor = $('colorPickerFree');
+            const freeWidth = $('freeWidth');
+            const bgFree = $('backgroundFreeOptions');
+            const widthFree = $('widthFreeOptions');
+
+            freeColor.addEventListener('change', (e) => {
+              canvas.freeDrawingBrush.color = e.target.value;
+            })
+
+            freeWidth.addEventListener('change', (e) => {
+              canvas.freeDrawingBrush.width = parseInt(e.target.value);
+            })
 
             freeDraw.addEventListener('click', (e) => {
               if(canvas.isDrawingMode == false){
                 canvas.isDrawingMode = true;
+
+                $('caract').classList.add('active')
+                $('caract-close').classList.add('active')
+
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+                fontOptions.style.display = 'none';
+
+                bgFree.style.display = 'block';
+                widthFree.style.display = 'block';
               }
               else{
                 canvas.isDrawingMode = false;
+
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
+                setTimeout(() => {
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+                  fontOptions.style.display = 'block';
+
+                  bgFree.style.display = 'none';
+                  widthFree.style.display = 'none';
+                },500)
+
               }
             });
 
             canvas.on('path:created', (opt) => {
-              opt.path.id = fabric.Object.__uid++
-              opt.path.lockMovementX = true;
-              opt.path.lockMovementY = true;
-              opt.path.lockScalingX = true;
-              opt.path.lockScalingY = true;
-              opt.path.lockRotation = true;
-              socket.emit('pathAdded')
+              path = opt.path.path;
+              socket.emit('objectAdded', {room: room, type: 'path', path: path, color: color, pathWidth: opt.path.strokeWidth, pathColor: opt.path.stroke})
+              canvas.remove(opt.path)
               sendData();
             });
 
@@ -630,16 +710,25 @@
             	let self = e.target;
               let fontOptions = $('fontOptions');
 
-            if(self.type != 'image'){
-                backgroundOptions.style.display = 'block';
-                borderOptions.style.display = 'block';
-                widthOptions.style.display = 'block';
-            }
-            else{
+              if(self.type != 'image'){
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+              }
+              else{
+                  backgroundOptions.style.display = 'none';
+                  borderOptions.style.display = 'none';
+                  widthOptions.style.display = 'none';
+              }
+
+              if(self.type == "path"){
+                bgFree.style.display = 'none';
+                widthFree.style.display = 'none';
                 backgroundOptions.style.display = 'none';
                 borderOptions.style.display = 'none';
                 widthOptions.style.display = 'none';
-            }
+                fontOptions.style.display = 'none';
+              }
 
               if(self.text != null){
                 fontOptions.style.display = 'block';
@@ -824,7 +913,19 @@
                     text.id = data.id;
 
                     canvas.add(text);
-                  }
+                }
+                else if(data.type == 'path'){
+
+                  const path = new fabric.Path(data.path,{
+                      stroke: data.pathColor,
+                      strokeWidth: data.pathWidth,
+                      fill: 'rgba(0,0,0,0)'
+                    });
+
+                    path.id = data.id;
+
+                    canvas.add(path);
+                }
             }
 
             canvas.on('text:changed', function(e) {

@@ -414,15 +414,11 @@ io.on('connection', (socket) => {
 
     knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {
       knex('projects').select('items').where({ id: room }).then(response => {
-        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url});
+        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url, path: data.path, pathWidth: data.pathWidth, pathColor: data.pathColor});
       });
     });
 
   });
-
-  socket.on('pathAdded', () => {
-    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {});
-  })
 
 });
 
