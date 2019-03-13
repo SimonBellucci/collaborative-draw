@@ -63,7 +63,7 @@
                               <%= other.title %>
                           </h2>
                          <span class="project__informations__author"><strong>Auteur :</strong> <%= other.author %></span><br>
-                          <span class="project__informations__date">Créé le <%= other.creation_date %></span>
+                          <span class="project__informations__date">Créé le <%= other.creation_date.toDateString() %></span>
                       </div>
                       <div class="project__cta col-lg-2">
                           <a href=<%= "/app/"+other.id %> class="button button--transparent" title="Modifier">Modifier</a>

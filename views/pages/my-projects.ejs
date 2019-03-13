@@ -99,7 +99,7 @@
                           <% }else{ %>
                             Il n'y a aucun collaborateur
                           <%}%></span><br>
-                          <span class="project__informations__date">Créé le <%= own.creation_date %></span>
+                          <span class="project__informations__date">Créé le <%= own.creation_date.toDateString() %></span>
                       </div>
                       <div class="project__cta col-lg-2">
                           <a href=<%= "/app/"+own.id %> class="button button--transparent" title="Modifier">Modifier</a>
