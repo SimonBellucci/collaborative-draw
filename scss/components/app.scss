@@ -79,8 +79,15 @@
         left:50%;
         top:50%;
         transform: translate(-50%, calc(-50% + 35px));
-        background: white;
+            background: $white;
         z-index: -2;
+        &.active {
+            background-image: url('../images/grid.svg');
+            background-color: $white;
+            background-repeat: repeat;
+            background-position: center;
+            background-size: 50px;
+        }
     }
     input#colorPicker {
         border: 0;
@@ -257,6 +264,26 @@
                 }
             }
         }
+
+    }
+}
+
+.grid-canvas {
+    position: absolute;
+    bottom:0px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    background: $gray-3;
+    padding: 13px 20px;
+    z-index: 10;
+    &__label {
+        color:$white;
+        font-size: 14px;
+        font-weight: 400;
+        margin: -2px 0 0 3px;
+    }
+    &__input {
 
     }
 }

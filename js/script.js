@@ -212,4 +212,21 @@ window.addEventListener("load" , function() {
         });
     }
 
+
+    // afficher la grille
+    var gridShow = document.getElementById('grid-canvas')
+    var canvasContainer = document.querySelector('.canvas-container')
+
+    gridShow.addEventListener('change' , function() {
+        if (gridShow.checked == true) {
+            console.log('true')
+            canvasContainer.classList.add('active');
+        }
+        else if (gridShow.checked == false){
+            console.log('false')
+            canvasContainer.classList.remove('active');
+        }
+})
+
+
 });
