@@ -96,7 +96,8 @@
                 <span class="characteristics__option__title">Épaisseur bordure</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
-                        <input type="number" name="" value="" id="borderWidth">
+                      <span id='widthCounter'>0</span>
+                      <input type="range" id="borderWidth" min="0" max="100">
                     </li>
                 </ul>
             </div>
@@ -126,6 +127,7 @@
                 <span class="characteristics__option__title">Épaisseur du trait</span>
                 <ul class="background-color">
                     <li class="characteristics__option__action characteristics__option__action--color">
+                      <span id='freeWidthCounter'>0</span>
                       <input type="range" id="freeWidth" name="epaisseur" min="0" max="100">
                     </li>
                 </ul>
@@ -399,7 +401,6 @@
             $('deselect').addEventListener('click', () => {
 
               if(canvas.isDrawingMode == false){
-                canvas.isDrawingMode = true;
 
                 $('caract').classList.add('active')
                 $('caract-close').classList.add('active')
@@ -428,6 +429,9 @@
                   widthFree.style.display = 'none';
                 },500)
               }
+
+              $('caract').classList.remove('active')
+              $('caract-close').classList.remove('active')
 
                 canvas.discardActiveObject();
                 canvas.renderAll();
@@ -462,7 +466,8 @@
               socket.emit('newBorderColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
             })
 
-            borderWidth.addEventListener('change', (e) => {
+            borderWidth.addEventListener('input', (e) => {
+              $('widthCounter').innerHTML = e.target.value
               socket.emit('newBorderWidth', {room: room, id: lastObjectSelected.id, width: e.target.value});
             })
 
@@ -656,7 +661,12 @@
             })
 
             freeWidth.addEventListener('change', (e) => {
+              $('freeWidthCounter').innerHTML = e.target.value
               canvas.freeDrawingBrush.width = parseInt(e.target.value);
+            })
+
+            freeWidth.addEventListener('input', (e) => {
+              $('freeWidthCounter').innerHTML = e.target.value
             })
 
             freeDraw.addEventListener('click', (e) => {
@@ -739,6 +749,8 @@
 
               colorPickerSingle.value = self.fill
               colorPickerBorder.value = self.stroke
+
+              $('widthCounter').innerHTML = self.strokeWidth
 
               borderWidth.value = self.strokeWidth
 
