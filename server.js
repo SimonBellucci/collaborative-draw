@@ -312,7 +312,6 @@ app.get('/canvas', function(req, res) {
 });
 
 let canvasData = '';
-let idCount = 0;
 
 io.on('connection', (socket) => {
 
@@ -367,16 +366,62 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newScale', data => {
-    io.emit('getNewScale', data);
+    io.sockets.in(data.room).emit('getNewScale', data);
   });
 
+  socket.on('newRotation', data => {
+    io.sockets.in(data.room).emit('getNewRotation', data);
+  });
+
+  socket.on('newColor', data => {
+    io.sockets.in(data.room).emit('getNewColor', data);
+  });
+
+  socket.on('newNoneColor', data => {
+    io.sockets.in(data.room).emit('getNewNoneColor', data);
+  });
+
+  socket.on('newBorderColor', data => {
+    io.sockets.in(data.room).emit('getNewBorderColor', data);
+  });
+
+  socket.on('newBorderWidth', data => {
+    io.sockets.in(data.room).emit('getNewBorderWidth', data);
+  });
+
+  socket.on('newFont', data => {
+    io.sockets.in(data.room).emit('getNewFont', data);
+  })
+
+  socket.on('newFilter', data => {
+    io.sockets.in(data.room).emit('getNewFilter', {id: data.id, filter: data.filter});
+  });
+
+  socket.on('newText', data => {
+    io.sockets.in(data.room).emit('getNewText', {text: data.text, id: data.id});
+  });
+
+  socket.on('deleted', data => {
+    io.sockets.in(data.room).emit('getDeleted', {id: data.id});
+  })
+
+  socket.on('layer', data => {
+    io.sockets.in(data.room).emit('getLayer', {type: data.type, object: data.object});
+  })
+
   socket.on('objectAdded', data => {
-    idCount++
-    io.emit('getNewObject', {type: data.type, color: data.color, id: idCount-1});
+    let room = data.room;
+
+    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {
+      knex('projects').select('items').where({ id: room }).then(response => {
+        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url});
+      });
+    });
+
   });
 
   socket.on('pathAdded', () => {
-    idCount++
+    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {});
   })
 
 });

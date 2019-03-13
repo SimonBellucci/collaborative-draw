@@ -3,19 +3,27 @@
 
 /* Home header */
 .global-header {
-    padding-top:10px;
+    padding-top: 0;
+
+    @media only screen and (min-width: 30em) {
+        padding-top:10px;
+    }
+
     .menu {
         display: inline-block;
         list-style: none;
         padding: 0;
         float: right;
+
         li {
             display: inline-block;
+
             .menu__link {
                 font-weight: 300;
                 display: inline-block;
                 margin-left: 38px;
                 position: relative;
+
                 &:after {
                     content: "";
                     height: 1px;
@@ -28,14 +36,17 @@
                     left: 0;
                     right: 0;
                 }
+
                 &:hover:after {
                     width:100%;
                     right: 0;
                     left: 0;
                 }
+
                 &--strong {
                     font-weight: bold;
                 }
+
                 &--active:after {
                     content: "";
                     height: 1px;

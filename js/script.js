@@ -202,4 +202,14 @@ window.addEventListener("load" , function() {
     //     }
     // }
 
+    var characteristics = document.querySelector('.characteristics');
+    var openClose = document.querySelector('.characteristics__close')
+
+    if (characteristics) {
+        openClose.addEventListener('click' , function() {
+           characteristics.classList.toggle('active');
+           this.classList.toggle('active');
+        });
+    }
+
 });

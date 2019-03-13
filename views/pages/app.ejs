@@ -34,7 +34,7 @@
                             <button type="submit" id="collabButton" class="people__sub__validate button button--blue" type="submit">Inviter</button>
                         </form>
                     </div>
-                    <a href="#" class="export button button--purple" title="Exporter">Exporter</a>
+                    <a href="#" id="export" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
             </div>
         </header>
@@ -53,25 +53,96 @@
                 <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
             </a>
         </div>
+        <section class="characteristics" id="caract">
+            <div class="characteristics__close" id="caract-close">&#8249;</div>
+            <h3 class="characteristics__title">Caractéristiques</h3>
+            <div class="characteristics__option">
+                <span class="characteristics__option__title">Position</span>
+                <ul>
+                    <li class="characteristics__option__action" id="posAp">
+                        Mettre en arrière plan
+                    </li>
+                    <li class="characteristics__option__action" id="posAr">
+                        Mettre en arrière
+                    </li>
+                    <li class="characteristics__option__action" id="posPp">
+                        Mettre en premier plan
+                    </li>
+                    <li class="characteristics__option__action" id="posAv">
+                        Mettre en avant
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="backgroundOptions">
+                <span class="characteristics__option__title">Couleur fond</span>
+                <ul>
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <input type="color" name="" value="#278bff" id="colorPickerSingle">
+                    </li>
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <img src="../images/transparent.svg" alt="Transparent" id="colorPickerNone">
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="borderOptions">
+                <span class="characteristics__option__title">Couleur bordure</span>
+                <ul>
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <input type="color" name="" value="#278bff" id="colorPickerBorder">
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="widthOptions">
+                <span class="characteristics__option__title">Épaisseur bordure</span>
+                <ul>
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <input type="number" name="" value="" id="borderWidth">
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="fontOptions">
+                <span class="characteristics__option__title">Police</span>
+                <select id="fonts">
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Montserrat">Montserrat</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="OpenSans">OpenSans</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Lato">Lato</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="PlayfairDisplay">PlayfairDisplay</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Oswald">Oswald</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Poppins">Poppins</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Raleway">Raleway</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="Roboto">Roboto</option>
+                    <option class="characteristics__option__action characteristics__option__action--color" value="RobotoSlab">RobotoSlab</option>
+                </select>
+            </div>
+        </section>
         <section class="tools">
+            <div class="tools__item">
+                <img src="../images/arrow-deselect.svg" id="deselect" alt="Désélectionner">
+            </div>
             <div class="tools__item">
                 <label for="file"><img src="../images/import.svg" alt="Settings"></label>
                 <input type="file" class="tools__item__files" id="file" name="" value="" style="background:url('../images/import.svg')">
             </div>
-            <div class="tools__item">
+            <!-- <div class="tools__item">
                 <img src="../images/settings.svg" alt="Settings">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
                     <li class="tools__item__sub__item">Contraste</li>
                     <li class="tools__item__sub__item">Luminosité</li>
                 </ul>
-            </div>
+            </div> -->
             <div class="tools__item">
                 <img src="../images/filters.svg" alt="Filters">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
-                    <li class="tools__item__sub__item">Noir et blanc</li>
-                    <li class="tools__item__sub__item">Sépia</li>
+                    <li class="tools__item__sub__item filter" data-filter="grayscale">Noir et blanc</li>
+                    <li class="tools__item__sub__item filter" data-filter="sepia">Sépia</li>
+                    <li class="tools__item__sub__item filter" data-filter="polaroid">Polaroïd</li>
+                    <li class="tools__item__sub__item filter" data-filter="vintage">Vintage</li>
+                    <li class="tools__item__sub__item filter" data-filter="technicolor">Technicolor</li>
+                    <li class="tools__item__sub__item filter" data-filter="brownie">Brownie</li>
+                    <li class="tools__item__sub__item filter" data-filter="kodachrome">Kodachrome</li>
+                    <li class="tools__item__sub__item filter" data-filter="reset">Réinitialiser</li>
                 </ul>
             </div>
             <div class="tools__item">
@@ -85,11 +156,11 @@
                 </ul>
             </div>
             <div class="tools__item">
-                <img src="../images/text.svg" alt="Text">
+                <img src="../images/text.svg" id="text" alt="Text">
             </div>
-            <div class="tools__item">
+            <!-- <div class="tools__item">
                 <img src="../images/crop.svg" alt="Crop">
-            </div>
+            </div> -->
             <div class="tools__item">
                 <input type="color" name="" value="#278bff" id="colorPicker">
             </div>
@@ -138,7 +209,7 @@
                 popupText[0].innerHTML = data;
             });
 
-            //Popup
+            /*Popup*/
               const popup = document.getElementsByClassName('popup');
               const popupClose = document.getElementsByClassName('popup__close');
               const popupText = document.getElementsByClassName('popup__text');
@@ -173,7 +244,7 @@
                   }
               });
 
-            //Chat
+            /*Chat*/
             const chatContainer = $('chat-container');
             const chatMsg = $('chat-input');
             const chatSend = $('chat-send');
@@ -249,9 +320,6 @@
 
               if(data.status){
                 chatContainer.appendChild(statusDiv);
-                // '<li class="chat__messages__li" style="background: #FFF; position: relative">'+
-                //   '<span class="chat__messages__li__author">'+data.user+' : '+'</span>'+'<img src="../images/typing.gif" style="position: absolute;top: -80px; left: -44px;transform: scale(0.15);">'+
-                // '</li>';
               }
               else if(!data.status){
                 let div = document.getElementsByClassName('chat__status');
@@ -293,17 +361,103 @@
 
             //Récupération des boutons de changements de couleur
             const colorPicker = $('colorPicker');
+            const colorPickerSingle = $('colorPickerSingle');
+            const colorPickerBorder = $('colorPickerBorder');
+            const colorPickerNone = $('colorPickerNone');
+
+            //Input épaisseur
+            const borderWidth = $('borderWidth');
+
+            //Options
+            const backgroundOptions = $('backgroundOptions');
+            const borderOptions = $('borderOptions');
+            const widthOptions = $('widthOptions');
 
             //Récupération import d'image
             const importButton = $('file');
 
-            importButton.addEventListener('change', (e) => {
-              upload(e);
+            //Deselection
+            $('deselect').addEventListener('click', () => {
+                canvas.discardActiveObject();
+                canvas.renderAll();
             })
+
+            //Export du canvas en png
+            const exportButton = $('export');
+
+            exportButton.addEventListener('click', saveImage)
+
+            function saveImage(e) {
+                this.href = canvas.toDataURL({
+                    format: 'png',
+                    quality: 0.8
+                });
+                this.download = 'canvas.png'
+            }
 
             colorPicker.addEventListener('change', (e) => {
               changeColor(e.target.value);
             });
+
+            colorPickerSingle.addEventListener('change', (e) => {
+              socket.emit('newColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
+            })
+
+            colorPickerNone.addEventListener('click', (e) => {
+              socket.emit('newNoneColor', {room: room, id: lastObjectSelected.id, color: 'rgba(0,0,0,0)'});
+            })
+
+            colorPickerBorder.addEventListener('change', (e) => {
+              socket.emit('newBorderColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
+            })
+
+            borderWidth.addEventListener('change', (e) => {
+              socket.emit('newBorderWidth', {room: room, id: lastObjectSelected.id, width: e.target.value});
+            })
+
+            socket.on('getNewColor', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.set('fill', data.color)
+
+              canvas.renderAll();
+              sendData();
+            })
+
+            socket.on('getNewNoneColor', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.set('fill', data.color)
+
+              canvas.renderAll();
+              sendData();
+            })
+
+            socket.on('getNewBorderColor', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.set('stroke', data.color)
+
+              canvas.renderAll();
+              sendData();
+            })
+
+            socket.on('getNewBorderWidth', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.strokeWidth = parseInt(data.width)
+
+              canvas.renderAll();
+              sendData();
+            })
 
             let color = 'black';
 
@@ -319,7 +473,6 @@
             let jsonDb = "<%= infos[0].render %>";
             let json = jsonDb.replace(/&#34;/g, '"');
 
-            console.log(json);
             canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
 
             canvas.selection = false;
@@ -338,91 +491,107 @@
               sendData();
             },10000)
 
-            //Ratio image
-            function sizeCalc(imgWidth, imgHeight) {
-              let width_ratio = canvas.width / 2 / imgWidth;
-              let height_ratio = canvas.height / 2 / imgHeight;
+            //Création de texte
+            const textButton = $('text');
 
-              let ratio = null;
-
-              // if (width_ratio > height_ratio)
-              if (imgWidth >= imgHeight)
-                ratio = width_ratio;
-              else
-                ratio = height_ratio;
-
-              let height = canvas.height / 2 / ratio;
-              let width = (canvas.width / 2) / ratio;
-
-              let cH = canvas.height / 2;
-              let nH = imgHeight * ratio;
-              let cropY = (nH - cH) / ratio / 2;
-
-              let cW = canvas.width / 2;
-              let nW = imgWidth * ratio;
-              let cropX = (nW - cW) / ratio / 2;
-
-              let returnObj = {
-                width_ratio: ratio,
-                height_ratio: ratio,
-                width: width,
-                height: height
-              };
-
-              if (width_ratio > height_ratio) returnObj.cropY = cropY;
-              else returnObj.cropX = cropX;
-
-              return returnObj;
+            //Filtres images
+            const allFilters = document.getElementsByClassName('filter');
+            for(let i = 0; i < allFilters.length; i++){
+              allFilters[i].addEventListener('click', (e) => {
+                socket.emit('newFilter', {room: room, id: lastObjectSelected.id, filter: e.target.getAttribute('data-filter')})
+              })
             }
 
-            fabric.Image.prototype.toObject = (function(toObject) {
-              return function() {
-                return fabric.util.object.extend(toObject.call(this), {
-                  src: this.toDataURL(),
-                  height: this.height,
-                  width: this.width,
-                  matrixCache: this.matrixCache,
-                  ownMatrixCache: this.ownMatrixCache,
-                  scaleY: this.scaleY,
-                  scaleX: this.scaleX,
-                  cropX: this.cropX,
-                  cropY: this.cropY
-                });
-              };
-            })(fabric.Image.prototype.toObject);
-
-            //Import d'image
-            function upload(e) {
-               let fileType = e.target.files[0].type;
-               let url = URL.createObjectURL(e.target.files[0]);
-
-               if (fileType === 'image/jpeg') { //check if png
-                  fabric.Image.fromURL(url, function(img) {
-                    let size = sizeCalc(img.width, img.height);
-                     img.set({
-                       left:20,
-                       top: 20,
-                       height: size.height,
-                       width: size.width,
-                       scaleY: size.height_ratio,
-                       scaleX: size.width_ratio,
-                       cropY: size.cropY ? size.cropY : false,
-                       cropX: size.cropX ? size.cropX : false
-                     });
-                     canvas.add(img);
-                  });
-               } else if (fileType === 'image/svg+xml') { //check if svg
-                  fabric.loadSVGFromURL(url, function(objects, options) {
-                     var svg = fabric.util.groupSVGElements(objects, options);
-                     svg.scaleToWidth(180);
-                     svg.scaleToHeight(180);
-                     canvas.add(svg);
-                  });
-               }
-
-               sendData();
-
+            const filtersObject = {
+              'grayscale': new fabric.Image.filters.Grayscale(),
+              'sepia': new fabric.Image.filters.Sepia(),
+              'polaroid': new fabric.Image.filters.Polaroid(),
+              'vintage': new fabric.Image.filters.Vintage(),
+              'technicolor': new fabric.Image.filters.Technicolor(),
+              'brownie': new fabric.Image.filters.Brownie(),
+              'kodachrome': new fabric.Image.filters.Kodachrome()
             }
+
+            socket.on('getNewFilter', data => {
+
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              });
+
+              if(data.filter == 'reset'){
+                result.filters = [];
+                result.applyFilters();
+                canvas.renderAll();
+                sendData();
+              }
+              else{
+                let fil = filtersObject[data.filter];
+                if(result.filters.length > 0 ){
+                  result.filters = []
+                }
+
+                result.filters.push(fil);
+                result.applyFilters();
+                canvas.renderAll();
+                sendData();
+              }
+
+
+
+            })
+
+            //Changement de positions (arrière-plan, premier-plan, ect...)
+            const buttonToBack = $('posAp');
+            const buttonBackward = $('posAr');
+            const buttonToFront = $('posPp');
+            const buttonFront = $('posAv');
+
+            buttonToBack.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'toBack'})
+            });
+
+            buttonBackward.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'back'})
+            });
+
+            buttonToFront.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'toFront'})
+            });
+
+            buttonFront.addEventListener('click', () => {
+              socket.emit('layer', {room: room, object: lastObjectSelected.id, type: 'front'})
+            });
+
+            socket.on('getLayer', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.object
+              })
+
+              if(data.type == 'toBack'){
+                canvas.sendToBack(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
+              }
+              else if(data.type == 'toFront'){
+                canvas.bringToFront(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
+              }
+              else if(data.type == 'back'){
+                canvas.sendBackwards(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
+              }
+              else if(data.type == 'front'){
+                canvas.bringForward(result);
+                canvas.discardActiveObject();
+                canvas.renderAll()
+                sendData()
+              }
+            })
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
@@ -451,17 +620,74 @@
 
             canvas.on('object:selected', onObjectSelected);
 
+            let lastObjectSelected = 0;
+
             function onObjectSelected(e){
             	let self = e.target;
-              console.log(self);
+              let fontOptions = $('fontOptions');
+
+            if(self.type != 'image'){
+                backgroundOptions.style.display = 'block';
+                borderOptions.style.display = 'block';
+                widthOptions.style.display = 'block';
             }
+            else{
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+            }
+
+              if(self.text != null){
+                fontOptions.style.display = 'block';
+              }
+              else{
+                fontOptions.style.display = 'none';
+              }
+
+              colorPickerSingle.value = self.fill
+              colorPickerBorder.value = self.stroke
+
+              borderWidth.value = self.strokeWidth
+
+              lastObjectSelected = self;
+
+              console.log(self);
+
+              $('caract').classList.add('active')
+              $('caract-close').classList.add('active')
+            }
+
+            canvas.on('mouse:down', (e) => {
+              if(e.target == null){
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+              }
+            })
 
             canvas.on('object:scaling', onObjectScaled);
 
             function onObjectScaled(e){
             	let self = e.target;
-              socket.emit('newScale', {scaleX: self.get('scaleX'), scaleY: self.get('scaleY'), id: self.id})
+              socket.emit('newScale', {room: room, scaleX: self.get('scaleX'), scaleY: self.get('scaleY'), id: self.id})
             }
+
+            canvas.on('object:rotating', onObjectRotating);
+
+            function onObjectRotating(e){
+            	let self = e.target;
+              socket.emit('newRotation', {room: room, angle: self.get('angle'), id: self.id})
+            }
+
+            socket.on('getNewRotation', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.angle = data.angle;
+
+              canvas.renderAll();
+              sendData();
+            });
 
             canvas.on('object:moving', objectMoving);
 
@@ -504,7 +730,8 @@
                 circle.id = data.id;
 
                 canvas.add(circle);
-            } else if(data.type == 'rect'){
+            }
+            else if(data.type == 'rect'){
 
                 const rect = new fabric.Rect({
                     width: 100,
@@ -525,7 +752,8 @@
                 rect.id = data.id;
 
                 canvas.add(rect);
-              } else if(data.type == 'triangle'){
+              }
+              else if(data.type == 'triangle'){
 
                   const triangle = new fabric.Triangle({
                       width: 100,
@@ -547,47 +775,151 @@
 
                   canvas.add(triangle);
                 }
+                else if(data.type == 'image'){
+                  if (data.file === 'image/jpeg') {
+                     fabric.Image.fromURL(data.url, function(img) {
+                        img.set({
+
+                        });
+
+                        img.id = data.id;
+
+                        canvas.add(img);
+                     });
+                  } else if (data.file === 'image/png') {
+                    fabric.Image.fromURL(data.url, function(img) {
+                       img.set({
+
+                       });
+
+                       img.id = data.id;
+
+                       canvas.add(img);
+                    });
+                  }
+
+                  fabric.Image.prototype.toObject = (function(toObject) {
+                    return function() {
+                      return fabric.util.object.extend(toObject.call(this), {
+                        id: this.id,
+                        src: this.toDataURL()
+                      });
+                    };
+                  })(fabric.Image.prototype.toObject);
+                }
+                else if(data.type == 'text'){
+
+                  const text = new fabric.IText('Appuyez et écrivez', {
+                      left: canvas.width/2.5,
+                      top: canvas.height/2,
+                      fontFamily: 'Montserrat',
+                      fill: data.color,
+                      fontSize: 50,
+                    });
+
+                    text.id = data.id;
+
+                    canvas.add(text);
+                  }
             }
 
+            canvas.on('text:changed', function(e) {
+              socket.emit('newText', {room: room, id: e.target.id, text: e.target.text})
+            });
+
+            socket.on('getNewText', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.text = data.text;
+              canvas.renderAll();
+              sendData();
+            })
+
+            //Changement de Police
+            const fontControl = $('fonts');
+
+            fontControl.addEventListener('change', (e) => {
+              socket.emit('newFont', {room: room, id: lastObjectSelected.id, font: e.target.value})
+            })
+
+            socket.on('getNewFont', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+
+              result.fontFamily = data.font;
+              canvas.renderAll();
+              sendData();
+            })
+
             document.addEventListener('keydown', e => {
-              if(e.keyCode == '8' || e.keyCode == '46'){
-                canvas.getActiveObject().visible = false;
-                sendData();
+              if(e.keyCode == '46'){
+                socket.emit('deleted', {room: room, id: lastObjectSelected.id});
               }
             }, false);
+
+            socket.on('getDeleted', data => {
+              let result = canvas.getObjects().find(obj => {
+                return obj.id === data.id
+              })
+              canvas.remove(result);
+              sendData();
+            })
 
             socket.on('getNewObject', data => {
               drawObject(data);
             });
 
             circleButton.addEventListener('click', () => {
-              socket.emit('objectAdded', {type: 'circle', color: color});
+              socket.emit('objectAdded', {type: 'circle', color: color, room: room});
             });
 
             createRect.addEventListener('click', () => {
-              socket.emit('objectAdded', {type: 'rect', color: color});
+              socket.emit('objectAdded', {type: 'rect', color: color, room: room});
             });
 
             createTriangle.addEventListener('click', () => {
-              socket.emit('objectAdded', {type: 'triangle', color: color});
+              socket.emit('objectAdded', {type: 'triangle', color: color, room: room});
             });
 
+            text.addEventListener('click', () => {
+              socket.emit('objectAdded', {type: 'text', color: color, room: room});
+
+              //socket.emit('newText', {room: room})
+            })
+
+            importButton.addEventListener('change', (e) => {
+              let fileType = e.target.files[0].type;
+              var reader = new FileReader();
+              reader.readAsDataURL(e.target.files[0]);
+              reader.onloadend = function() {
+                  base64data = reader.result;
+                  socket.emit('objectAdded', {type: 'image', file: fileType, url: base64data, room: room})
+              }
+            })
+
           socket.on('getNewCoords', data => {
-            let allObjects = canvas.getObjects();
+            let result = canvas.getObjects().find(obj => {
+              return obj.id === data.id
+            })
 
             //console.log(allObjects);
-            allObjects[data.id].top = data.top;
-            allObjects[data.id].left = data.left;
+            result.top = data.top;
+            result.left = data.left;
 
             canvas.renderAll();
 
           });
 
           socket.on('getNewScale', data => {
-            let allObjects = canvas.getObjects();
+            let result = canvas.getObjects().find(obj => {
+              return obj.id === data.id
+            })
 
-            allObjects[data.id].scaleX = data.scaleX;
-            allObjects[data.id].scaleY = data.scaleY;
+            result.scaleX = data.scaleX;
+            result.scaleY = data.scaleY;
 
             canvas.renderAll();
 
