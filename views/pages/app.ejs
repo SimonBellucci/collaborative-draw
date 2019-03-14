@@ -1004,6 +1004,9 @@
             document.addEventListener('keydown', e => {
               if(e.keyCode == '46'){
                 socket.emit('deleted', {room: room, id: lastObjectSelected.id});
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
               }
             }, false);
 
