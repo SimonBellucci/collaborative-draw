@@ -22,9 +22,11 @@
             box-sizing: content-box;
             position: relative;
             transition: all 0.2s ease;
+
             label {
                 cursor: pointer;
             }
+
             &__files {
                 width: 0.1px;
             	height: 0.1px;
@@ -33,6 +35,7 @@
             	position: absolute;
             	z-index: -1;
             }
+
             &__sub {
                 list-style: none;
                 position: absolute;
@@ -42,6 +45,7 @@
                 padding:0px;
                 top:0;
                 margin: 0;
+
                 &__item {
                     color:$white;
                     display: inline-block;
@@ -71,6 +75,13 @@
             }
             &:last-child {
                 margin-bottom:0px;
+            }
+
+            &.scrollable .tools__item__sub {
+                height: 225px;
+                overflow: hidden;
+                overflow-y: scroll;
+                box-shadow: inset 0 -10px 10px -10px #fff;
             }
         }
     }
