@@ -16,12 +16,14 @@
                     <label for="name">Nom du projet</label><br />
                     <input id="name-project" class="modal__content__name__input" type="text" name="name" placeholder="Projet n°1">
                 </div>
+                <span id="titleCreateProject" class="error-box"></span>
                 <div class="modal__content__size">
                     <label for="size-project">Taille du projet (en px)</label><br />
                     <input id="size-project" type="number" class="modal__content__size__1" name="width" placeholder="800"> x
-                    <input type="number" class="modal__content__size__2" name="height" placeholder="600">
+                    <input id="size-project-height" type="number" class="modal__content__size__2" name="height" placeholder="600">
                 </div>
-                <button class="button button--blue" type="submit">Créer le projet</button>
+                <span id="projectSizeError" class="error-box"></span>
+                <button id="submitCreateProject" class="button button--blue" type="submit">Créer le projet</button>
             </div>
         </form>
 
@@ -129,6 +131,32 @@
             const popupClose = document.getElementsByClassName('popup__close');
             const popupText = document.getElementsByClassName('popup__text');
             const popupLink = document.getElementById('popup-link');
+
+            // Gets variables for input error handling
+            const titleInput = document.getElementById('name-project');
+            const widthInput = document.getElementById('size-project');
+            const heightInput = document.getElementById('size-project-height');
+
+            const titleError = document.getElementById('titleCreateProject');
+            const sizeError = document.getElementById('projectSizeError');
+
+            const createProjectBtn = document.getElementById('submitCreateProject');
+
+            createProjectBtn.addEventListener('click', function(e) {
+
+                if (titleInput.value == '') {
+                    e.preventDefault();
+                    titleError.innerText = 'Merci de choisir un nom pour votre projet';
+                    titleError.classList.add('is-shown');
+                }
+
+                if (widthInput.value == '' || heightInput.value == '') {
+                    e.preventDefault();
+                    sizeError.innerText = 'Veuillez indiquer une taille à votre projet';
+                    sizeError.classList.add('is-shown');
+                }
+
+            });
 
             const openNotif = (element) => {
                 element.classList.add('open');

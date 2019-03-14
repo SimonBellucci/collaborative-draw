@@ -112,7 +112,7 @@
         top:50%;
         transform: translate(-50% , -50%);
         background: $white;
-        padding: 50px 85px;
+        padding: 50px 60px;
         display: inline-block;
         &__title {
             font-size:26px;
@@ -121,6 +121,7 @@
         &__name {
             color:$gray-2;
             margin-top: 30px;
+            margin-bottom: 10px;
             &__input {
                 height:40px;
                 margin-top:7px;
@@ -148,13 +149,17 @@
             &__2 {
                 height: 40px;
                 width:60px;
-                margin-bottom: 30px;
+                margin-bottom: 10px;
                 padding-left: 10px;
                 outline: none;
                 &:focus {
                     border: 1px solid $blue;
                 }
             }
+        }
+
+        #submitCreateProject {
+            margin-top: 15px;
         }
     }
 }
