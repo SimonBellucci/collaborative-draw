@@ -55,7 +55,7 @@ const useSession = app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { expires: 600000 },
+  cookie: { expires: 3600000 },
 }));
 
 const sessionChecker = (req, res, next) => {
