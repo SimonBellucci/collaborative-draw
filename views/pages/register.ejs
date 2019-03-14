@@ -23,12 +23,14 @@
                         <input id="formMail" class="bloc-form__form__input" type="mail" name="email" placeholder="Adresse email"><br>
                         <input id="formPassword" class="bloc-form__form__input" type="password" name="password" placeholder="Votre mot de passe"><br>
                         <input id="formPasswordVerify" class="bloc-form__form__input" type="password" placeholder="Confirmez le mot de passe"><br>
+                        <span id="registerErrorBox" class="error-box"></span>
+
                         <div class="row bloc-form__condition">
                             <div class="col-12 col-lg-6">
                                 En cliquant sur "S'inscrire" vous acceptez les Conditions générales d'utilisation de WEMAKE.
                             </div>
                             <div class="col-12 col-lg-6">
-                                <button href="#" id="registerButton" class="bloc-form__register || button button--blue" title="S'inscrire">S'inscrire</button>
+                                <button type="submit" id="registerButton" class="bloc-form__register || button button--blue" title="S'inscrire">S'inscrire</button>
                             </div>
                         </div>
                     </form>
@@ -66,7 +68,28 @@
             socket.emit('registerUser', userInfo);
           }
 
-          $('registerButton').addEventListener('click', () => {
+          const formLastName = $('formLastName');
+          const formSurName = $('formSurName');
+          const formNickName = $('formNickName');
+          const formMail = $('formMail');
+          const formPassword = $('formPassword');
+          const formPasswordVerify = $('formPasswordVerify');
+
+          const registerErrorBox = $('registerErrorBox');
+
+          $('registerButton').addEventListener('click', (e) => {
+
+            if (formLastName.value  == '' ||
+                formSurName.value   == '' ||
+                formNickName.value  == '' ||
+                formMail.value      == '' ||
+                formPassword        == '' ||
+                formPasswordVerify  == '') {
+                    e.preventDefault();
+                    registerErrorBox.innerText = ('Tous les champs doivent être complétés, merci de vérifier vos informations.');
+                    registerErrorBox.classList.add('is-shown');
+                }
+
             register();
           });
 
