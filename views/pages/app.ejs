@@ -691,6 +691,14 @@
 
             }
 
+            drawingModeClose.addEventListener('click', () => {
+                canvas.isDrawingMode = false
+                bgFree.style.display = 'none';
+                widthFree.style.display = 'none';
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+            })
+
             freeDraw.addEventListener('click', (e) => {
               if(canvas.isDrawingMode == false){
                 canvas.isDrawingMode = true;
