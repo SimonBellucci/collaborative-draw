@@ -226,7 +226,7 @@ window.addEventListener("load" , function() {
             console.log('false')
             canvasContainer.classList.remove('active');
         }
-})
+    })
 
 
 });

@@ -318,7 +318,31 @@
         font-weight: 400;
         margin: -2px 0 0 3px;
     }
-    &__input {
+}
 
+.drawing-mode {
+    background: rgba(70, 83, 101, 0.7);;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top:90px;
+    padding: 10px 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    &.active {
+        visibility: visible;
+        opacity: 1;
+    }
+    &__text {
+        color:$white;
+        font-size: 14px;
+        font-weight: 200;
+    }
+    &__button {
+        font-weight: bold;
+        padding: 0;
+        margin-left: 7px;
+        font-size: 14px;
     }
 }

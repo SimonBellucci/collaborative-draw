@@ -38,6 +38,10 @@
                 </div>
             </div>
         </header>
+        <div class="drawing-mode" id="drawing-mode">
+            <span class="drawing-mode__text">Vous êtes en mode dessin</span>
+            <button class="drawing-mode__button">Quitter</button>
+        </div>
         <div class="popup">
             <div class="popup__close">&#215;</div>
             <div class="popup__text">
@@ -168,10 +172,13 @@
                 </ul>
             </div>
             <div class="tools__item">
+                <img src="../images/drawing-mode.svg" alt="Shapes" id="freeDraw">
+            </div>
+            <div class="tools__item">
                 <img src="../images/shapes.svg" alt="Shapes">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
-                    <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button>
+                    <!-- <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button> -->
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createCircle">Cercle</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createRect">Rectangle</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createTriangle">Triangle</button>
@@ -668,6 +675,21 @@
             freeWidth.addEventListener('input', (e) => {
               $('freeWidthCounter').innerHTML = e.target.value
             })
+
+
+            // drawing mode notifications
+            var drawingMode = document.getElementById('drawing-mode');
+            var drawingModeClose = document.querySelector('.drawing-mode__button');
+
+            if (freeDraw) {
+                    freeDraw.addEventListener('click' , function() {
+                    drawingMode.classList.toggle('active');
+                });
+                drawingModeClose.addEventListener('click' , function() {
+                    drawingMode.classList.remove('active');
+                });
+
+            }
 
             freeDraw.addEventListener('click', (e) => {
               if(canvas.isDrawingMode == false){
