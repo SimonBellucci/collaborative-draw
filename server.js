@@ -198,7 +198,8 @@ app.get('/mes-collaborations', function(req, res) {
 
     knex.select('projects.*', 'users.nickname as author').from('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').innerJoin('users', 'projects.author_id', '=', 'users.id').where('projects_users.user_id', userId).then(rows => {
       res.render('pages/my-collabs', {
-            othersProjects: rows.reverse()
+            othersProjects: rows.reverse(),
+            user: userId
         });
     });
   }else{
