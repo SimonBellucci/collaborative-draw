@@ -68,3 +68,21 @@ hr {
         }
     }
 }
+
+.error-box {
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    height: 0;
+    opacity: 0;
+    background-color: #fab1a0;
+    border-radius: 5px;
+    color: #d63031;
+    transition: opacity 1s ease;
+
+    &.is-shown {
+        padding: 8px 10px;
+        height: auto;
+        opacity: 1;
+    }
+}
