@@ -41,15 +41,6 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
-app.get('/galerie', function(req, res) {
-    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
-        res.render('pages/gallery', {
-            ownProjects: response.reverse()
-        });
-    });
-
-});
-
 const useSession = app.use(session({
   key: 'user_id',
   secret: 'keyboard cat',
@@ -65,6 +56,16 @@ const sessionChecker = (req, res, next) => {
         next();
     }
 };
+
+app.get('/galerie', function(req, res) {
+    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
+        res.render('pages/gallery', {
+            ownProjects: response.reverse(),
+            user: req.session.user
+        });
+    });
+
+});
 
 app.get('/app', function(req, res) {
   if(req.session.user){

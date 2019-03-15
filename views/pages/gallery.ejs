@@ -8,6 +8,7 @@
 	    <title>WeMake - Galerie publique</title>
     </head>
     <body>
+      <% if(!user){ %>
     	<header class="global-header">
     		<nav class="container">
     			<div class="row align-center">
@@ -30,6 +31,54 @@
     			</div>
     		</nav>
     	</header>
+      <% } else{ %>
+      <form action="/mes-projets" method="POST" class="modal">
+          <div class="modal__content">
+              <div class="modal__content__close">&#215;</div>
+              <span class="modal__content__title">Créer un projet</span>
+              <div class="modal__content__name">
+                  <label for="name">Nom du projet</label><br />
+                  <input id="name-project" class="modal__content__name__input" type="text" name="name" placeholder="Projet n°1">
+              </div>
+              <span id="titleCreateProject" class="error-box"></span>
+              <div class="modal__content__size">
+                  <label for="size-project">Taille du projet (en px)</label><br />
+                  <input id="size-project" type="number" class="modal__content__size__1" name="width" placeholder="800"> x
+                  <input id="size-project-height" type="number" class="modal__content__size__2" name="height" placeholder="600">
+              </div>
+              <span id="projectSizeError" class="error-box"></span>
+              <button id="submitCreateProject" class="button button--blue" type="submit">Créer le projet</button>
+          </div>
+      </form>
+
+      <div class="popup">
+          <div class="popup__close">&#215;</div>
+          <div class="popup__text">
+              Lorem ipsum dola ersam Lorem ipsum dola ersam
+          </div>
+          <a id="popup-link" href="">
+              <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+          </a>
+      </div>
+
+      <header class="container-fluid app-header">
+          <div class="row align-center">
+              <div class="col-lg-6">
+                  <nav class="menu">
+                      <a href="/" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
+                      <ul class="menu__sub">
+                          <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
+                          <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
+                          <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
+                      </ul>
+                  </nav>
+              </div>
+              <div class="col-lg-6 d-flex justify-end">
+                  <a href="#" class="create-project button button--blue" title="Créer un projet">Créer un projet</a>
+              </div>
+          </div>
+      </header>
+      <% } %>
         <main>
             <section class="container gallery">
                 <div class="row">
