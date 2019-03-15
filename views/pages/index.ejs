@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	    <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./vendors/aos/dist/aos.css">
 	    <title>WeMake</title>
     </head>
     <body>
@@ -56,17 +57,17 @@
                 <div class="container">
                     <h2 class="features__title">.: Les fonctionnalités</h2>
                     <div class="row">
-                        <div class="col-12 col-lg-4 || feature">
+                        <div class="col-12 col-lg-4 || feature" data-aos="fade-right" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400">
                             <h3>De nombreux outils</h3>
                             <img src="./images/tools.svg" alt="De nombreux outils" class="feature__img">
                             <p class="feature__text">WeMake met à votre disposition tous les outils nécessaires pour la retouche d’images (filtres, texte...)</p>
                         </div>
-                        <div class="col-12 col-lg-4 || feature">
+                        <div class="col-12 col-lg-4 || feature" data-aos="fade-right" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400" data-aos-delay="400">
                             <h3>Plateforme collaborative</h3>
                             <img src="./images/people.svg" alt="Plateforme collaborative" class="feature__img">
                             <p class="feature__text">Retouchez vos images en groupe dans des salles d’éditions allant jusqu’à 10 participants.</p>
                         </div>
-                        <div class="col-12 col-lg-4 || feature">
+                        <div class="col-12 col-lg-4 || feature" data-aos="fade-right" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400" data-aos-delay="800">
                             <h3>Partagez vos projets</h3>
                             <img src="./images/public.svg" alt="Partagez vos projets" class="feature__img">
                             <p class="feature__text">Partagez votre projet en un seul clic et obtenez des retours de la communauté WeMake.</p>
@@ -82,40 +83,40 @@
             <section class="container popular-projects">
                 <h2 class="text-center popular-projects__title">.: Projets populaires</h2>
                 <div class="row center">
-                    <div class="col-lg-4 popular-projects__three">
+                    <div class="col-lg-4 popular-projects__three" data-aos="fade-up" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400">
                         <div>
                             <div class="popular-projects__three__image" style="background:url('../images/road.jpg')"></div>
                             <div class="popular-projects__three__box-infos">
                                 <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
                                 <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
                                 <div class="popular-projects__three__box-infos__like">
-                                    <span class="popular-projects__three__box-infos__like__counter">5</span>
+                                    <span class="popular-projects__three__box-infos__like__counter">23</span>
                                     <input type="submit" class="popular-projects__three__box-infos__like__icon" value="">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 popular-projects__three">
+                    <div class="col-lg-4 popular-projects__three" data-aos="fade-up" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400">
                         <div>
                             <div class="popular-projects__three__image" style="background:url('../images/nature.jpg')"></div>
                             <div class="popular-projects__three__box-infos">
                                 <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche contraste</a></h4>
                                 <span class="popular-projects__three__box-infos__author">Simon57</span>
                                 <div class="popular-projects__three__box-infos__like">
-                                    <span class="popular-projects__three__box-infos__like__counter">5</span>
+                                    <span class="popular-projects__three__box-infos__like__counter">17</span>
                                     <input type="submit" class="popular-projects__three__box-infos__like__icon" value="">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 popular-projects__three">
+                    <div class="col-lg-4 popular-projects__three" data-aos="fade-up" data-aos-offset="150" data-aos-easing="ease-in-out" data-aos-duration="400">
                         <div>
                             <div class="popular-projects__three__image" style="background:url('../images/road.jpg')"></div>
                             <div class="popular-projects__three__box-infos">
                                 <h4 class="popular-projects__three__box-infos__title"><a href="#">Retouche luminosité</a></h4>
                                 <span class="popular-projects__three__box-infos__author">JeromeCrea</span>
                                 <div class="popular-projects__three__box-infos__like">
-                                    <span class="popular-projects__three__box-infos__like__counter">5</span>
+                                    <span class="popular-projects__three__box-infos__like__counter">15</span>
                                     <input type="submit" class="popular-projects__three__box-infos__like__icon" value="">
                                 </div>
                             </div>
@@ -130,6 +131,7 @@
             <a href="#" title="Mentions légales" class="footer__link">Mentions légales</a>
             <a href="#" title="Nous contacter" class="footer__link">Nous contacter</a>
         </footer>
+        <script src="/vendors/aos/dist/aos.js"></script>
         <script src="./minjs/script.js"></script>
     </body>
 </html>

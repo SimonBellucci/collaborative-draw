@@ -60,7 +60,7 @@
                 <% if(othersProjects.length > 0){ %>
 				              <h1>Mes collaborations</h1>
                 <% othersProjects.forEach(function(other) { %>
-                  <article class="project row">
+                  <article class="project row" data-aos="fade-right" data-aos-duration="800" data-aos-offest="120" data-aos-easing="ease-in-out" data-aos-delay="150">
                       <div class="project__preview col-lg-4" id="preview" style="background:url('<%= other.thumbnail %>')">
                           <div class="project__preview__status">
                             <% if(other.visibility){ %>
