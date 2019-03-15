@@ -59,10 +59,18 @@ const sessionChecker = (req, res, next) => {
 
 app.get('/galerie', function(req, res) {
     knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
+      if(req.session.user){
+        res.render('pages/gallery', {
+            ownProjects: response.reverse(),
+            user: req.session.user[0].id,
+        });
+      }
+      else{
         res.render('pages/gallery', {
             ownProjects: response.reverse(),
             user: req.session.user
         });
+      }
     });
 
 });
