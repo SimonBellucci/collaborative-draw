@@ -125,6 +125,78 @@
                 //Incrémentation du compteur à faire
             })
 
+            if(user){
+              const popup = document.getElementsByClassName('popup');
+              const popupClose = document.getElementsByClassName('popup__close');
+              const popupText = document.getElementsByClassName('popup__text');
+              const popupLink = document.getElementById('popup-link');
+
+              // Gets variables for input error handling
+              const titleInput = document.getElementById('name-project');
+              const widthInput = document.getElementById('size-project');
+              const heightInput = document.getElementById('size-project-height');
+
+              const titleError = document.getElementById('titleCreateProject');
+              const sizeError = document.getElementById('projectSizeError');
+
+              const createProjectBtn = document.getElementById('submitCreateProject');
+
+              createProjectBtn.addEventListener('click', function(e) {
+
+                  if (titleInput.value == '') {
+                      e.preventDefault();
+                      titleError.innerText = 'Merci de choisir un nom pour votre projet';
+                      titleError.classList.add('is-shown');
+                  }
+
+                  if (widthInput.value == '' || heightInput.value == '') {
+                      e.preventDefault();
+                      sizeError.innerText = 'Veuillez indiquer une taille à votre projet';
+                      sizeError.classList.add('is-shown');
+                  }
+
+              });
+
+              const openNotif = (element) => {
+                  element.classList.add('open');
+              }
+
+              const closeNotif = (element) => {
+                  element.classList.remove('open');
+              }
+
+              popupClose[0].addEventListener('click' , function() {
+                  closeNotif(popup[0])
+              });
+
+              document.addEventListener('click', (e) => {
+                  let id = e.target.getAttribute('data-id');
+                  let form = document.getElementById('form-visibility');
+                  let modalVisibility = document.getElementsByClassName('modal-visibility');
+                  if(id){
+                      form.setAttribute('action', '/visible/'+id)
+                      console.log(form.getAttribute('action'))
+                      modalVisibility[0].style.opacity = '1';
+                      modalVisibility[0].style.visibility = 'visible';
+                  }
+              })
+
+            const socket = io.connect();
+
+            //Notification d'ajout dans un projet
+            socket.on('getCollabNotif', data => {
+                if(data.receiver == "<%= user %>"){
+                    openNotif(popup[0]);
+                    setTimeout(() => {
+                        closeNotif(popup[0]);
+                    },5000)
+
+                    popupText[0].innerHTML = data.sender+' t\'as invité dans un nouveau projet';
+                    popupLink.href = "/app/"+data.project;
+                }
+            });
+            }
+            
         </script>
     </body>
 </html>
