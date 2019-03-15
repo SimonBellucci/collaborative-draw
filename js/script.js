@@ -217,16 +217,23 @@ window.addEventListener("load" , function() {
     var gridShow = document.getElementById('grid-canvas')
     var canvasContainer = document.querySelector('.canvas-container')
 
-    gridShow.addEventListener('change' , function() {
-        if (gridShow.checked == true) {
-            console.log('true')
-            canvasContainer.classList.add('active');
-        }
-        else if (gridShow.checked == false){
-            console.log('false')
-            canvasContainer.classList.remove('active');
-        }
-    })
+    if(gridShow) {
+        gridShow.addEventListener('change' , function() {
+            if (gridShow.checked == true) {
+                console.log('true')
+                canvasContainer.classList.add('active');
+            }
+            else if (gridShow.checked == false){
+                console.log('false')
+                canvasContainer.classList.remove('active');
+            }
+        });
+    }
 
+});
 
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Document Loaded");
+    // Initialize AOS
+    AOS.init();
 });
