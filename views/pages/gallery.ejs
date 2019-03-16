@@ -112,6 +112,7 @@
             <a href="#" title="Mentions légales" class="footer__link">Mentions légales</a>
             <a href="#" title="Nous contacter" class="footer__link">Nous contacter</a>
         </footer>
+        <script src="../socket.io/socket.io.js" charset="utf-8"></script>
         <script src="./minjs/script.js"></script>
         <script type="application/javascript">
             const likeButton = document.getElementById('likeButton');
@@ -125,7 +126,8 @@
                 //Incrémentation du compteur à faire
             })
 
-            if(user){
+            if('<%= user %>'){
+
               const popup = document.getElementsByClassName('popup');
               const popupClose = document.getElementsByClassName('popup__close');
               const popupText = document.getElementsByClassName('popup__text');
@@ -196,7 +198,7 @@
                 }
             });
             }
-            
+
         </script>
     </body>
 </html>
