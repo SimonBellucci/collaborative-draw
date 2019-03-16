@@ -347,7 +347,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('leavingRoom', data => {
-    io.sockets.in(data.room).emit('userLeft', {count: data.count-1, message: data.user+' a quitté la salle'});
+    socket.broadcast.to(data.room).emit('userLeft', {count: data.count-1, message: data.user+' a quitté la salle'});
   })
 
   /*******
