@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	    <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./vendors/aos/dist/aos.css">
 	    <title>WeMake - Mes projets</title>
     </head>
     <body>
@@ -27,23 +28,24 @@
             </div>
         </form>
 
-        <div class="popup">
-            <div class="popup__close">&#215;</div>
-            <div class="popup__text">
-                Lorem ipsum dola ersam Lorem ipsum dola ersam
+        <div class="popup-container">
+            <div class="popup">
+                <div class="popup__close">&#215;</div>
+                <div class="popup__text">
+                    Lorem ipsum dola ersam Lorem ipsum dola ersam
+                </div>
+                <a id="popup-link" href="">
+                    <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+                </a>
             </div>
-            <a id="popup-link" href="">
-                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
-            </a>
         </div>
-
+        
         <header class="container-fluid app-header">
             <div class="row align-center">
                 <div class="col-lg-6">
                     <nav class="menu">
                         <a href="/" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="/" title="Accueil">Home</a></li>
                             <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
                             <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
                             <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
@@ -55,7 +57,7 @@
                 </div>
             </div>
         </header>
-        <main>
+        <main class="container">
             <section class="all-projects container">
                 <% if(othersProjects.length > 0){ %>
 				              <h1>Mes collaborations</h1>
@@ -94,6 +96,7 @@
             </section>
         </main>
         <script src="../socket.io/socket.io.js" charset="utf-8"></script>
+        <script src="/vendors/aos/dist/aos.js"></script>
         <script src="./minjs/script.js"></script>
         <script type="text/javascript">
 
