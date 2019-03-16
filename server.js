@@ -34,6 +34,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/vendors', express.static(__dirname + '/node_modules'));
 app.use('/mincss', express.static(__dirname + '/mincss'))
 app.use('/minjs', express.static(__dirname + '/minjs'))
 
