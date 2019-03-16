@@ -364,6 +364,34 @@
               }
             })
 
+            let leavingRoom = document.getElementsByClassName('menu__sub__link');
+
+            for(let i = 0; i < leavingRoom.length; i++) {
+              leavingRoom[i].addEventListener('click', () => {
+                let numberNoFilter = chatCount.innerHTML;
+                let result = numberNoFilter.match(/\d+/g).map(n => parseInt(n));
+                socket.emit('leavingRoom', {room: room, count: result[0], user: "<%= username %>"})
+              })
+            }
+
+            socket.on('userLeft', data => {
+
+              openNotif(popup[0]);
+
+              setTimeout(() => {
+                  closeNotif(popup[0]);
+              },5000)
+
+              popupText[0].innerHTML = data.message;
+
+              if(data.count === 1){
+                chatCount.innerHTML = 'Connecté ( '+data.count+' )';
+              }
+              else{
+                chatCount.innerHTML = 'Connectés ( '+data.count+' )';
+              }
+            })
+
             socket.on('numberConnected', data => {
               if(data === 1){
                 chatCount.innerHTML = 'Connecté ( '+data+' )';

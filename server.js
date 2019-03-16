@@ -345,6 +345,10 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
   })
 
+  socket.on('leavingRoom', data => {
+    io.sockets.in(data.room).emit('userLeft', {count: data.count-1, message: data.user+' a quitté la salle'});
+  })
+
   /*******
   * Notification collabs
   *******/
