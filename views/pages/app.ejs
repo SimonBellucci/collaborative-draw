@@ -187,6 +187,7 @@
         </section>
 
         <section class="chat">
+            <div class="" id="msgCounter" style="transition: all ease .4s; width: 30px; height: 30px; border-radius: 50%; background: #ff2064; position: absolute; top:-15px; left: 10px; opacity: 0; color: white; display: flex; justify-content: center; align-items: center"></div>
             <div class="chat__header" id="chat-count"></div>
             <ul class="chat__messages" id="chat-container"></ul>
             <hr />
@@ -261,10 +262,19 @@
               });
 
             /*Chat*/
+            const chat = document.querySelector('.chat');
+            const headerChat = document.querySelector('.chat__header');
             const chatContainer = $('chat-container');
             const chatMsg = $('chat-input');
             const chatSend = $('chat-send');
             const chatCount = $('chat-count');
+            let msgCounter = $('msgCounter');
+            let msgCount = 0
+
+            headerChat.addEventListener('click' , function() {
+               msgCount = 0
+               msgCounter.style.opacity = 0;
+            });
 
             chatSend.addEventListener('click', () => {
               socket.emit('chatMsg', {room: room, username: "<%= username %>", message: chatMsg.value});
@@ -283,6 +293,17 @@
             });
 
             socket.on('newChatMsg', data => {
+              if(chat.classList.contains("open")){
+                msgCount = 0
+                msgCounter.innerHTML = msgCount
+                msgCounter.style.opacity = 0;
+              }
+              else{
+                msgCount++
+                msgCounter.style.opacity = 1;
+                msgCounter.innerHTML = msgCount
+              }
+
               chatContainer.innerHTML +=
               '<li class="chat__messages__li">'+
                 '<span class="chat__messages__li__author">'+data.username+' : '+'</span>'+data.message+
