@@ -30,6 +30,11 @@ hr {
     border-bottom: 1px solid #ccc ;
 }
 
+.popup-container {
+    position: relative;
+    overflow-x: hidden;
+}
+
 .popup {
     background: $blue;
     position: absolute;
