@@ -15,8 +15,11 @@
                     <a href="/" class="bloc-form__previous">&#8249;	Retour à l'accueil</a>
                     <h1 class="bloc-form__title"> WEMAKE</h1>
                     <form action="/connexion" method="POST" class="bloc-form__form">
-                        <input id="formMail" class="bloc-form__form__input" type="mail form__mail" name="email" placeholder="Votre adresse email"><br>
+                        <input id="formMail" class="bloc-form__form__input" type="mail form__mail" name="email" placeholder="Votre adresse email">
+                        <span id="errorFormMail" class="error-box"></span>
+
                         <input id="formPassword" class="bloc-form__form__input" type="password" name="password" placeholder="Votre mot de passe">
+                        <span id="errorFormPassword" class="error-box"></span>
                         <div class="row">
                             <div class="col-12 form-flex">
                                 <a href="#">Mot de passe oublié ?</a>
@@ -53,9 +56,29 @@
             socket.emit('connectionUser', userInfo);
           }
 
-          // $('connectionButton').addEventListener('click', () => {
-          //   connection();
-          // });
+          // Gets variables for the form error handling
+          const emailConnexion = $('formMail');
+          const passwordConnexion = $('formPassword');
+
+          const emailFormError = $('errorFormMail');
+          const passwordFormError = $('errorFormPassword');
+
+          $('connectionButton').addEventListener('click', (e) => {
+            
+            if (emailConnexion.value == '') {
+                e.preventDefault();
+                emailFormError.innerText = ('Veuillez renseigner votre adresse mail');
+                emailFormError.classList.add('is-shown');
+            }
+
+            if (passwordConnexion.value == '') {
+                e.preventDefault();
+                passwordFormError.innerText = ('Veuillez renseigner votre mot de passe');
+                passwordFormError.classList.add('is-shown');
+            }
+
+            connection();
+          });
 
           socket.on('emailAlreadyExists', () => {
             console.log('emailAlreadyExists')

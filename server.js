@@ -34,6 +34,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/vendors', express.static(__dirname + '/node_modules'));
 app.use('/mincss', express.static(__dirname + '/mincss'))
 app.use('/minjs', express.static(__dirname + '/minjs'))
 
@@ -41,21 +42,12 @@ app.get('/', function(req, res) {
   res.render('pages/index');
 });
 
-app.get('/galerie', function(req, res) {
-    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
-        res.render('pages/gallery', {
-            ownProjects: response.reverse()
-        });
-    });
-
-});
-
 const useSession = app.use(session({
   key: 'user_id',
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { expires: 600000 },
+  cookie: { expires: 3600000 },
 }));
 
 const sessionChecker = (req, res, next) => {
@@ -65,6 +57,24 @@ const sessionChecker = (req, res, next) => {
         next();
     }
 };
+
+app.get('/galerie', function(req, res) {
+    knex.table('projects').innerJoin('users', 'users.id', '=', 'projects.author_id').select('title', 'visibility', 'thumbnail', 'nickname').where('projects.visibility', 1).then(response => {
+      if(req.session.user){
+        res.render('pages/gallery', {
+            ownProjects: response.reverse(),
+            user: req.session.user[0].id,
+        });
+      }
+      else{
+        res.render('pages/gallery', {
+            ownProjects: response.reverse(),
+            user: req.session.user
+        });
+      }
+    });
+
+});
 
 app.get('/app', function(req, res) {
   if(req.session.user){
@@ -85,17 +95,14 @@ app.get('/app/:id', function(req, res) {
           if (collaboratorCheck.length === 0) {
               knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
                   if (authorCheck.length === 0) {
-                      console.log('Pas collab ni aut')
                       return isInProject = false
                   }
                   else {
-                      console.log('auteur')
                       return isInProject = true
                   }
               })
           }
           else {
-              console.log('Collaborateur')
               return isInProject = true
           }
       }).catch(error => {
@@ -160,7 +167,6 @@ app.get('/mes-projets', function(req, res) {
         collabs.forEach(collab => {
           ownProjects['project'+collab.project_id].collabs.push(collab.nickname);
         });
-        console.log(Object.values(ownProjects));
         res.render('pages/my-projects', {
           ownProjects: (Object.values(ownProjects)).reverse(),
           user: userId
@@ -179,13 +185,11 @@ app.post('/mes-projets', function(req, res) {
     height: req.body.height,
     creation_date: new Date().toISOString().slice(0, 19).replace('T', ' ')
   }).then(response => {
-    console.log(response);
     res.redirect('/app/'+response);
   });
 })
 
 app.post('/delete/:id', function(req, res) {
-  console.log('delete '+req.params.id)
   knex('projects').where({ id: req.params.id }).del().then(response => {
     res.redirect('/mes-projets')
   })
@@ -198,7 +202,8 @@ app.get('/mes-collaborations', function(req, res) {
 
     knex.select('projects.*', 'users.nickname as author').from('projects').innerJoin('projects_users', 'projects.id', '=', 'projects_users.project_id').innerJoin('users', 'projects.author_id', '=', 'users.id').where('projects_users.user_id', userId).then(rows => {
       res.render('pages/my-collabs', {
-            othersProjects: rows.reverse()
+            othersProjects: rows.reverse(),
+            user: userId
         });
     });
   }else{
@@ -335,6 +340,10 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.room).emit('typingStatus', {user: data.username, status: data.isTyping});
   })
 
+  socket.on('leavingRoom', data => {
+    socket.broadcast.to(data.room).emit('userLeft', {count: data.count-1, message: data.user+' a quitté la salle'});
+  })
+
   /*******
   * Notification collabs
   *******/
@@ -414,15 +423,11 @@ io.on('connection', (socket) => {
 
     knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {
       knex('projects').select('items').where({ id: room }).then(response => {
-        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url});
+        io.sockets.in(room).emit('getNewObject', {type: data.type, color: data.color, id: response[0].items - 1, file: data.file, url: data.url, path: data.path, pathWidth: data.pathWidth, pathColor: data.pathColor});
       });
     });
 
   });
-
-  socket.on('pathAdded', () => {
-    knex('projects').where('id', room).update({items: knex.raw('items + 1')}).then(response => {});
-  })
 
 });
 

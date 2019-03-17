@@ -9,20 +9,21 @@
     </head>
     <body>
         <header class="container-fluid app-header">
-            <div class="row align-center">
-                <div class="col-lg-6">
-                    <nav class="menu">
-                        <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
-                        <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
-                            <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
-                            <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
-                            <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <h1 class="project-name text-center"><%= infos[0].title %></h1>
-                <div class="col-lg-6 d-flex justify-end">
+            <div class="row">
+              <div class="col-12 d-flex || menu-container">
+                <nav class="menu">
+                    <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
+                    <ul class="menu__sub">
+                        <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
+                        <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
+                        <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
+                        <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
+                    </ul>
+                </nav>
+
+                <h1 class="project-name"><%= infos[0].title %></h1>
+
+                <div class="d-flex">
                     <div class="people d-flex align-center">
                         <img class="people__icon" src="../images/add-people.svg" alt="">
                         <span class="people__number"><%= count %></span>
@@ -36,8 +37,16 @@
                     </div>
                     <a href="#" id="export" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
+              </div>
             </div>
         </header>
+        <div class="drawing-mode" id="drawing-mode">
+            <span class="drawing-mode__text">Vous êtes en mode dessin</span>
+            <button class="drawing-mode__button">Quitter</button>
+        </div>
+        <div class="drawing-mode" id="max-size">
+            <span class="drawing-mode__text" id="max-size-text">L'import a échoué car l'image dépasse la taille maximale (1Mo)</span>
+        </div>
         <div class="popup">
             <div class="popup__close">&#215;</div>
             <div class="popup__text">
@@ -75,7 +84,7 @@
             </div>
             <div class="characteristics__option" id="backgroundOptions">
                 <span class="characteristics__option__title">Couleur fond</span>
-                <ul>
+                <ul class="background-color">
                     <li class="characteristics__option__action characteristics__option__action--color">
                         <input type="color" name="" value="#278bff" id="colorPickerSingle">
                     </li>
@@ -96,12 +105,13 @@
                 <span class="characteristics__option__title">Épaisseur bordure</span>
                 <ul>
                     <li class="characteristics__option__action characteristics__option__action--color">
-                        <input type="number" name="" value="" id="borderWidth">
+                      <span id='widthCounter'>0</span>
+                      <input type="range" id="borderWidth" min="0" max="100">
                     </li>
                 </ul>
             </div>
             <div class="characteristics__option" id="fontOptions">
-                <span class="characteristics__option__title">Police</span>
+                <span class="characteristics__option__title">Police</span> <br>
                 <select id="fonts">
                     <option class="characteristics__option__action characteristics__option__action--color" value="Montserrat">Montserrat</option>
                     <option class="characteristics__option__action characteristics__option__action--color" value="OpenSans">OpenSans</option>
@@ -114,6 +124,27 @@
                     <option class="characteristics__option__action characteristics__option__action--color" value="RobotoSlab">RobotoSlab</option>
                 </select>
             </div>
+            <div class="characteristics__option" id="backgroundFreeOptions" style="display: none">
+                <span class="characteristics__option__title">Couleur du trait</span>
+                <ul class="background-color">
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                        <input type="color" name="" value="#278bff" id="colorPickerFree">
+                    </li>
+                </ul>
+            </div>
+            <div class="characteristics__option" id="widthFreeOptions" style="display: none">
+                <span class="characteristics__option__title">Épaisseur du trait</span>
+                <ul class="background-color">
+                    <li class="characteristics__option__action characteristics__option__action--color">
+                      <span id='freeWidthCounter'>0</span>
+                      <input type="range" id="freeWidth" name="epaisseur" min="0" max="100">
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="grid-canvas">
+            <input type="checkbox" class="grid-canvas__input" id="grid-canvas">
+            <label for="grid-canvas" class="grid-canvas__label">Afficher la grille</label>
         </section>
         <section class="tools">
             <div class="tools__item">
@@ -123,15 +154,7 @@
                 <label for="file"><img src="../images/import.svg" alt="Settings"></label>
                 <input type="file" class="tools__item__files" id="file" name="" value="" style="background:url('../images/import.svg')">
             </div>
-            <!-- <div class="tools__item">
-                <img src="../images/settings.svg" alt="Settings">
-                <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
-                <ul class="tools__item__sub">
-                    <li class="tools__item__sub__item">Contraste</li>
-                    <li class="tools__item__sub__item">Luminosité</li>
-                </ul>
-            </div> -->
-            <div class="tools__item">
+            <div class="tools__item scrollable">
                 <img src="../images/filters.svg" alt="Filters">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
@@ -146,10 +169,12 @@
                 </ul>
             </div>
             <div class="tools__item">
+                <img src="../images/drawing-mode.svg" alt="Shapes" id="freeDraw">
+            </div>
+            <div class="tools__item">
                 <img src="../images/shapes.svg" alt="Shapes">
                 <img src="../images/arrow.svg" alt="Sub" class="tools__item__sub-img">
                 <ul class="tools__item__sub">
-                    <button class="tools__item__sub__item" type="button" name="button" id="freeDraw">Dessin</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createCircle">Cercle</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createRect">Rectangle</button>
                     <button class="tools__item__sub__item shape" type="button" name="button" id="createTriangle">Triangle</button>
@@ -158,15 +183,13 @@
             <div class="tools__item">
                 <img src="../images/text.svg" id="text" alt="Text">
             </div>
-            <!-- <div class="tools__item">
-                <img src="../images/crop.svg" alt="Crop">
-            </div> -->
             <div class="tools__item">
                 <input type="color" name="" value="#278bff" id="colorPicker">
             </div>
         </section>
 
         <section class="chat">
+            <div class="" id="msgCounter" style="transition: all ease .4s; width: 30px; height: 30px; border-radius: 50%; background: #ff2064; position: absolute; top:-15px; left: 10px; opacity: 0; color: white; display: flex; justify-content: center; align-items: center"></div>
             <div class="chat__header" id="chat-count"></div>
             <ul class="chat__messages" id="chat-container"></ul>
             <hr />
@@ -176,11 +199,7 @@
             </div>
         </section>
 
-
-
         <canvas id="canvasTest" width="<%= infos[0].width %>" height="<%= infos[0].height %>"></canvas>
-
-        <!-- <input type="text" name="" value="" id="radiusValue"> -->
 
         <script src="../socket.io/socket.io.js" charset="utf-8"></script>
         <script src="../minjs/fabric.min.js" charset="utf-8"></script>
@@ -245,10 +264,19 @@
               });
 
             /*Chat*/
+            const chat = document.querySelector('.chat');
+            const headerChat = document.querySelector('.chat__header');
             const chatContainer = $('chat-container');
             const chatMsg = $('chat-input');
             const chatSend = $('chat-send');
             const chatCount = $('chat-count');
+            let msgCounter = $('msgCounter');
+            let msgCount = 0
+
+            headerChat.addEventListener('click' , function() {
+               msgCount = 0
+               msgCounter.style.opacity = 0;
+            });
 
             chatSend.addEventListener('click', () => {
               socket.emit('chatMsg', {room: room, username: "<%= username %>", message: chatMsg.value});
@@ -267,6 +295,17 @@
             });
 
             socket.on('newChatMsg', data => {
+              if(chat.classList.contains("open")){
+                msgCount = 0
+                msgCounter.innerHTML = msgCount
+                msgCounter.style.opacity = 0;
+              }
+              else{
+                msgCount++
+                msgCounter.style.opacity = 1;
+                msgCounter.innerHTML = msgCount
+              }
+
               chatContainer.innerHTML +=
               '<li class="chat__messages__li">'+
                 '<span class="chat__messages__li__author">'+data.username+' : '+'</span>'+data.message+
@@ -327,8 +366,36 @@
               }
             })
 
+            let leavingRoom = document.getElementsByClassName('menu__sub__link');
+
+            for(let i = 0; i < leavingRoom.length; i++) {
+              leavingRoom[i].addEventListener('click', () => {
+                let numberNoFilter = chatCount.innerHTML;
+                let result = numberNoFilter.match(/\d+/g).map(n => parseInt(n));
+                sendData()
+                socket.emit('leavingRoom', {room: room, count: result[0], user: "<%= username %>"})
+              })
+            }
+
+            socket.on('userLeft', data => {
+
+              openNotif(popup[0]);
+
+              setTimeout(() => {
+                  closeNotif(popup[0]);
+              },5000)
+
+              popupText[0].innerHTML = data.message;
+
+              if(data.count === 1){
+                chatCount.innerHTML = 'Connecté ( '+data.count+' )';
+              }
+              else{
+                chatCount.innerHTML = 'Connectés ( '+data.count+' )';
+              }
+            })
+
             socket.on('numberConnected', data => {
-              console.log(data);
               if(data === 1){
                 chatCount.innerHTML = 'Connecté ( '+data+' )';
               }
@@ -378,6 +445,40 @@
 
             //Deselection
             $('deselect').addEventListener('click', () => {
+
+              if(canvas.isDrawingMode == false){
+
+                $('caract').classList.add('active')
+                $('caract-close').classList.add('active')
+
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+                fontOptions.style.display = 'none';
+
+                bgFree.style.display = 'none';
+                widthFree.style.display = 'none';
+              }
+              else{
+                canvas.isDrawingMode = false;
+
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
+                setTimeout(() => {
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+                  fontOptions.style.display = 'block';
+
+                  bgFree.style.display = 'none';
+                  widthFree.style.display = 'none';
+                },500)
+              }
+
+              $('caract').classList.remove('active')
+              $('caract-close').classList.remove('active')
+
                 canvas.discardActiveObject();
                 canvas.renderAll();
             })
@@ -392,7 +493,7 @@
                     format: 'png',
                     quality: 0.8
                 });
-                this.download = 'canvas.png'
+                this.download = '<%= infos[0].title %>.png'
             }
 
             colorPicker.addEventListener('change', (e) => {
@@ -411,7 +512,8 @@
               socket.emit('newBorderColor', {room: room, id: lastObjectSelected.id, color: e.target.value});
             })
 
-            borderWidth.addEventListener('change', (e) => {
+            borderWidth.addEventListener('input', (e) => {
+              $('widthCounter').innerHTML = e.target.value
               socket.emit('newBorderWidth', {room: room, id: lastObjectSelected.id, width: e.target.value});
             })
 
@@ -595,24 +697,85 @@
 
             //FreeDraw | Temps réel : http://jsfiddle.net/B5Ub9/4/
             const freeDraw = $('freeDraw');
+            const freeColor = $('colorPickerFree');
+            const freeWidth = $('freeWidth');
+            const bgFree = $('backgroundFreeOptions');
+            const widthFree = $('widthFreeOptions');
+
+            freeColor.addEventListener('change', (e) => {
+              canvas.freeDrawingBrush.color = e.target.value;
+            })
+
+            freeWidth.addEventListener('change', (e) => {
+              $('freeWidthCounter').innerHTML = e.target.value
+              canvas.freeDrawingBrush.width = parseInt(e.target.value);
+            })
+
+            freeWidth.addEventListener('input', (e) => {
+              $('freeWidthCounter').innerHTML = e.target.value
+            })
+
+
+            // drawing mode notifications
+            var drawingMode = document.getElementById('drawing-mode');
+            var drawingModeClose = document.querySelector('.drawing-mode__button');
+
+            if (freeDraw) {
+                    freeDraw.addEventListener('click' , function() {
+                    drawingMode.classList.toggle('active');
+                });
+                drawingModeClose.addEventListener('click' , function() {
+                    drawingMode.classList.remove('active');
+                });
+
+            }
+
+            drawingModeClose.addEventListener('click', () => {
+                canvas.isDrawingMode = false
+                bgFree.style.display = 'none';
+                widthFree.style.display = 'none';
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+            })
 
             freeDraw.addEventListener('click', (e) => {
               if(canvas.isDrawingMode == false){
                 canvas.isDrawingMode = true;
+
+                $('caract').classList.add('active')
+                $('caract-close').classList.add('active')
+
+                backgroundOptions.style.display = 'none';
+                borderOptions.style.display = 'none';
+                widthOptions.style.display = 'none';
+                fontOptions.style.display = 'none';
+
+                bgFree.style.display = 'block';
+                widthFree.style.display = 'block';
               }
               else{
                 canvas.isDrawingMode = false;
+
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
+                setTimeout(() => {
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+                  fontOptions.style.display = 'block';
+
+                  bgFree.style.display = 'none';
+                  widthFree.style.display = 'none';
+                },500)
+
               }
             });
 
             canvas.on('path:created', (opt) => {
-              opt.path.id = fabric.Object.__uid++
-              opt.path.lockMovementX = true;
-              opt.path.lockMovementY = true;
-              opt.path.lockScalingX = true;
-              opt.path.lockScalingY = true;
-              opt.path.lockRotation = true;
-              socket.emit('pathAdded')
+              path = opt.path.path;
+              socket.emit('objectAdded', {room: room, type: 'path', path: path, color: color, pathWidth: opt.path.strokeWidth, pathColor: opt.path.stroke})
+              canvas.remove(opt.path)
               sendData();
             });
 
@@ -626,16 +789,25 @@
             	let self = e.target;
               let fontOptions = $('fontOptions');
 
-            if(self.type != 'image'){
-                backgroundOptions.style.display = 'block';
-                borderOptions.style.display = 'block';
-                widthOptions.style.display = 'block';
-            }
-            else{
+              if(self.type != 'image'){
+                  backgroundOptions.style.display = 'block';
+                  borderOptions.style.display = 'block';
+                  widthOptions.style.display = 'block';
+              }
+              else{
+                  backgroundOptions.style.display = 'none';
+                  borderOptions.style.display = 'none';
+                  widthOptions.style.display = 'none';
+              }
+
+              if(self.type == "path"){
+                bgFree.style.display = 'none';
+                widthFree.style.display = 'none';
                 backgroundOptions.style.display = 'none';
                 borderOptions.style.display = 'none';
                 widthOptions.style.display = 'none';
-            }
+                fontOptions.style.display = 'none';
+              }
 
               if(self.text != null){
                 fontOptions.style.display = 'block';
@@ -646,6 +818,8 @@
 
               colorPickerSingle.value = self.fill
               colorPickerBorder.value = self.stroke
+
+              $('widthCounter').innerHTML = self.strokeWidth
 
               borderWidth.value = self.strokeWidth
 
@@ -702,8 +876,8 @@
                 const circle = new fabric.Circle({
                   radius: 100,
                   fill: data.color,
-                  left: canvas.width/2,
-                  top: canvas.height/2,
+                  left: (canvas.width/2)-100,
+                  top: (canvas.height/2)-100,
                   selectable: true
                 });
 
@@ -715,18 +889,6 @@
                   };
                 })(circle.toObject);
 
-
-                const rect = new fabric.Rect({
-                    width: 10,
-                    height: 20,
-                    fill: data.color,
-                    opacity: 0.7,
-                    top: canvas.height/2,
-                    left: canvas.width/2,
-                 });
-
-
-
                 circle.id = data.id;
 
                 canvas.add(circle);
@@ -737,8 +899,8 @@
                     width: 100,
                     height: 200,
                     fill: data.color,
-                    top: canvas.height/2,
-                    left: canvas.width/2,
+                    top: (canvas.height/2)-100,
+                    left: (canvas.width/2)-50,
                  });
 
                 rect.toObject = (function(toObject) {
@@ -756,11 +918,11 @@
               else if(data.type == 'triangle'){
 
                   const triangle = new fabric.Triangle({
-                      width: 100,
+                      width: 200,
                       height: 200,
                       fill: data.color,
-                      top: canvas.height/2,
-                      left: canvas.width/2,
+                      top: (canvas.height/2)-100,
+                      left: (canvas.width/2)-100,
                    });
 
                   triangle.toObject = (function(toObject) {
@@ -802,7 +964,9 @@
                     return function() {
                       return fabric.util.object.extend(toObject.call(this), {
                         id: this.id,
-                        src: this.toDataURL()
+                        src: this.toDataURL(),
+                        scaleX: 1,
+                        scaleY: 1
                       });
                     };
                   })(fabric.Image.prototype.toObject);
@@ -820,7 +984,19 @@
                     text.id = data.id;
 
                     canvas.add(text);
-                  }
+                }
+                else if(data.type == 'path'){
+
+                  const path = new fabric.Path(data.path,{
+                      stroke: data.pathColor,
+                      strokeWidth: data.pathWidth,
+                      fill: 'rgba(0,0,0,0)'
+                    });
+
+                    path.id = data.id;
+
+                    canvas.add(path);
+                }
             }
 
             canvas.on('text:changed', function(e) {
@@ -857,6 +1033,9 @@
             document.addEventListener('keydown', e => {
               if(e.keyCode == '46'){
                 socket.emit('deleted', {room: room, id: lastObjectSelected.id});
+                $('caract').classList.remove('active')
+                $('caract-close').classList.remove('active')
+
               }
             }, false);
 
@@ -886,17 +1065,24 @@
 
             text.addEventListener('click', () => {
               socket.emit('objectAdded', {type: 'text', color: color, room: room});
-
-              //socket.emit('newText', {room: room})
             })
 
             importButton.addEventListener('change', (e) => {
               let fileType = e.target.files[0].type;
-              var reader = new FileReader();
-              reader.readAsDataURL(e.target.files[0]);
-              reader.onloadend = function() {
-                  base64data = reader.result;
-                  socket.emit('objectAdded', {type: 'image', file: fileType, url: base64data, room: room})
+
+              if(e.target.files[0].size > 1000000){
+                $('max-size').classList.add('active');
+                setTimeout(() => {
+                  $('max-size').classList.remove('active');
+                },5000)
+              }
+              else{
+                let reader = new FileReader();
+                reader.readAsDataURL(e.target.files[0]);
+                reader.onloadend = function() {
+                    base64data = reader.result;
+                    socket.emit('objectAdded', {type: 'image', file: fileType, url: base64data, room: room})
+                }
               }
             })
 
@@ -924,12 +1110,6 @@
             canvas.renderAll();
 
           });
-
-            //On récupère le canvas à la ocnnection
-            // socket.on('getConnectionCanvas', data => {
-            //   console.log('New Data = '+data)
-            //   canvas.loadFromJSON(data);
-            // })
 
           }
         </script>

@@ -4,7 +4,8 @@
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	    <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./mincss/styles.css">
+        <link rel="stylesheet" href="./vendors/aos/dist/aos.css">
 	    <title>WeMake - Mes projets</title>
     </head>
     <body>
@@ -16,23 +17,27 @@
                     <label for="name">Nom du projet</label><br />
                     <input id="name-project" class="modal__content__name__input" type="text" name="name" placeholder="Projet n°1">
                 </div>
+                <span id="titleCreateProject" class="error-box"></span>
                 <div class="modal__content__size">
                     <label for="size-project">Taille du projet (en px)</label><br />
                     <input id="size-project" type="number" class="modal__content__size__1" name="width" placeholder="800"> x
-                    <input type="number" class="modal__content__size__2" name="height" placeholder="600">
+                    <input id="size-project-height" type="number" class="modal__content__size__2" name="height" placeholder="600">
                 </div>
-                <button class="button button--blue" type="submit">Créer le projet</button>
+                <span id="projectSizeError" class="error-box"></span>
+                <button id="submitCreateProject" class="button button--blue" type="submit">Créer le projet</button>
             </div>
         </form>
 
-        <div class="popup">
-            <div class="popup__close">&#215;</div>
-            <div class="popup__text">
-                Lorem ipsum dola ersam Lorem ipsum dola ersam
+        <div class="popup-container">
+            <div class="popup">
+                <div class="popup__close">&#215;</div>
+                <div class="popup__text">
+                    Lorem ipsum dola ersam Lorem ipsum dola ersam
+                </div>
+                <a id="popup-link" href="">
+                    <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
+                </a>
             </div>
-            <a id="popup-link" href="">
-                <button class="popup__button button button&#45;&#45;white">Rejoindre</button>
-            </a>
         </div>
 		
 		<form action="/visible/" id="form-visibility" method="POST" class="modal-visibility">
@@ -52,34 +57,28 @@
 		</form>
 		
         <header class="container-fluid app-header">
-            <div class="row align-center">
-                <div class="col-lg-6">
+            <div class="row">
+                <div class="col-12 d-flex || menu-container">
                     <nav class="menu">
                         <a href="/" class="menu__icon"><img src="./images/menu.svg" alt="Menu"></a>
                         <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="/" title="Accueil">Home</a></li>
                             <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
                             <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
                             <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                         </ul>
                     </nav>
-                </div>
-                <div class="col-lg-6 d-flex justify-end">
+
                     <a href="#" class="create-project button button--blue" title="Créer un projet">Créer un projet</a>
                 </div>
             </div>
         </header>
-        <main>
+        <main class="container">
             <section class="all-projects container">
                 <% if(ownProjects.length > 0){ %>
 				<h1>Mes projets</h1>
                 <% ownProjects.forEach(function(own) { %>
 
-                    
-
-
-
-                  <article class="project row">
+                  <article class="project row" data-aos="fade-right" data-aos-duration="800" data-aos-offest="30" data-aos-easing="ease-in-out">
                       <div class="project__preview col-lg-4" id="preview" style="background:url('<%= own.thumbnail %>')">
                           <div class="project__preview__status preview-<%= own.id %>">
                             <% if(own.visibility){ %>
@@ -93,13 +92,13 @@
                           <h2 class="project__informations__title">
                               <%= own.title %>
                           </h2>
-                         <!--  <span class="project__informations__author"><strong>Auteur :</strong> <%= own.nickname %></span><br> -->
+                          
                           <span class="project__informations__colaborators"><strong><% if(own.collabs.length > 1){ %>Collaborateurs :<% }else{ %> Collaborateur : <%}%></strong> <% if(own.collabs.length > 0){ %>
                             <%= own.collabs.join(', ') %>
                           <% }else{ %>
                             Il n'y a aucun collaborateur
                           <%}%></span><br>
-                          <span class="project__informations__date">Créé le <%= own.creation_date %></span>
+                          <span class="project__informations__date">Créé le <%= own.creation_date.toDateString() %></span>
                       </div>
                       <div class="project__cta col-lg-2">
                           <a href=<%= "/app/"+own.id %> class="button button--transparent" title="Modifier">Modifier</a>
@@ -122,6 +121,7 @@
             </section>
         </main>
         <script src="../socket.io/socket.io.js" charset="utf-8"></script>
+        <script src="/vendors/aos/dist/aos.js"></script>
         <script src="./minjs/script.js"></script>
         <script type="text/javascript">
 
@@ -129,6 +129,32 @@
             const popupClose = document.getElementsByClassName('popup__close');
             const popupText = document.getElementsByClassName('popup__text');
             const popupLink = document.getElementById('popup-link');
+
+            // Gets variables for input error handling
+            const titleInput = document.getElementById('name-project');
+            const widthInput = document.getElementById('size-project');
+            const heightInput = document.getElementById('size-project-height');
+
+            const titleError = document.getElementById('titleCreateProject');
+            const sizeError = document.getElementById('projectSizeError');
+
+            const createProjectBtn = document.getElementById('submitCreateProject');
+
+            createProjectBtn.addEventListener('click', function(e) {
+
+                if (titleInput.value == '') {
+                    e.preventDefault();
+                    titleError.innerText = 'Merci de choisir un nom pour votre projet';
+                    titleError.classList.add('is-shown');
+                }
+
+                if (widthInput.value == '' || heightInput.value == '') {
+                    e.preventDefault();
+                    sizeError.innerText = 'Veuillez indiquer une taille à votre projet';
+                    sizeError.classList.add('is-shown');
+                }
+
+            });
 
             const openNotif = (element) => {
                 element.classList.add('open');
