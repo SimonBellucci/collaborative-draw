@@ -202,6 +202,33 @@ window.addEventListener("load" , function() {
         });
     }
 
+
+    // Gestion du bandeau de cookies
+    var cookieBanner = document.getElementById('js-cookies');
+    var cookieConfirmBtn = document.getElementById('js-btn-cookies');
+
+    function setCookie(cname, cvalue, expdate) {
+        var date = new Date();
+
+        // Exdays is the value (in days) you want to set before it expires
+        date.setTime(date.getTime() + (expdate * 24 * 60 * 60 * 1000));
+
+        // Formats expiration date
+        var expires = "expires=" + date.toUTCString();
+
+        // Creates the cookie
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    if (document.cookie.indexOf('isConfirmed') >= 0) {
+        cookieBanner.classList.remove('is-visible');
+    }
+
+    cookieConfirmBtn.addEventListener('click', function() {
+        setCookie('isConfirmed', true, 30);
+        cookieBanner.classList.remove('is-visible');
+    });
+
 });
 
 document.addEventListener('DOMContentLoaded', function() {

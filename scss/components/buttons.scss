@@ -32,6 +32,10 @@
             color:$white;
         }
     }
+
+    &--nowrap {
+        white-space: nowrap;
+    }
 }
 
 button {
