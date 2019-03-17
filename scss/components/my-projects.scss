@@ -178,7 +178,7 @@
 
 
 .modal-visibility {
-    position: absolute;
+    position: fixed;
     background: rgba(0 , 0 , 0 , 0.6);
     z-index: 10;
     height: 100%;
@@ -188,14 +188,17 @@
     opacity: 0;
     top: 0;
     right: 0;
+
     &__content {
         position: absolute;
         left: 50%;
         top:50%;
         transform: translate(-50% , -50%);
         background: $white;
-        padding: 50px 85px;
+        padding: 50px 60px;
+        min-width: 280px;
         display: inline-block;
+
         &__close {
             position: absolute;
             top:15px;
@@ -209,10 +212,14 @@
             }
         }
         &__title {
-            font-size:26px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom:20px;
             display: inline-block;
+
+            @media only screen and (min-width: 30em) {
+                font-size: 26px;
+            }
         }
         &__input {
             margin-bottom:10px;
