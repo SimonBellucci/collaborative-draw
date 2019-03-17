@@ -962,8 +962,8 @@
                       return fabric.util.object.extend(toObject.call(this), {
                         id: this.id,
                         src: this.toDataURL(),
-                        width: this.width,
-                        height: this.height
+                        scaleX: 1,
+                        scaleY: 1
                       });
                     };
                   })(fabric.Image.prototype.toObject);
