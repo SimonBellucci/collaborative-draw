@@ -20,9 +20,9 @@
                         <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
                     </ul>
                 </nav>
-                
+
                 <h1 class="project-name"><%= infos[0].title %></h1>
-  
+
                 <div class="d-flex">
                     <div class="people d-flex align-center">
                         <img class="people__icon" src="../images/add-people.svg" alt="">
@@ -372,6 +372,7 @@
               leavingRoom[i].addEventListener('click', () => {
                 let numberNoFilter = chatCount.innerHTML;
                 let result = numberNoFilter.match(/\d+/g).map(n => parseInt(n));
+                sendData()
                 socket.emit('leavingRoom', {room: room, count: result[0], user: "<%= username %>"})
               })
             }

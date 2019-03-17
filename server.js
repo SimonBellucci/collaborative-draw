@@ -95,17 +95,14 @@ app.get('/app/:id', function(req, res) {
           if (collaboratorCheck.length === 0) {
               knex('projects').where({author_id: req.session.user[0].id, id: projectId}).then(authorCheck => {
                   if (authorCheck.length === 0) {
-                      console.log('Pas collab ni aut')
                       return isInProject = false
                   }
                   else {
-                      console.log('auteur')
                       return isInProject = true
                   }
               })
           }
           else {
-              console.log('Collaborateur')
               return isInProject = true
           }
       }).catch(error => {
@@ -170,7 +167,6 @@ app.get('/mes-projets', function(req, res) {
         collabs.forEach(collab => {
           ownProjects['project'+collab.project_id].collabs.push(collab.nickname);
         });
-        console.log(Object.values(ownProjects));
         res.render('pages/my-projects', {
           ownProjects: (Object.values(ownProjects)).reverse(),
           user: userId
@@ -189,13 +185,11 @@ app.post('/mes-projets', function(req, res) {
     height: req.body.height,
     creation_date: new Date().toISOString().slice(0, 19).replace('T', ' ')
   }).then(response => {
-    console.log(response);
     res.redirect('/app/'+response);
   });
 })
 
 app.post('/delete/:id', function(req, res) {
-  console.log('delete '+req.params.id)
   knex('projects').where({ id: req.params.id }).del().then(response => {
     res.redirect('/mes-projets')
   })
