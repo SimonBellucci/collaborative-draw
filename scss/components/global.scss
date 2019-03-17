@@ -33,15 +33,17 @@ hr {
 .popup-container {
     position: absolute;
     overflow-x: hidden;
-    height: 100%;
-    width: 100%;
+    top: 90px;
+    right: 0;
+    height: 105px;
+    width: 260px;
 }
 
 .popup {
     background: $blue;
     position: absolute;
     display: inline-block;
-    top:90px;
+    top: 90px;
     padding:10px 40px 10px 10px;
     max-width: 250px;
     right: -250px;
