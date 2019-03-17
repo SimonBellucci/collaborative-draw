@@ -9,20 +9,21 @@
     </head>
     <body>
         <header class="container-fluid app-header">
-            <div class="row align-center">
-                <div class="col-lg-6">
-                    <nav class="menu">
-                        <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
-                        <ul class="menu__sub">
-                            <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
-                            <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
-                            <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
-                            <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <h1 class="project-name text-center"><%= infos[0].title %></h1>
-                <div class="col-lg-6 d-flex justify-end">
+            <div class="row">
+              <div class="col-12 d-flex || menu-container">
+                <nav class="menu">
+                    <a href="#" class="menu__icon"><img src="../images/menu.svg" alt="Menu"></a>
+                    <ul class="menu__sub">
+                        <li class="menu__sub__link"><a href="/mes-projets" title="Mes projets">Mes projets</a></li>
+                        <li class="menu__sub__link"><a href="/mes-collaborations" title="Mes collaborations">Mes collaborations</a></li>
+                        <li class="menu__sub__link"><a href="/galerie" title="Galerie publique">Galerie publique</a></li>
+                        <li class="menu__sub__link"><a href="/deconnexion" title="Déconnexion">Déconnexion</a></li>
+                    </ul>
+                </nav>
+                
+                <h1 class="project-name"><%= infos[0].title %></h1>
+  
+                <div class="d-flex">
                     <div class="people d-flex align-center">
                         <img class="people__icon" src="../images/add-people.svg" alt="">
                         <span class="people__number"><%= count %></span>
@@ -36,6 +37,7 @@
                     </div>
                     <a href="#" id="export" class="export button button--purple" title="Exporter">Exporter</a>
                 </div>
+              </div>
             </div>
         </header>
         <div class="drawing-mode" id="drawing-mode">
