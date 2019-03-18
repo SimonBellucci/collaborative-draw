@@ -372,7 +372,6 @@
               leavingRoom[i].addEventListener('click', () => {
                 let numberNoFilter = chatCount.innerHTML;
                 let result = numberNoFilter.match(/\d+/g).map(n => parseInt(n));
-                sendData()
                 socket.emit('leavingRoom', {room: room, count: result[0], user: "<%= username %>"})
               })
             }
