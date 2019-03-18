@@ -32,11 +32,11 @@ hr {
 
 .popup-container {
     position: absolute;
-    overflow-x: hidden;
     top: 90px;
-    right: 0;
+    left: 0;
     height: 105px;
     width: 260px;
+    z-index: 10000;
 }
 
 .popup {
@@ -46,10 +46,10 @@ hr {
     top: 90px;
     padding:10px 40px 10px 10px;
     max-width: 250px;
-    right: -250px;
+    left: -250px;
     transition: all 0.3s ease;
     &.open {
-        right:20px;
+        left:20px;
     }
     &__close {
         position: absolute;
